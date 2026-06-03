@@ -1,0 +1,156 @@
+/* =========================================================
+   im-edit chrome — UI styles
+   All selectors prefixed `.ime-` to avoid collisions with deck CSS.
+   ========================================================= */
+
+/* Hide everything during print */
+@media print {
+  .ime-toolbar, .ime-comments-panel, .ime-comment-pin,
+  .ime-selection-halo, .ime-comment-popover { display: none !important; }
+}
+
+/* Toolbar — top of viewport */
+.ime-toolbar {
+  position: fixed; top: 0; left: 0; right: 0; z-index: 9000;
+  display: flex; align-items: center; gap: 8px;
+  height: 56px; padding: 8px 16px;
+  background: rgba(31, 32, 35, 0.96);
+  border-bottom: 1px solid rgba(255,255,255,0.08);
+  font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Arial, sans-serif;
+  font-size: 13px; color: #E1E0DE;
+  user-select: none;
+}
+.ime-toolbar.ime-hidden { display: none; }
+.ime-toolbar select, .ime-toolbar input, .ime-toolbar button {
+  background: #2F363B; color: #F2F2F1;
+  border: 1px solid rgba(255,255,255,0.1); border-radius: 4px;
+  padding: 4px 8px; font-size: 12px; line-height: 1.2;
+  font-family: inherit;
+}
+.ime-toolbar select { padding-right: 22px; cursor: pointer; }
+.ime-toolbar button { cursor: pointer; }
+.ime-toolbar button:hover { background: #404144; }
+.ime-toolbar button:disabled { opacity: 0.4; cursor: not-allowed; }
+.ime-toolbar .ime-group {
+  display: flex; align-items: center; gap: 4px;
+  padding: 0 8px; border-right: 1px solid rgba(255,255,255,0.08);
+}
+.ime-toolbar .ime-group:last-child { border-right: none; }
+.ime-toolbar .ime-label {
+  font-size: 10.5px; letter-spacing: 0.06em; text-transform: uppercase;
+  color: rgba(255,255,255,0.5);
+}
+.ime-toolbar .ime-save-indicator {
+  width: 8px; height: 8px; border-radius: 50%;
+  background: #C07830;
+}
+.ime-toolbar .ime-save-indicator.ime-saved { background: #3D7A5A; }
+.ime-toolbar .ime-target-label {
+  flex: 1; padding: 0 12px; font-size: 11.5px;
+  color: rgba(255,255,255,0.7);
+  white-space: nowrap; overflow: hidden; text-overflow: ellipsis;
+}
+
+/* Push the deck below the toolbar. The deck nav JS reads --ime-toolbar-h and accounts for it in scale. */
+body.ime-active { padding-top: 0; }
+/* .deck is position: fixed; inset: 0 — margin doesn't move it. Override `top`
+   so the deck sits below the toolbar, leaving its full inset:right/bottom/left
+   intact. The slide inside is centered via translate, so it lands centered in
+   the available area. */
+body.ime-active .deck {
+  top: var(--ime-toolbar-h, 56px) !important;
+}
+
+/* Comments panel — right side */
+.ime-comments-panel {
+  position: fixed; top: 56px; right: 0; bottom: 0;
+  width: 320px; z-index: 8500;
+  background: rgba(31, 32, 35, 0.96);
+  border-left: 1px solid rgba(255,255,255,0.08);
+  font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Arial, sans-serif;
+  font-size: 13px; color: #E1E0DE;
+  overflow-y: auto;
+  transition: transform 0.2s ease;
+}
+.ime-comments-panel.ime-collapsed { transform: translateX(320px); }
+.ime-comments-panel .ime-panel-header {
+  position: sticky; top: 0; z-index: 1;
+  padding: 12px 16px; background: rgba(31, 32, 35, 1);
+  border-bottom: 1px solid rgba(255,255,255,0.08);
+  display: flex; align-items: center; justify-content: space-between;
+  font-weight: 600; font-size: 13px;
+}
+.ime-comments-panel .ime-comment-card {
+  padding: 12px 16px; border-bottom: 1px solid rgba(255,255,255,0.06);
+  cursor: pointer;
+}
+.ime-comments-panel .ime-comment-card:hover { background: rgba(255,255,255,0.03); }
+.ime-comments-panel .ime-comment-meta {
+  font-size: 10.5px; letter-spacing: 0.06em; text-transform: uppercase;
+  color: rgba(255,255,255,0.5); margin-bottom: 4px;
+}
+.ime-comments-panel .ime-comment-text {
+  font-size: 13px; line-height: 1.45; color: #F2F2F1;
+  margin-bottom: 6px;
+}
+.ime-comments-panel .ime-comment-status {
+  display: inline-block; padding: 2px 6px; border-radius: 3px;
+  font-size: 10.5px; font-weight: 600;
+  background: #C07830; color: #fff;
+}
+.ime-comments-panel .ime-comment-status.ime-applied { background: #3D7A5A; }
+.ime-comments-panel .ime-comment-status.ime-deferred { background: #848586; }
+.ime-comments-panel .ime-comment-empty {
+  padding: 32px 16px; text-align: center; opacity: 0.5;
+}
+
+/* Push deck content left to make room for panel */
+body.ime-active.ime-panel-open .deck { right: 320px !important; }
+
+/* Selection halo — drawn around the currently-selected element */
+.ime-selection-halo {
+  position: absolute; pointer-events: none; z-index: 7000;
+  border: 1.5px dashed #67817F; border-radius: 2px;
+}
+
+/* Comment pin — small numbered circle overlaid on slides */
+.ime-comment-pin {
+  position: absolute; z-index: 7500;
+  width: 22px; height: 22px; border-radius: 50%;
+  background: #C07830; color: #fff;
+  font-family: -apple-system, "Segoe UI", Arial, sans-serif;
+  font-size: 12px; font-weight: 700;
+  display: flex; align-items: center; justify-content: center;
+  cursor: pointer;
+  box-shadow: 0 1px 3px rgba(0,0,0,0.3);
+}
+.ime-comment-pin.ime-applied { background: #3D7A5A; }
+.ime-comment-pin.ime-active { box-shadow: 0 0 0 3px rgba(192,120,48,0.4); }
+
+/* Comment popover — opens when user adds a new comment */
+.ime-comment-popover {
+  position: absolute; z-index: 9500;
+  width: 320px; padding: 12px;
+  background: #2F363B; color: #F2F2F1;
+  border: 1px solid rgba(255,255,255,0.1); border-radius: 6px;
+  box-shadow: 0 8px 24px rgba(0,0,0,0.4);
+  font-family: -apple-system, "Segoe UI", Arial, sans-serif;
+  font-size: 13px;
+}
+.ime-comment-popover textarea {
+  width: 100%; min-height: 80px; box-sizing: border-box;
+  background: #1F2023; color: #F2F2F1;
+  border: 1px solid rgba(255,255,255,0.1); border-radius: 4px;
+  padding: 8px; font-family: inherit; font-size: 13px;
+  resize: vertical; margin-bottom: 8px;
+}
+.ime-comment-popover .ime-popover-actions {
+  display: flex; gap: 8px; justify-content: flex-end;
+}
+.ime-comment-popover button {
+  background: #67817F; color: #fff;
+  border: none; border-radius: 4px;
+  padding: 6px 12px; font-size: 12px; cursor: pointer;
+}
+.ime-comment-popover button.ime-cancel { background: #404144; }
+.ime-comment-popover button:hover { opacity: 0.9; }

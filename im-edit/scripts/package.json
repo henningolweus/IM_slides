@@ -1,0 +1,17 @@
+{
+  "name": "im-edit-helpers",
+  "version": "1.0.0",
+  "private": true,
+  "type": "module",
+  "description": "Chrome injection / strip helpers for im-edit",
+  "scripts": {
+    "inject": "node inject-chrome.mjs",
+    "strip": "node strip-chrome.mjs"
+  },
+  "engines": {
+    "node": ">=18"
+  },
+  "dependencies": {
+    "cheerio": "^1.0.0-rc.12"
+  }
+}
