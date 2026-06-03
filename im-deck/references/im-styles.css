@@ -1,0 +1,1342 @@
+  :root {
+    --im-blue-green: #67817F;
+    --im-blue-green-dark: #4F6764;
+    --im-green-grey: #B9C7C2;
+    --im-green-grey-60: #D5DDDA;
+    --im-black: #1F1F23;
+    --im-ash: #30373B;
+    --im-grey: #A8A5A1;
+    --im-egg: #F8F5E7;
+    --im-light-grey: #F2F2F1;
+    --im-white: #FFFFFF;
+    --im-blue-green-light: #E1E6E5;
+    --im-blue-green-near-white: #F1F4F3;
+
+    /* nuance-scale midpoints — added by adoption pack (Tasks 14-16) */
+    --im-blue-green-60: #A4B3B2;
+    --im-blue-green-30: #C2CDCC;
+    --im-green-grey-30: #E3E9E7;
+    --im-green-grey-light: #EAEEEC;
+    --im-green-grey-near-white: #F1F4F3;
+
+    --font-display: 'Palatino Linotype', Palatino, 'Book Antiqua', Georgia, serif;
+    --font-body: Arial, Helvetica, sans-serif;
+
+    /* === Type scale (pt → px @ 96 dpi) — adopted 2026-06-02 === */
+    --type-footer:         8.7px;  /*  6.5pt — page-number tracker, source/notes footer */
+    --type-eyebrow:        12px;   /*    9pt — section-label, caption */
+    --type-body-small:     13.3px; /*   10pt — STEP labels, RUNTIME, kpi-kicker */
+    --type-body:           16px;   /*   12pt — default body, bullets */
+    --type-subheading:     18.7px; /*   14pt — card titles, table heads */
+    --type-callout:        24px;   /*   18pt — Palatino small numbers, italic subtitles */
+    --type-heading:        32px;   /*   24pt — action titles AND section headings */
+    --type-callout-large:  53.3px; /*   40pt — cover title, pull-quote, agenda, KPI value */
+  }
+
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+
+  html, body {
+    height: 100%;
+    background: var(--im-ash);
+    font-family: var(--font-body);
+    color: var(--im-black);
+    overflow: hidden;
+  }
+
+  /* ---------- Deck framework ----------
+     Architecture: every slide is a fixed 1280×720px container (PowerPoint 16:9 widescreen at 96dpi).
+     All sizes inside the slide are in px (or px-derived units). On screen, a `scale()` transform
+     fits the slide to the viewport. In print, the native 1280×720 = 13.333in × 7.5in at 96dpi,
+     so each slide becomes one PowerPoint-sized PDF page.
+     ---------- */
+  .deck {
+    position: fixed;
+    inset: 0;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    overflow: hidden;
+  }
+
+  .slide {
+    width: 1280px;
+    height: 720px;          /* 16:9 widescreen, equals 13.333in × 7.5in at 96dpi (PowerPoint default) */
+    flex: 0 0 auto;
+    background: var(--im-white);
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    overflow: hidden;
+    box-shadow: 0 8px 40px rgba(0, 0, 0, 0.35);
+    transform-origin: center center;
+    /* Center the slide inside the deck container, then scale around the center.
+       `--scale` is set by JS based on viewport; defaults to 1 if JS hasn't run. */
+    transform: translate(-50%, -50%) scale(var(--scale, 1));
+    display: none;
+  }
+  .slide.active { display: flex; flex-direction: column; padding: 30px 44px 67px; }
+  .slide-cover.active { display: grid; padding: 0; }
+
+  /* Bleed-right variant — used on slide 2 (right panel extends to slide edge) */
+  .slide.bleed-right.active { padding-right: 0; }
+  .slide.bleed-right .action-title { padding-right: 159px; }
+  .slide.bleed-right .source-line { right: 44%; }
+
+  /* ---------- Slide chrome ---------- */
+  .logo {
+    position: absolute;
+    top: 30px;
+    right: 22px;
+    writing-mode: vertical-rl;       /* rotates inline text 90° CW — characters stack top-to-bottom */
+    font-family: var(--font-body);
+    font-weight: 700;
+    font-size: 20px;
+    letter-spacing: 0.04em;
+    color: var(--im-black);
+    line-height: 1;
+    z-index: 10;
+  }
+  .page-number {
+    position: absolute;
+    bottom: 17px;
+    right: 44px;
+    font-size: var(--type-footer);
+    color: var(--im-grey);
+    letter-spacing: 0.04em;
+    font-variant-numeric: tabular-nums;
+  }
+  .source-line {
+    position: absolute;
+    bottom: 17px;
+    left: 44px;
+    right: 12%;
+    font-size: var(--type-footer);
+    color: var(--im-grey);
+    line-height: 1.35;
+  }
+
+  /* ---------- Action title ---------- */
+  .action-title {
+    font-family: var(--font-body);
+    font-size: var(--type-heading);
+    line-height: 1.26;
+    color: var(--im-black);
+    font-weight: 400;
+    padding-right: 9%;
+    margin-bottom: 31.9px;  /* compensates for the slide top-padding reduction (44 → 30) so content stays at the same Y */
+    letter-spacing: -0.005em;
+    min-height: 74px;
+    box-sizing: border-box;
+  }
+  .action-title strong { font-weight: 700; }
+  .action-title em { font-style: italic; }
+
+  /* ---------- Sub-title types ---------- */
+  /* Palatino panel sub-title — used for analytical / section / panel context */
+  .panel-sub {
+    font-family: var(--font-display);
+    font-weight: normal;
+    font-size: var(--type-subheading);
+    color: var(--im-black);
+    line-height: 1.2;
+    margin-bottom: 5.8px;
+  }
+  .panel-sub-underline { height: 1px; background: var(--im-black); margin-bottom: 12.8px; }
+  .panel-sub.on-dark { color: var(--im-white); }
+  .panel-sub-underline.on-dark { background: rgba(255, 255, 255, 0.55); }
+
+  /* Arial bold table/container label — used when label heads a collection of items rather than analysis */
+  .table-label {
+    font-family: var(--font-body);
+    font-size: var(--type-body);
+    font-weight: 700;
+    color: var(--im-black);
+    letter-spacing: normal;
+    text-transform: none;
+    line-height: 1.3;
+    margin: 0 0 4px 0;
+  }
+  .table-label.on-dark { color: var(--im-white); }
+  .table-label-underline { height: 1px; background: var(--im-black); margin-bottom: 12.8px; }
+  .table-label-underline.on-dark { background: rgba(255, 255, 255, 0.55); }
+
+  /* ---------- Content area ---------- */
+  .content-wrap { flex: 1; display: flex; flex-direction: column; min-height: 0; padding-top: 17.9px; }
+
+  /* ---------- Body text helpers ---------- */
+  p, li { font-size: var(--type-body); line-height: 1.5; color: var(--im-ash); }
+  .body-text { font-size: var(--type-body); line-height: 1.5; color: var(--im-ash); }
+  .body-text strong { font-weight: 700; color: var(--im-black); }
+
+  /* =========================================================
+     COVER (slide 1) — unchanged from v3
+     ========================================================= */
+  .slide-cover { display: none; grid-template-columns: 55% 45%; }
+  .cover-left {
+    background: var(--im-green-grey);
+    padding: 46px;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    color: var(--im-black);
+  }
+  .cover-left .im-mark { font-weight: 700; font-size: 17.2px; letter-spacing: 0.04em; }
+  .cover-left h1 {
+    font-family: var(--font-display);
+    font-weight: normal;
+    font-size: var(--type-callout-large);
+    line-height: 1.12;
+    max-width: 92%;
+  }
+  .cover-left h1 em { font-style: italic; }
+  .cover-left .subtitle {
+    font-family: var(--font-body);
+    font-size: var(--type-callout);
+    line-height: 1.4;
+    max-width: 80%;
+    margin-top: 14.1px;
+    color: var(--im-ash);
+  }
+  .cover-left .meta {
+    font-size: var(--type-body-small);
+    letter-spacing: 0.04em;
+    color: var(--im-ash);
+    line-height: 1.6;
+  }
+  .cover-left .meta strong { font-weight: 700; color: var(--im-black); }
+  .cover-right {
+    background: var(--im-ash);
+    color: var(--im-white);
+    padding: 46px;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;  /* center body block vertically */
+    position: relative;
+  }
+  .cover-right .body-text { color: rgba(255, 255, 255, 0.88); font-size: var(--type-body); max-width: 95%; }
+  .cover-right .body-text strong { color: var(--im-white); }
+  .cover-right .footer-meta {
+    position: absolute;
+    bottom: 46px;
+    left: 46px;
+    right: 46px;
+    font-size: var(--type-footer);
+    color: rgba(255, 255, 255, 0.6);
+    line-height: 1.55;
+  }
+  .cover-right .footer-meta strong { color: rgba(255, 255, 255, 0.88); font-weight: 700; }
+
+  /* =========================================================
+     SLIDE 2 — TRANSACTION (bleed-right panel)
+     Grid layout: 2 cols × 2 rows. Row 1 = labels (aligned underlines).
+     Row 2 = content. Right column has continuous blue-green background.
+     ========================================================= */
+  .s2-layout {
+    flex: 1;
+    display: grid;
+    grid-template-columns: 1fr 40%;
+    grid-template-rows: auto 1fr;
+    column-gap: 17.9px;
+    min-height: 0;
+  }
+  .s2-left-header { padding: 0 0 5.1px 0; }
+  .s2-left-body { display: flex; flex-direction: column; min-height: 0; padding-top: 7.7px; }
+  /* Right panel is one continuous element spanning both grid rows — no seam between header and body */
+  .s2-right {
+    grid-column: 2;
+    grid-row: 1 / 3;
+    background: var(--im-blue-green);
+    color: var(--im-white);
+    padding: 0 38.4px 19.2px 19.2px;
+    display: flex;
+    flex-direction: column;
+    min-height: 0;
+  }
+  .s2-right .keyinfo-row:first-of-type {
+    margin-top: 12px;
+  }
+
+  .assets-grid {
+    flex: 1;
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    grid-template-rows: 1fr 1fr;
+    gap: 11.5px;
+  }
+  .asset-card {
+    border: 1px solid var(--im-blue-green-light);
+    padding: 12.8px 14.1px;
+    display: flex;
+    flex-direction: column;
+    background: var(--im-white);
+    min-height: 0;
+  }
+  .asset-card .asset-loc {
+    font-size: var(--type-eyebrow);
+    letter-spacing: 0.18em;
+    text-transform: uppercase;
+    color: var(--im-blue-green);
+    font-weight: 700;
+    margin-bottom: 5.8px;
+  }
+  .asset-card .asset-name {
+    font-family: var(--font-display);
+    font-size: var(--type-subheading);
+    line-height: 1.15;
+    color: var(--im-black);
+    margin-bottom: 7.7px;
+  }
+  .asset-card .asset-desc { font-size: var(--type-body-small); line-height: 1.45; color: var(--im-ash); flex: 1; }
+  .asset-card .asset-type {
+    margin-top: 9px;
+    padding-top: 7px;
+    border-top: 1px solid var(--im-blue-green-light);
+    font-size: var(--type-eyebrow);
+    color: var(--im-grey);
+    letter-spacing: 0.04em;
+  }
+
+  /* Right panel keyinfo rows — icon + 3-line text (kicker label, big value, detail) */
+  .keyinfo-row {
+    display: grid;
+    grid-template-columns: 30.7px 1fr;
+    align-items: center;
+    column-gap: 12.2px;
+    padding: 10.9px 0;
+    border-bottom: 1px solid rgba(255, 255, 255, 0.18);
+  }
+  .keyinfo-row:last-child { border-bottom: none; }
+  .keyinfo-row .ki-icon { width: 28.2px; height: 28.2px; display: flex; align-items: center; justify-content: center; }
+  .keyinfo-row .ki-icon svg { width: 100%; height: 100%; }
+  .keyinfo-row .ki-text { display: flex; flex-direction: column; min-width: 0; }
+  .keyinfo-row .ki-kicker {
+    font-family: var(--font-body);
+    font-size: var(--type-body-small);
+    letter-spacing: 0.18em;
+    text-transform: uppercase;
+    color: rgba(255, 255, 255, 0.62);
+    font-weight: 700;
+    margin-bottom: 2.6px;
+  }
+  .keyinfo-row .ki-value {
+    font-family: var(--font-display);
+    font-size: var(--type-subheading);
+    line-height: 1.15;
+    color: var(--im-white);
+    margin-bottom: 3.2px;
+  }
+  .keyinfo-row .ki-detail {
+    font-family: var(--font-body);
+    font-size: var(--type-body-small);
+    line-height: 1.4;
+    color: rgba(255, 255, 255, 0.85);
+  }
+
+  /* =========================================================
+     SLIDE 3 — THESIS (iconic 3-column with bullets)
+     ========================================================= */
+  .iconic-three-col {
+    flex: 1;
+    display: grid;
+    grid-template-columns: 1fr 1fr 1fr;
+    gap: 32px;
+    align-content: start;
+    padding-top: 0;
+  }
+  .iconic-card {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    text-align: center;
+  }
+  .iconic-circle {
+    width: 69.1px;
+    height: 69.1px;
+    background: var(--im-green-grey);
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin-bottom: 15.4px;
+  }
+  .iconic-circle svg {
+    width: 60%;
+    height: 60%;
+    overflow: visible;
+  }
+  .iconic-title {
+    font-family: var(--font-display);
+    font-size: var(--type-callout);
+    line-height: 1.15;
+    color: var(--im-black);
+    margin-bottom: 3.2px;
+  }
+  .iconic-subtitle {
+    font-family: var(--font-display);
+    font-style: italic;
+    font-size: var(--type-body);
+    color: var(--im-blue-green);
+    margin-bottom: 14.1px;
+  }
+  .iconic-bullets {
+    list-style: none;
+    text-align: left;
+    align-self: stretch;
+    padding-top: 12.8px;
+    border-top: 1px solid var(--im-blue-green-light);
+  }
+  .iconic-bullets li {
+    font-size: var(--type-body);
+    line-height: 1.55;
+    margin-bottom: 12px;
+    color: var(--im-ash);
+    position: relative;
+    padding-left: 22px;
+  }
+  .iconic-bullets li::before {
+    content: "•";
+    position: absolute;
+    left: 0;
+    top: 0;
+    color: var(--im-blue-green);
+    font-weight: 700;
+    line-height: 1.55;
+  }
+  .iconic-bullets li strong { font-weight: 700; color: var(--im-black); }
+
+  /* =========================================================
+     SLIDE 4 — GOVERNANCE (both sides contained in panels)
+     ========================================================= */
+  .gov-layout {
+    flex: 1;
+    display: grid;
+    grid-template-columns: 2fr 3fr;  /* fr units share container minus gap → no overflow into slide padding */
+    gap: 20.5px;
+    min-height: 0;
+  }
+  .gov-side {
+    display: flex;
+    flex-direction: column;
+    min-height: 0;
+    padding-top: 0;
+  }
+  .gov-panel {
+    flex: 1;
+    padding: 16.6px 16.6px;
+    min-height: 0;
+    display: flex;
+    flex-direction: column;
+  }
+  .gov-panel.left-panel { background: var(--im-blue-green-near-white); }
+  .gov-panel.right-panel { background: var(--im-light-grey); }
+
+  .ownership-stack {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    gap: 5.8px;
+    justify-content: center;
+    padding: 6.4px 0;
+  }
+  .own-layer { background: var(--im-white); padding: 12.2px 13.4px; }
+  .own-layer.layer-top { background: var(--im-black); color: var(--im-white); }
+  .own-layer .layer-label {
+    font-size: var(--type-eyebrow);
+    letter-spacing: 0.18em;
+    text-transform: uppercase;
+    font-weight: 700;
+    margin-bottom: 3.8px;
+    opacity: 0.75;
+  }
+  .own-layer .layer-name {
+    font-family: var(--font-display);
+    font-size: var(--type-subheading);
+    line-height: 1.2;
+  }
+  .own-arrow { text-align: center; color: var(--im-blue-green); font-size: 21.6px; line-height: 0.5; }
+
+  .gov-blocks {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    gap: 14.1px;
+    justify-content: center;
+  }
+  .gov-block-label {
+    font-family: var(--font-body);
+    font-weight: 700;
+    font-size: var(--type-subheading);
+    color: var(--im-black);
+    margin-bottom: 4.5px;
+    letter-spacing: 0.005em;
+  }
+  .gov-block .body-text { font-size: var(--type-body); line-height: 1.55; color: var(--im-ash); }
+  .gov-block .body-text strong { color: var(--im-black); font-weight: 700; }
+  .gov-bullets {
+    list-style: none;
+    padding-left: 0;
+    margin-top: 8px;
+  }
+  .gov-bullets li {
+    font-size: 15.9px;
+    line-height: 1.55;
+    color: var(--im-ash);
+    margin-bottom: 11px;
+    position: relative;
+    padding-left: 22px;          /* room for the marker, kept tight to not waste horizontal space */
+  }
+  .gov-bullets li:last-child { margin-bottom: 0; }
+  .gov-bullets li::before {
+    content: "•";
+    position: absolute;          /* absolute positioning keeps text content as a single inline flow */
+    left: 0;
+    top: 0;
+    color: var(--im-blue-green);
+    font-weight: 700;
+    line-height: 1.55;           /* match li's line-height so marker sits on first text line */
+  }
+  .gov-bullets li strong { font-weight: 700; color: var(--im-black); }
+
+  /* =========================================================
+     SLIDE 5 — LIKELY MOVES (with numbering + icons)
+     ========================================================= */
+  .moves-grid {
+    flex: 1;
+    display: grid;
+    grid-template-columns: 12% repeat(3, 1fr);
+    grid-template-rows: 1fr 1fr;
+    column-gap: 14.1px;
+    row-gap: 15.4px;
+    min-height: 0;
+    padding-top: 0;
+  }
+  .moves-label {
+    background: var(--im-black);
+    color: var(--im-white);
+    padding: 12.8px 11.5px;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    gap: 5.1px;
+  }
+  .moves-label .ml-kicker {
+    font-size: var(--type-body-small);
+    letter-spacing: 0.18em;
+    text-transform: uppercase;
+    font-weight: 700;
+    opacity: 0.7;
+  }
+  .moves-label .ml-title {
+    font-family: var(--font-display);
+    font-size: var(--type-subheading);
+    line-height: 1.15;
+  }
+  .moves-label .ml-sub {
+    font-family: var(--font-body);
+    font-size: var(--type-body-small);
+    line-height: 1.35;
+    opacity: 0.85;
+    margin-top: 1.9px;
+  }
+  .move-card { display: flex; flex-direction: column; min-height: 0; }
+  .move-head {
+    background: var(--im-green-grey);
+    padding: 12px 14px;
+    display: grid;
+    grid-template-columns: auto 1fr auto;
+    align-items: center;
+    column-gap: 7.7px;
+    min-height: 72px;  /* fits 2-line title at 18.4px font + line-height 1.2 + padding; one-line titles vertically center within this height so all 6 headers are visually identical */
+  }
+  .move-head .mh-num {
+    font-family: var(--font-body);
+    font-weight: 700;
+    font-size: var(--type-body-small);
+    color: var(--im-blue-green-dark);
+    letter-spacing: 0.06em;
+  }
+  .move-head .mh-name {
+    font-family: var(--font-body);
+    font-weight: 700;
+    font-size: var(--type-subheading);
+    color: var(--im-black);
+    line-height: 1.2;
+  }
+  .move-head .mh-icon { width: 36px; height: 36px; display: flex; align-items: center; justify-content: center; }
+  .move-head .mh-icon svg { width: 100%; height: 100%; overflow: visible; }
+  .move-body {
+    background: var(--im-light-grey);
+    padding: 11.5px 12.2px;
+    flex: 1;
+    font-size: var(--type-body);
+    line-height: 1.5;
+    color: var(--im-ash);
+  }
+  .move-body strong { font-weight: 700; color: var(--im-black); }
+
+  /* =========================================================
+     SLIDE 6 — WHAT TO WATCH (alternating timeline)
+     Layout: 6 columns × 3 rows.
+     Row 1 = above content (cols 1, 3, 5).
+     Row 2 = axis with dots (spans all cols).
+     Row 3 = below content (cols 2, 4, 6).
+     End labels live in an outer wrapper, positioned outside the grid.
+     ========================================================= */
+  .timeline-wrap {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    min-height: 0;
+    padding-top: 0;
+  }
+
+  .signal-timeline-outer {
+    position: relative;
+    flex: 1;
+    display: flex;
+    align-items: stretch;
+    padding: 0 102.4px;  /* enough room for "Now" and "24+ months" labels — 24+ MONTHS is ~70.4px wide */
+    min-height: 0;
+  }
+  .st-end-label {
+    position: absolute;
+    top: 50%;
+    transform: translateY(-50%);
+    font-family: var(--font-body);
+    font-size: var(--type-eyebrow);
+    letter-spacing: 0.16em;
+    text-transform: uppercase;
+    color: var(--im-grey);
+    font-weight: 700;
+    white-space: nowrap;
+  }
+  .st-end-label.start { left: 0; }
+  .st-end-label.end { right: 0; }
+
+  .signal-timeline {
+    flex: 1;
+    display: grid;
+    grid-template-columns: repeat(6, 1fr);
+    grid-template-rows: 1fr auto 1fr;
+    position: relative;
+    min-height: 0;
+  }
+
+  /* Axis row */
+  .st-axis {
+    grid-column: 1 / -1;
+    grid-row: 2;
+    position: relative;
+    height: 17.9px;
+  }
+  .st-line {
+    position: absolute;
+    top: 50%;
+    left: 0;
+    right: 0;
+    height: 2px;
+    background: var(--im-blue-green);
+    transform: translateY(-50%);
+  }
+  .st-dot {
+    position: absolute;
+    top: 50%;
+    transform: translate(-50%, -50%);
+    width: 14px;
+    height: 14px;
+    background: var(--im-white);
+    border: 2px solid var(--im-blue-green);
+    border-radius: 50%;
+    z-index: 2;
+  }
+  .st-dot.confirmed {
+    background: var(--im-black);
+    border-color: var(--im-black);
+  }
+
+  /* Content cells (above and below) — both top-aligned with min-height title block for body alignment.
+     Each text occupies 1 of 6 grid columns but extends into the empty adjacent columns via negative
+     margins, since "above" content lives in columns 1/3/5 (neighbors are empty) and "below" in 2/4/6
+     (neighbors are also empty in the same row). This gives each box ~1.6 columns of horizontal room. */
+  .st-content {
+    padding: 0 2px;
+    min-width: 0;
+    display: flex;
+    flex-direction: column;
+    margin-left: -30px;
+    margin-right: -30px;
+  }
+  .st-content.above {
+    grid-row: 1;
+    align-self: start;
+    padding-top: 5.1px;
+    padding-bottom: 10.2px;
+  }
+  .st-content.below {
+    grid-row: 3;
+    align-self: start;
+    padding-top: 10.2px;
+    padding-bottom: 5.1px;
+  }
+  /* First above (col 1) and last below (col 6) can only extend in one direction */
+  .st-content.above.first-col { margin-left: 0; }
+  .st-content.below.last-col { margin-right: 0; }
+
+  .st-num {
+    font-family: var(--font-body);
+    font-weight: 700;
+    font-size: var(--type-body-small);
+    color: var(--im-blue-green);
+    font-variant-numeric: tabular-nums;
+    margin-bottom: 1.9px;
+    text-align: center;
+  }
+  .st-content.confirmed .st-num { color: var(--im-black); }
+  .st-title-row {
+    display: flex;
+    align-items: flex-start;
+    justify-content: center;
+    gap: 3.8px;
+    flex-wrap: wrap;
+    margin-bottom: 5.1px;
+    min-height: 34.6px;   /* fits 2-line title OR 1-line title + tag; body starts at consistent Y across all 6 markers */
+  }
+  .st-title {
+    font-family: var(--font-body);
+    font-weight: 700;
+    font-size: var(--type-subheading);
+    color: var(--im-black);
+    line-height: 1.25;
+    text-align: center;
+  }
+  .st-tag {
+    background: var(--im-blue-green);
+    color: var(--im-white);
+    font-size: 9.9px;
+    letter-spacing: 0.14em;
+    padding: 2.3px 6.4px;
+    text-transform: uppercase;
+    font-weight: 700;
+    white-space: nowrap;
+    align-self: flex-start;
+  }
+  .st-body {
+    font-size: var(--type-body-small);
+    line-height: 1.45;
+    color: var(--im-ash);
+    text-align: center;   /* match the centered title/num */
+  }
+  .st-body strong { font-weight: 700; color: var(--im-black); }
+
+  /* ---------- Navigation chrome ---------- */
+  .nav {
+    position: fixed;
+    bottom: 12px;
+    left: 50%;
+    transform: translateX(-50%);
+    display: flex;
+    align-items: center;
+    gap: 14px;
+    background: rgba(31, 31, 35, 0.85);
+    backdrop-filter: blur(6px);
+    padding: 8px 14px;
+    border-radius: 999px;
+    z-index: 100;
+  }
+  .nav button {
+    background: transparent;
+    border: 1px solid rgba(255, 255, 255, 0.25);
+    color: var(--im-white);
+    width: 28px;
+    height: 28px;
+    border-radius: 50%;
+    cursor: pointer;
+    font-size: 19.7px;
+    line-height: 0;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: all 0.15s ease;
+  }
+  .nav button:hover:not(:disabled) { background: var(--im-blue-green); border-color: var(--im-blue-green); }
+  .nav button:disabled { opacity: 0.3; cursor: default; }
+  .nav .counter { color: var(--im-white); font-size: 16.9px; letter-spacing: 0.08em; min-width: 56px; text-align: center; font-variant-numeric: tabular-nums; }
+  .nav .dots { display: flex; gap: 6px; }
+  .nav .dot { width: 8px; height: 8px; border-radius: 50%; background: rgba(255, 255, 255, 0.25); cursor: pointer; transition: background 0.15s ease; }
+  .nav .dot.active { background: var(--im-blue-green); }
+  .nav .dot:hover { background: #A4B3B2; }
+
+  /* =========================================================
+     PDF EXPORT — Save as PDF via the print dialog
+     The slide is natively 1280px × 720px = 13.333in × 7.5in at 96dpi
+     (PowerPoint 16:9 widescreen). We just need to:
+       1. Remove the on-screen scale transform
+       2. Lay slides out linearly (one per page)
+       3. Force colours through with print-color-adjust
+     The user must select "Margins: None" in the print dialog for this to work
+     edge-to-edge — the pre-print modal walks them through that.
+     ========================================================= */
+  @page {
+    size: 13.333in 7.5in;
+    margin: 0;
+  }
+  @media print {
+    /* Force colors to render — without this, panel fills and dark backgrounds strip out */
+    * {
+      -webkit-print-color-adjust: exact !important;
+      print-color-adjust: exact !important;
+      color-adjust: exact !important;
+    }
+    html, body {
+      width: 1280px !important;
+      height: auto !important;
+      margin: 0 !important;
+      padding: 0 !important;
+      background: white !important;
+      overflow: visible !important;
+    }
+    .deck {
+      position: static !important;
+      inset: auto !important;
+      width: 1280px !important;
+      height: auto !important;
+      padding: 0 !important;
+      margin: 0 !important;
+      display: block !important;
+      overflow: visible !important;
+      align-items: initial !important;
+      justify-content: initial !important;
+    }
+    /* Each slide renders at its native 1280×720 px (= 13.333in × 7.5in at 96dpi).
+       Override the on-screen `display: none` for inactive slides and the scale transform.
+       Use `position: relative` (NOT static) so absolute-positioned children like
+       .page-number and .source-line stay scoped to each slide — with `static`,
+       they fall through to <body> and stack on the first page. */
+    .slide {
+      width: 1280px !important;
+      height: 720px !important;
+      max-width: none !important;
+      max-height: none !important;
+      position: relative !important;
+      transform: none !important;
+      box-shadow: none !important;
+      page-break-after: always;
+      page-break-inside: avoid;
+      break-after: page;
+      break-inside: avoid;
+      display: flex !important;
+      flex-direction: column !important;
+      padding: 30px 44px 67px !important;
+      margin: 0 !important;
+      overflow: hidden !important;
+    }
+    .slide-cover {
+      display: grid !important;
+      padding: 0 !important;
+      grid-template-columns: 55% 45%;
+    }
+    .slide.bleed-right { padding-right: 0 !important; }
+    .slide:last-of-type { page-break-after: auto; break-after: auto; }
+    /* Hide all UI chrome */
+    .nav, .print-modal { display: none !important; }
+  }
+
+  /* =========================================================
+     PRINT INSTRUCTIONS MODAL — pre-print guidance
+     ========================================================= */
+  .print-modal {
+    display: none;
+    position: fixed;
+    inset: 0;
+    background: rgba(31, 31, 35, 0.65);
+    z-index: 1000;
+    align-items: center;
+    justify-content: center;
+    padding: 24px;
+  }
+  .print-modal.open { display: flex; }
+  .print-modal-content {
+    background: var(--im-white);
+    width: min(520px, 100%);
+    padding: 36px 40px 32px;
+    position: relative;
+    font-family: var(--font-body);
+    color: var(--im-black);
+    box-shadow: 0 24px 60px rgba(0, 0, 0, 0.35);
+  }
+  .print-modal-close {
+    position: absolute;
+    top: 16px;
+    right: 16px;
+    background: transparent;
+    border: none;
+    width: 32px;
+    height: 32px;
+    font-size: 24px;
+    line-height: 1;
+    color: var(--im-grey);
+    cursor: pointer;
+    padding: 0;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+  .print-modal-close:hover { color: var(--im-black); }
+  .print-modal-title {
+    font-family: var(--font-display);
+    font-size: 28px;
+    font-weight: normal;
+    line-height: 1.15;
+    margin-bottom: 4px;
+    color: var(--im-black);
+  }
+  .print-modal-sub {
+    font-family: var(--font-display);
+    font-style: italic;
+    font-size: 16px;
+    color: var(--im-blue-green);
+    margin-bottom: 18px;
+  }
+  .print-modal-intro {
+    font-size: 15px;
+    line-height: 1.55;
+    color: var(--im-ash);
+    margin-bottom: 16px;
+  }
+  .print-modal-steps {
+    list-style: none;
+    padding: 16px 18px;
+    background: var(--im-light-grey);
+    margin-bottom: 18px;
+  }
+  .print-modal-steps li {
+    font-size: 14px;
+    line-height: 1.5;
+    color: var(--im-ash);
+    padding: 6px 0;
+    display: flex;
+    gap: 10px;
+    align-items: baseline;
+  }
+  .print-modal-steps li .step-num {
+    font-family: var(--font-body);
+    font-weight: 700;
+    color: var(--im-blue-green);
+    font-size: 13px;
+    letter-spacing: 0.04em;
+    flex-shrink: 0;
+    min-width: 14px;
+  }
+  .print-modal-steps li .step-label {
+    font-weight: 700;
+    color: var(--im-black);
+  }
+  .print-modal-note {
+    font-size: 13px;
+    line-height: 1.5;
+    color: var(--im-grey);
+    margin-bottom: 22px;
+    font-style: italic;
+  }
+  .print-modal-actions {
+    display: flex;
+    gap: 10px;
+    justify-content: flex-end;
+  }
+  .print-modal-actions button {
+    font-family: var(--font-body);
+    font-size: 14px;
+    font-weight: 700;
+    padding: 10px 18px;
+    border: 1px solid transparent;
+    cursor: pointer;
+    letter-spacing: 0.01em;
+  }
+  .print-modal-cancel {
+    background: transparent;
+    color: var(--im-ash);
+    border-color: var(--im-grey) !important;
+  }
+  .print-modal-cancel:hover { border-color: var(--im-black) !important; color: var(--im-black); }
+  .print-modal-confirm {
+    background: var(--im-black);
+    color: var(--im-white);
+  }
+  .print-modal-confirm:hover { background: var(--im-blue-green); }
+
+/* =========================================================
+   LAYOUT 9 — KPI DASHBOARD
+   3–4 metric cells across the top + supporting detail rows below.
+   Use for status/update decks slide 2.
+   ========================================================= */
+.kpi-grid {
+  flex: 1;
+  display: grid;
+  grid-template-columns: repeat(var(--kpi-cols, 3), 1fr);
+  grid-template-rows: auto 1fr;
+  gap: 16px;
+  padding-top: 40px;
+  min-height: 0;
+}
+.kpi-card {
+  background: var(--im-blue-green-near-white);
+  padding: 20px 22px 18px;
+  display: flex;
+  flex-direction: column;
+  border-top: 3px solid var(--im-blue-green);
+}
+.kpi-card.rag-green { border-top-color: #3D7A5A; }
+.kpi-card.rag-amber { border-top-color: #C07830; }
+.kpi-card.rag-red   { border-top-color: #A63228; }
+.kpi-kicker {
+  font-size: var(--type-body-small);
+  letter-spacing: 0.18em;
+  text-transform: uppercase;
+  font-weight: 700;
+  color: var(--im-blue-green);
+  margin-bottom: 6px;
+}
+.kpi-card.rag-green .kpi-kicker { color: #3D7A5A; }
+.kpi-card.rag-amber .kpi-kicker { color: #C07830; }
+.kpi-card.rag-red   .kpi-kicker { color: #A63228; }
+.kpi-value {
+  font-family: var(--font-display);
+  font-size: var(--type-callout-large);
+  line-height: 1.1;
+  color: var(--im-black);
+  margin-bottom: 6px;
+}
+.kpi-label {
+  font-size: var(--type-body);
+  line-height: 1.4;
+  color: var(--im-ash);
+  flex: 1;
+}
+.kpi-detail-row {
+  grid-column: 1 / -1;
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  min-height: 0;
+}
+.kpi-detail-item {
+  display: grid;
+  grid-template-columns: 180px 1fr;
+  align-items: baseline;
+  gap: 16px;
+  padding: 10px 0;
+  border-top: 1px solid var(--im-blue-green-light);
+  font-size: var(--type-body);
+  color: var(--im-ash);
+}
+.kpi-detail-item:first-child { border-top: none; }
+.kpi-detail-label { font-weight: 700; color: var(--im-black); }
+
+/* =========================================================
+   LAYOUT 10 — COMPARISON TABLE
+   Dark header row, alternating stripes, optional colour-coded cells.
+   Use for benchmarks, feature comparisons.
+   ========================================================= */
+.im-table-wrap {
+  flex: 1;
+  overflow: hidden;
+  padding-top: 0;
+  min-height: 0;
+}
+.im-table {
+  width: 100%;
+  border-collapse: collapse;
+  table-layout: fixed;
+}
+.im-table th {
+  background: var(--im-black);
+  color: var(--im-white);
+  font-family: var(--font-body);
+  font-weight: 700;
+  font-size: var(--type-subheading);
+  letter-spacing: 0.04em;
+  padding: 10px 14px;
+  text-align: left;
+  line-height: 1.3;
+}
+.im-table th:first-child { width: 26%; }
+.im-table td {
+  font-size: var(--type-body);
+  line-height: 1.45;
+  color: var(--im-ash);
+  padding: 10px 14px;
+  border-bottom: 1px solid var(--im-blue-green-light);
+  vertical-align: top;
+}
+.im-table td strong { font-weight: 700; color: var(--im-black); }
+.im-table tr:nth-child(even) td { background: var(--im-blue-green-near-white); }
+.im-table tr:nth-child(odd)  td { background: var(--im-white); }
+.im-table td.cell-green { background: #EAF4EE !important; color: #2E6644; font-weight: 700; }
+.im-table td.cell-amber { background: #FDF4E3 !important; color: #7A4E1A; font-weight: 700; }
+.im-table td.cell-red   { background: #FAEAEA !important; color: #7A2222; font-weight: 700; }
+.im-table td.cell-highlight { background: var(--im-green-grey-60) !important; font-weight: 700; color: var(--im-black); }
+
+/* =========================================================
+   LAYOUT 11 — PULL QUOTE / CLOSING
+   Large serif quotation mark + centred statement + attribution.
+   Use for executive provocations, "Thank you" closing slides.
+   ========================================================= */
+.pull-quote-slide {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  padding: 40px 80px;
+  min-height: 0;
+  text-align: center;
+}
+.pull-quote-mark {
+  font-family: var(--font-display);
+  font-size: 96px;
+  line-height: 0.7;
+  color: var(--im-green-grey);
+  margin-bottom: 16px;
+  display: block;
+}
+.pull-quote-text {
+  font-family: var(--font-display);
+  font-size: var(--type-callout-large);
+  line-height: 1.25;
+  color: var(--im-black);
+  max-width: 80%;
+  margin-bottom: 24px;
+}
+.pull-quote-attribution {
+  font-family: var(--font-body);
+  font-size: var(--type-body-small);
+  color: var(--im-grey);
+  letter-spacing: 0.04em;
+}
+.pull-quote-attribution strong { color: var(--im-blue-green); font-weight: 700; }
+/* Thank-you variant — dark background */
+.slide.thank-you-slide { background: var(--im-black); }
+.slide.thank-you-slide .pull-quote-mark { color: var(--im-blue-green); }
+.slide.thank-you-slide .pull-quote-text { color: var(--im-white); }
+.slide.thank-you-slide .pull-quote-attribution { color: rgba(255,255,255,0.6); }
+.slide.thank-you-slide .pull-quote-attribution strong { color: rgba(255,255,255,0.88); }
+.slide.thank-you-slide .logo { color: rgba(255,255,255,0.6); }
+.slide.thank-you-slide .page-number { color: rgba(255,255,255,0.35); }
+
+/* =========================================================
+   LAYOUT 12 — FULL-WIDTH BODY TEXT
+   Action title + paragraph text / bulleted list spanning full content area.
+   Use for appendix, SCR text, next steps, instructions.
+   ========================================================= */
+.full-body-content {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  min-height: 0;
+  padding-top: 0;
+  gap: 14px;
+}
+.full-body-content .body-text + .body-text { margin-top: 0; }
+ul.im-bullets { list-style: none; padding-left: 0; }
+ul.im-bullets > li {
+  font-size: var(--type-body); line-height: 1.5;
+  color: var(--im-ash);
+  position: relative; padding-left: 22px;
+  margin-bottom: 10px;
+}
+ul.im-bullets > li:last-child { margin-bottom: 0; }
+ul.im-bullets > li::before {
+  content: "•"; position: absolute; left: 0; top: 0;
+  color: var(--im-blue-green); font-weight: 700; line-height: 1.5;
+}
+ul.im-bullets > li strong { font-weight: 700; color: var(--im-black); }
+ul.im-bullets ul.im-sub {
+  list-style: none; padding: 2px 0 2px 14px; margin: 7px 0 4px 0;
+  border-left: 2px solid var(--im-green-grey);
+}
+ul.im-bullets ul.im-sub li {
+  font-size: 14.4px; line-height: 1.4; color: var(--im-ash);
+  padding-left: 0; margin-bottom: 5px;
+}
+ul.im-bullets ul.im-sub li strong { font-weight: 700; color: var(--im-black); }
+
+/* =========================================================
+   LAYOUT 7 — SECTION DIVIDER
+   Two-tone full-bleed. Blue-green left, dark ash right.
+   Use for Part 1/2/3 transitions, ToC markers.
+   ========================================================= */
+.slide-divider { display: none; }
+.slide-divider.active {
+  display: grid !important;
+  grid-template-columns: 55% 45%;
+  padding: 0 !important;
+}
+.divider-left {
+  background: var(--im-blue-green);
+  display: flex; flex-direction: column;
+  justify-content: center; padding: 60px 52px;
+}
+.divider-left .div-eyebrow {
+  font-family: var(--font-body); font-weight: 700;
+  font-size: var(--type-eyebrow); letter-spacing: 0.22em;
+  text-transform: uppercase; color: rgba(255,255,255,0.7);
+  margin-bottom: 16px;
+}
+.divider-left .div-title {
+  font-family: var(--font-display); font-weight: normal;
+  font-size: var(--type-callout-large); line-height: 1.1; color: var(--im-white);
+}
+.divider-left .div-title em { font-style: italic; }
+.divider-right {
+  background: var(--im-ash);
+  display: flex; flex-direction: column;
+  justify-content: center; padding: 60px 52px;
+  color: var(--im-white);
+}
+.divider-right .div-items { display: flex; flex-direction: column; gap: 18px; }
+.divider-right .div-item {
+  display: grid; grid-template-columns: 28px 1fr;
+  gap: 12px; align-items: baseline;
+}
+.divider-right .div-num {
+  font-family: var(--font-body); font-weight: 700;
+  font-size: 13px; color: var(--im-blue-green); letter-spacing: 0.08em;
+}
+.divider-right .div-label {
+  font-family: var(--font-body); font-size: var(--type-body);
+  color: rgba(255,255,255,0.88); line-height: 1.3;
+}
+
+/* =========================================================
+   LAYOUT 8 — PURPOSE / PHOTO-LEFT
+   35% egg-tone left (image placeholder) + 65% near-white right.
+   Use for workshop objectives, why-we're-here, proposal opener.
+   ========================================================= */
+.slide-purpose { display: none; }
+.slide-purpose.active {
+  display: grid !important;
+  grid-template-columns: 35% 65%;
+  padding: 0 !important;
+}
+.purpose-left {
+  background: var(--im-egg);
+  display: flex; flex-direction: column;
+  align-items: center; justify-content: center;
+  gap: 18px; padding: 48px; position: relative;
+}
+.purpose-left .photo-placeholder {
+  width: 80px; height: 80px; opacity: 0.2;
+  border: 2px dashed var(--im-ash); border-radius: 4px;
+  display: flex; align-items: center; justify-content: center;
+}
+.purpose-left .photo-caption {
+  font-family: var(--font-body); font-size: var(--type-eyebrow);
+  letter-spacing: 0.18em; text-transform: uppercase;
+  color: var(--im-grey); font-weight: 700; text-align: center;
+}
+.purpose-right {
+  background: var(--im-blue-green-near-white);
+  padding: 42px 50px 60px;
+  display: flex; flex-direction: column; justify-content: center;
+  position: relative; min-height: 0;
+}
+.purpose-right .slide-eyebrow {
+  font-family: var(--font-body); font-size: var(--type-eyebrow); font-weight: 700;
+  letter-spacing: 0.18em; text-transform: uppercase;
+  color: var(--im-blue-green); margin-bottom: 10px;
+}
+.purpose-right .purpose-heading {
+  font-family: var(--font-display); font-weight: normal;
+  font-size: var(--type-callout-large); line-height: 1.1; color: var(--im-black);
+  margin-bottom: 28px; padding-right: 40px;
+}
+.purpose-boxes { display: flex; flex-direction: column; gap: 12px; }
+.purpose-box {
+  display: grid; grid-template-columns: 44px 1fr;
+  gap: 16px; align-items: flex-start;
+  padding: 12px 0; border-top: 1px solid var(--im-blue-green-light);
+}
+.purpose-box:first-child { border-top: none; padding-top: 4px; }
+.purpose-box-icon { width: 36px; height: 36px; color: var(--im-blue-green); }
+.purpose-box-icon svg { width: 36px; height: 36px; stroke: currentColor; fill: none; stroke-width: 1.4; stroke-linecap: round; stroke-linejoin: round; }
+.purpose-box-title { font-family: var(--font-body); font-weight: 700; font-size: var(--type-subheading); color: var(--im-black); margin-bottom: 3px; }
+.purpose-box-body { font-size: var(--type-body-small); line-height: 1.45; color: var(--im-ash); }
+.purpose-box-body strong { font-weight: 700; color: var(--im-black); }
+
+/* =========================================================
+   COLOR THEME OVERRIDES
+   Paste the relevant block at the very top of the <style> tag
+   in the generated deck HTML to activate a non-Standard theme.
+   ========================================================= */
+
+/* --- DARK THEME (Stallion-style) ---
+   Near-monochrome dark with warm grey tones.
+   Blue-green used only for underlines, dots, bullets — not panel fills.
+
+:root {
+  --im-green-grey: #2F363B;
+  --im-green-grey-60: #404144;
+  --im-black: #F2F2F1;
+  --im-ash: #E1E0DE;
+  --im-grey: #848586;
+  --im-egg: #1F2023;
+  --im-light-grey: #2F363B;
+  --im-white: #1F2023;
+  --im-blue-green-light: #404144;
+  --im-blue-green-near-white: #2F363B;
+}
+html, body { background: #1F2023; }
+.slide { background: #1F2023; }
+.cover-left { background: #1F2023 !important; color: #F2F2F1; }
+.cover-left .im-mark, .cover-left h1, .cover-left .subtitle, .cover-left .meta { color: #F2F2F1; }
+.cover-left .meta { color: #E1E0DE; }
+.cover-right { background: #30373B !important; }
+.logo { color: #E1E0DE !important; }
+.action-title { color: #F2F2F1 !important; }
+p, li { color: #E1E0DE !important; }
+.body-text { color: #E1E0DE !important; }
+.body-text strong { color: #F2F2F1 !important; }
+.asset-card { background: #2F363B !important; border-color: #404144 !important; }
+.asset-name { color: #F2F2F1 !important; }
+.asset-desc, .asset-type { color: #E1E0DE !important; }
+.own-layer { background: #2F363B !important; }
+.own-layer .layer-name { color: #F2F2F1 !important; }
+.own-layer.layer-top { background: #404144 !important; }
+.move-body { background: #2F363B !important; color: #E1E0DE !important; }
+.move-body strong { color: #F2F2F1 !important; }
+.gov-panel { background: #2F363B !important; }
+.gov-block-label { color: #F2F2F1 !important; }
+.tp-panel { background: #2F363B !important; }
+.kpi-card { background: #2F363B !important; }
+.kpi-value { color: #F2F2F1 !important; }
+.im-table th { background: #404144 !important; }
+.im-table tr:nth-child(even) td { background: #2F363B !important; }
+.im-table tr:nth-child(odd)  td { background: #1F2023 !important; }
+.im-table td { color: #E1E0DE !important; border-color: #404144 !important; }
+.divider-left { background: #2F363B !important; }
+.divider-right { background: #404144 !important; }
+.purpose-left { background: #1F2023 !important; }
+.purpose-right { background: #2F363B !important; }
+.purpose-heading { color: #F2F2F1 !important; }
+.slide-eyebrow { color: #67817F !important; }
+*/
+
+/* --- LIGHT THEME ---
+   Egg-tone and near-white. Airy feel, blue-green underlines and dots.
+
+:root {
+  --im-egg: #F8F5E7;
+  --im-light-grey: #F8F5E7;
+  --im-blue-green-near-white: #F8F5E7;
+  --im-blue-green-light: #D5DDDA;
+}
+.cover-left { background: #F8F5E7 !important; }
+.cover-right { background: #F1F4F3 !important; }
+.cover-right .body-text { color: #30373B !important; }
+.cover-right .body-text strong { color: #1F1F23 !important; }
+.cover-right .footer-meta { color: #A8A5A1 !important; }
+.cover-right .panel-sub.on-dark { color: #1F1F23 !important; }
+.cover-right .panel-sub-underline.on-dark { background: #67817F !important; }
+.cover-right .footer-meta strong { color: #30373B !important; }
+*/
+

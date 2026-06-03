@@ -1,0 +1,20 @@
+{
+  "name": "im-deck-export",
+  "version": "1.0.0",
+  "private": true,
+  "type": "module",
+  "description": "PPTX export pipeline for im-deck — Playwright + pptxgenjs",
+  "scripts": {
+    "export-pptx": "node export-pptx.mjs",
+    "split-deck": "node split-deck.mjs"
+  },
+  "engines": {
+    "node": ">=18"
+  },
+  "dependencies": {
+    "pptxgenjs": "^3.12.0",
+    "playwright": "^1.40.0",
+    "sharp": "^0.33.0",
+    "cheerio": "^1.0.0-rc.12"
+  }
+}
