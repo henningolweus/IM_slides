@@ -1,0 +1,18 @@
+# Default: treat as text, normalize to LF on commit
+* text=auto eol=lf
+
+# Force LF for shell scripts (run on macOS/Linux)
+*.sh text eol=lf
+
+# Force CRLF for PowerShell scripts (run on Windows)
+*.ps1 text eol=crlf
+
+# Markdown stays text
+*.md text
+
+# JSON, JS, CSS, HTML stay text
+*.json text
+*.js text
+*.mjs text
+*.css text
+*.html text
