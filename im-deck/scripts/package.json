@@ -6,7 +6,8 @@
   "description": "PPTX export pipeline for im-deck — Playwright + pptxgenjs",
   "scripts": {
     "export-pptx": "node export-pptx.mjs",
-    "split-deck": "node split-deck.mjs"
+    "split-deck": "node split-deck.mjs",
+    "test": "node --test tests/"
   },
   "engines": {
     "node": ">=18"

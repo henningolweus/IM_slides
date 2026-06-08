@@ -5,6 +5,7 @@ import { existsSync } from 'node:fs';
 import { fileURLToPath } from 'node:url';
 import { dirname, join } from 'node:path';
 import * as cheerio from 'cheerio';
+import { applyStyleOverrides } from './helpers/walk.js';
 
 const __dirname = dirname(fileURLToPath(import.meta.url));
 
@@ -46,7 +47,19 @@ async function main() {
   const outPath = resolve(outDir);
 
   const html = await readFile(deckPath, 'utf8');
-  const $ = cheerio.load(html, { decodeEntities: false });
+
+  // Extract im-edit state JSON if present and apply overrides
+  const stateMatch = /<script id="im-edit-state"[^>]*>([\s\S]*?)<\/script>/.exec(html);
+  let appliedHtml = html;
+  if (stateMatch) {
+    try {
+      const state = JSON.parse(stateMatch[1]);
+      appliedHtml = applyStyleOverrides(html, state);
+    } catch (e) {
+      console.warn(`im-edit state JSON malformed, skipping overrides: ${e.message}`);
+    }
+  }
+  const $ = cheerio.load(appliedHtml, { decodeEntities: false });
 
   const styleEl = $('style').first();
   if (!styleEl.length) {
@@ -74,7 +87,7 @@ async function main() {
       .text()
       .trim();
     const slug = slugify(titleText.split('|').pop().trim() || $slide.attr('class'));
-    const num = String(i + 1).padStart(2, '0');
+    const num = String(i + 1).padStart(3, '0');
     const filename = `${num}-${slug}.html`;
 
     const slideHtml = `<!DOCTYPE html>
@@ -87,7 +100,7 @@ async function main() {
   /* per-slide canvas overrides for PPTX export */
   html, body { margin: 0; padding: 0; width: 1280px; height: 720px; overflow: hidden; background: white; }
   .deck { width: 1280px; height: 720px; position: relative; transform: none !important; margin: 0 !important; }
-  section.slide { width: 1280px !important; height: 720px !important; position: absolute !important; top: 0 !important; left: 0 !important; display: flex !important; flex-direction: column !important; }
+  section.slide { width: 1280px !important; height: 720px !important; position: absolute !important; top: 0 !important; left: 0 !important; transform: none !important; display: flex !important; flex-direction: column !important; }
   section.slide > .content-wrap { flex: 1 1 auto !important; display: flex !important; flex-direction: column !important; min-height: 0 !important; }
   section.slide .pull-quote-slide { flex: 1 1 auto !important; }
   section.slide.slide-cover { display: grid !important; grid-template-columns: 47% 53%; }
