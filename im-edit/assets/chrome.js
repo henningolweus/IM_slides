@@ -349,7 +349,11 @@
     IME.selectedHalos.push({ el, halo: IME.selectedHalo });
     updateToolbarForSelection(el);
     const TEXT_TAGS = new Set(['P','H1','H2','H3','H4','H5','H6','LI','SPAN','TH','TD']);
-    if (TEXT_TAGS.has(el.tagName)) {
+    // A <div> with data-imedit-id that holds only inline content (text + span/strong/em/br/a/code)
+    // is treated as a text leaf — gives custom layouts the same in-place edit affordance as <p>,
+    // without breaking real containers (cards, panels) that wrap block-level children.
+    const isTextLeafDiv = el.tagName === 'DIV' && !el.querySelector('p, div, h1, h2, h3, h4, h5, h6, ul, ol, table, section, article, header, footer, nav, aside, main, figure, blockquote');
+    if (TEXT_TAGS.has(el.tagName) || isTextLeafDiv) {
       el.setAttribute('contenteditable', 'true');
       el.addEventListener('input', onElementInput);
       setTimeout(() => el.focus(), 0);

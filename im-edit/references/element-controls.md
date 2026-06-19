@@ -11,7 +11,8 @@ Which toolbar controls are active for which element kinds, and what they do.
 | `<li>` | Bullet | Style, Font, Size, Colour, Comment |
 | `<span>` (small-text inline elements) | Inline text | Font, Size, Colour, Comment (Style hidden — inline can't carry block styles cleanly) |
 | `<th>`, `<td>` | Table cell | Style, Font, Size, Colour, Comment |
-| `<div>` with `data-imedit-id` (text-bearing wrapper, no inner `<p>`) | Container | Comment only (use sparingly — should be rare after PPTX-constraint refactor) |
+| `<div>` with `data-imedit-id` whose children are only text + inline tags (`span`, `strong`, `em`, `br`, `a`, `code`) | Text leaf — treated as a text element | Style, Font, Size, Colour, Comment + inline text editing |
+| `<div>` with `data-imedit-id` containing block-level children (`p`, `div`, `h*`, `ul`, `ol`, `table`, …) | Container | Comment only |
 | `<img>` | Image | Comment only |
 | `<svg>` icon | Icon | Comment only |
 
