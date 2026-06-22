@@ -132,13 +132,36 @@
   }
 
   // ---------- Text-edit application ----------
+  // Some layouts (e.g. purpose-box-title/body in Layout 8) wrap their text in
+  // <div data-imedit-id><p>text</p></div>. Setting textContent on the parent
+  // div would replace the inner <p> with a bare text node and break structure
+  // on reload. Resolve to the inner text leaf in that case.
+  const TEXT_LEAF_TAGS = new Set(['P','H1','H2','H3','H4','H5','H6']);
+  const TEXT_TAGS_FOR_EDIT = new Set(['P','H1','H2','H3','H4','H5','H6','LI','SPAN','TH','TD']);
+  const BLOCK_CHILD_SELECTOR = 'p, div, h1, h2, h3, h4, h5, h6, ul, ol, table, section, article, header, footer, nav, aside, main, figure, blockquote';
+
+  function getTextEditTarget(el) {
+    if (!el || el.tagName !== 'DIV') return el;
+    // A div whose only block-level child is a single text leaf (P or H1-6) that
+    // itself contains only inline content — treat the inner leaf as the edit target.
+    const blockKids = Array.from(el.children).filter(c =>
+      ['P','H1','H2','H3','H4','H5','H6','UL','OL','DIV','TABLE','SECTION','ARTICLE','HEADER','FOOTER','NAV','ASIDE','MAIN','FIGURE','BLOCKQUOTE'].includes(c.tagName)
+    );
+    if (blockKids.length !== 1) return el;
+    const inner = blockKids[0];
+    if (!TEXT_LEAF_TAGS.has(inner.tagName)) return el;
+    if (inner.querySelector(BLOCK_CHILD_SELECTOR)) return el;
+    return inner;
+  }
+
   function applyAllEdits() {
     if (!IME.state.edits) return;
     for (const edit of IME.state.edits) {
       const el = document.querySelector(`[data-imedit-id="${edit.imedit_id}"]`);
       if (!el) continue;
-      if (el.textContent !== edit.new_text) {
-        el.textContent = edit.new_text;
+      const target = getTextEditTarget(el);
+      if (target.textContent !== edit.new_text) {
+        target.textContent = edit.new_text;
       }
     }
   }
@@ -333,11 +356,17 @@
 
   function selectElement(el) {
     if (IME.selectedElement === el && IME.selectedElements.length === 1) return;
-    // Disable contentEditable on the previous selection(s)
+    // Disable contentEditable on the previous selection(s) — clean both the
+    // wrapper and the inner leaf in the p-wrapper-div case.
     for (const prev of IME.selectedElements) {
       if (prev !== el) {
+        const prevTarget = getTextEditTarget(prev);
         prev.removeAttribute('contenteditable');
         prev.removeEventListener('input', onElementInput);
+        if (prevTarget !== prev) {
+          prevTarget.removeAttribute('contenteditable');
+          prevTarget.removeEventListener('input', onElementInput);
+        }
       }
     }
     // Clear old halos
@@ -348,15 +377,19 @@
     drawHalo(el);
     IME.selectedHalos.push({ el, halo: IME.selectedHalo });
     updateToolbarForSelection(el);
-    const TEXT_TAGS = new Set(['P','H1','H2','H3','H4','H5','H6','LI','SPAN','TH','TD']);
     // A <div> with data-imedit-id that holds only inline content (text + span/strong/em/br/a/code)
     // is treated as a text leaf — gives custom layouts the same in-place edit affordance as <p>,
     // without breaking real containers (cards, panels) that wrap block-level children.
-    const isTextLeafDiv = el.tagName === 'DIV' && !el.querySelector('p, div, h1, h2, h3, h4, h5, h6, ul, ol, table, section, article, header, footer, nav, aside, main, figure, blockquote');
-    if (TEXT_TAGS.has(el.tagName) || isTextLeafDiv) {
-      el.setAttribute('contenteditable', 'true');
-      el.addEventListener('input', onElementInput);
-      setTimeout(() => el.focus(), 0);
+    const isTextLeafDiv = el.tagName === 'DIV' && !el.querySelector(BLOCK_CHILD_SELECTOR);
+    // A <div data-imedit-id> wrapping a single <p>/<h1-6> (Layout 8 purpose-box,
+    // and any future layout using the same pattern) — edit the inner leaf, but
+    // route input events back to the parent via closest('[data-imedit-id]').
+    const editTarget = getTextEditTarget(el);
+    const isPWrapper = editTarget !== el;
+    if (TEXT_TAGS_FOR_EDIT.has(el.tagName) || isTextLeafDiv || isPWrapper) {
+      editTarget.setAttribute('contenteditable', 'true');
+      editTarget.addEventListener('input', onElementInput);
+      setTimeout(() => editTarget.focus(), 0);
     }
   }
 
@@ -376,8 +409,13 @@
 
   function clearSelection() {
     for (const el of IME.selectedElements) {
+      const target = getTextEditTarget(el);
       el.removeAttribute('contenteditable');
       el.removeEventListener('input', onElementInput);
+      if (target !== el) {
+        target.removeAttribute('contenteditable');
+        target.removeEventListener('input', onElementInput);
+      }
     }
     IME.selectedElements = [];
     IME.selectedElement = null;
