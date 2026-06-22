@@ -14,21 +14,33 @@
   const modalClose = document.getElementById('ifd-modal-close');
   const suggestBtn = document.getElementById('ifd-suggest-more');
   const grid = document.getElementById('ifd-grid');
-  const saveDot = document.getElementById('ifd-save-dot');
+  const copyBtn = document.getElementById('ifd-copy-changes-btn');
+  const countEl = document.getElementById('ifd-changes-count');
+  const toastEl = document.getElementById('ifd-toast');
 
-  let dirty = false;
-  let fileHandle = null;
   let activeSlideIndex = null;
+  let toastTimer = null;
 
-  function markDirty() {
-    dirty = true;
-    saveDot.classList.add('ifd-dirty');
-    saveDot.title = 'Unsaved changes';
+  function showToast(message, kind) {
+    if (!toastEl) { console.log('[im-first-draft]', message); return; }
+    toastEl.textContent = message;
+    toastEl.className = 'ifd-toast ifd-toast-' + (kind || 'info');
+    toastEl.hidden = false;
+    if (toastTimer) clearTimeout(toastTimer);
+    toastTimer = setTimeout(() => { toastEl.hidden = true; }, 4000);
   }
-  function markClean() {
-    dirty = false;
-    saveDot.classList.remove('ifd-dirty');
-    saveDot.title = 'All changes saved';
+
+  function changeCount() {
+    return state.slides.filter(s => s.user_pick || s.wants_ai_suggestion).length;
+  }
+  function updateCountBadge() {
+    if (!countEl) return;
+    const n = changeCount();
+    countEl.textContent = n;
+    copyBtn.classList.toggle('ifd-has-changes', n > 0);
+  }
+  function syncStateToScript() {
+    stateEl.textContent = JSON.stringify(state, null, 2);
   }
 
   function openModal(slideIdx) {
@@ -51,7 +63,7 @@
     if (alternatives.length === 0) {
       const empty = document.createElement('div');
       empty.className = 'ifd-empty-alts';
-      empty.textContent = 'No catalog alternatives. Click "Suggest something else" for AI proposals.';
+      empty.textContent = 'No catalog alternatives. Click "Suggest something else" to ask Claude.';
       modalCandidates.appendChild(empty);
     } else {
       for (const cand of alternatives) {
@@ -62,6 +74,8 @@
         modalCandidates.appendChild(div);
       }
     }
+    // Reflect already-flagged AI request state on the suggest button
+    suggestBtn.textContent = slide.wants_ai_suggestion ? 'Cancel AI request' : 'Suggest something else';
     modal.hidden = false;
   }
   function closeModal() {
@@ -73,10 +87,26 @@
     if (!slide) return;
     slide.user_pick = newLayout;
     slide.current_layout = newLayout;
+    delete slide.wants_ai_suggestion; // a concrete pick supersedes the AI request
     rerenderCard(slide);
     syncStateToScript();
-    markDirty();
-    scheduleSave();
+    updateCountBadge();
+    closeModal();
+  }
+  function toggleAiRequest() {
+    if (activeSlideIndex == null) return;
+    const slide = state.slides.find(s => s.index === activeSlideIndex);
+    if (!slide) return;
+    if (slide.wants_ai_suggestion) {
+      delete slide.wants_ai_suggestion;
+      showToast(`Slide ${slide.index}: AI request cancelled`, 'info');
+    } else {
+      slide.wants_ai_suggestion = true;
+      showToast(`Slide ${slide.index}: marked for AI suggestions — include via "Copy changes"`, 'ok');
+    }
+    rerenderCard(slide);
+    syncStateToScript();
+    updateCountBadge();
     closeModal();
   }
   function rerenderCard(slide) {
@@ -85,124 +115,28 @@
     card.setAttribute('data-layout', slide.current_layout);
     card.querySelector('.ifd-slide-layout-badge').textContent = slide.current_layout;
     card.querySelector('.ifd-thumb-wrap').innerHTML = thumbnails[slide.current_layout] || '';
-  }
-  function syncStateToScript() {
-    stateEl.textContent = JSON.stringify(state, null, 2);
-  }
-  let saveTimer = null;
-  function scheduleSave() {
-    if (saveTimer) clearTimeout(saveTimer);
-    saveTimer = setTimeout(() => save(false), 1200);
-  }
-  const toastEl = document.getElementById('ifd-toast');
-  let toastTimer = null;
-  function showToast(message, kind) {
-    if (!toastEl) { console.log('[im-first-draft]', message); return; }
-    toastEl.textContent = message;
-    toastEl.className = 'ifd-toast ifd-toast-' + (kind || 'info');
-    toastEl.hidden = false;
-    if (toastTimer) clearTimeout(toastTimer);
-    toastTimer = setTimeout(() => { toastEl.hidden = true; }, 4000);
+    card.classList.toggle('ifd-picked', !!slide.user_pick);
+    card.classList.toggle('ifd-wants-ai', !!slide.wants_ai_suggestion);
   }
 
-  async function save(fromUserGesture) {
-    syncStateToScript();
-    const html = '<!DOCTYPE html>\n' + document.documentElement.outerHTML;
-    const filename = decodeURIComponent(location.pathname.split('/').pop()) || 'firstdraft.html';
-    try {
-      if (fileHandle && 'createWritable' in fileHandle) {
-        const w = await fileHandle.createWritable();
-        await w.write(html); await w.close();
-        markClean();
-        showToast('Saved in place', 'ok');
-        return;
-      }
-      if (!fromUserGesture) return;
-      // Try in-place save via File System Access API
-      if ('showSaveFilePicker' in window) {
-        try {
-          const h = await window.showSaveFilePicker({
-            suggestedName: filename,
-            types: [{ description: 'HTML', accept: { 'text/html': ['.html'] } }]
-          });
-          fileHandle = h;
-          const w = await h.createWritable();
-          await w.write(html); await w.close();
-          markClean();
-          showToast('Saved — future saves will write to the same file silently', 'ok');
-          return;
-        } catch (e) {
-          if (e.name === 'AbortError') { showToast('Save cancelled', 'info'); return; }
-          // NotAllowedError / SecurityError / file://-restricted contexts — fall through to download
-          console.warn('[im-first-draft] showSaveFilePicker rejected, falling back to download:', e.message);
-        }
-      }
-      // Fallback: blob download. Lands in the Downloads folder; user replaces the original.
-      const blob = new Blob([html], { type: 'text/html' });
-      const a = document.createElement('a');
-      a.href = URL.createObjectURL(blob);
-      a.download = filename;
-      a.click();
-      URL.revokeObjectURL(a.href);
-      markClean();
-      showToast('Downloaded ' + filename + ' to your Downloads folder. Replace the original to keep your picks. (Or use "Copy picks" for a no-file flow.)', 'warn');
-    } catch (e) {
-      console.error('[im-first-draft] save failed:', e);
-      showToast('Save failed: ' + (e.message || e.name || 'unknown error'), 'err');
-    }
-  }
-
-  function onSuggestMore() {
-    if (activeSlideIndex == null) return;
-    const slide = state.slides.find(s => s.index === activeSlideIndex);
-    if (!slide) return;
-    const prompt =
-      `For slide ${slide.index} of the first draft (action title: "${slide.title}", current layout: ${slide.current_layout}, ` +
-      `current candidates already shown: ${slide.candidates.join(', ')}), propose 2-3 alternative layouts not already shown that fit this slide's intent. ` +
-      `If a worthwhile alternative isn't in the standard 12-layout catalog, describe a new layout I could add.`;
-    if (typeof window.sendPrompt === 'function') {
-      window.sendPrompt(prompt);
-    } else {
-      navigator.clipboard.writeText(prompt).then(
-        () => alert('sendPrompt not available — prompt copied to clipboard. Paste it into chat.'),
-        () => alert('sendPrompt not available. Prompt:\n\n' + prompt)
-      );
-    }
-    closeModal();
-  }
-
-  grid.addEventListener('click', e => {
-    const card = e.target.closest('.ifd-slide-card');
-    if (!card) return;
-    openModal(parseInt(card.getAttribute('data-slide'), 10));
-  });
-  modalClose.addEventListener('click', closeModal);
-  modal.addEventListener('click', e => { if (e.target === modal) closeModal(); });
-  suggestBtn.addEventListener('click', onSuggestMore);
-  const saveBtn = document.getElementById('ifd-save-btn');
-  if (saveBtn) saveBtn.addEventListener('click', () => save(true));
-  const copyPicksBtn = document.getElementById('ifd-copy-picks-btn');
-  if (copyPicksBtn) copyPicksBtn.addEventListener('click', copyPicks);
-
-  function copyPicks() {
-    const picks = state.slides
-      .filter(s => s.user_pick && s.user_pick !== s.candidates[s.candidates.length - 1])
-      .map(s => ({ index: s.index, title: s.title, layout: s.user_pick }));
-    const hasPicks = state.slides.some(s => s.user_pick);
-    if (!hasPicks) {
-      showToast('No picks to copy — swap a layout first by clicking a slide', 'info');
+  function copyChanges() {
+    if (changeCount() === 0) {
+      showToast('No changes to copy. Click a slide to swap its layout or request AI suggestions.', 'info');
       return;
     }
     const payload = {
       story_file: state.story_file,
       picks: state.slides
         .filter(s => s.user_pick)
-        .map(s => ({ index: s.index, layout: s.user_pick }))
+        .map(s => ({ index: s.index, layout: s.user_pick })),
+      ai_suggestions_requested: state.slides
+        .filter(s => s.wants_ai_suggestion)
+        .map(s => ({ index: s.index, title: s.title, current_layout: s.current_layout }))
     };
     const json = JSON.stringify(payload, null, 2);
     if (navigator.clipboard && navigator.clipboard.writeText) {
       navigator.clipboard.writeText(json).then(
-        () => showToast('Picks copied. Paste in chat and say "apply these picks".', 'ok'),
+        () => showToast('Changes copied. Paste in chat and say "apply these changes".', 'ok'),
         () => promptCopy(json)
       );
     } else {
@@ -212,9 +146,24 @@
   function promptCopy(json) {
     window.prompt('Copy this JSON and paste in chat:', json);
   }
+
+  grid.addEventListener('click', e => {
+    const card = e.target.closest('.ifd-slide-card');
+    if (!card) return;
+    openModal(parseInt(card.getAttribute('data-slide'), 10));
+  });
+  modalClose.addEventListener('click', closeModal);
+  modal.addEventListener('click', e => { if (e.target === modal) closeModal(); });
+  suggestBtn.addEventListener('click', toggleAiRequest);
+  if (copyBtn) copyBtn.addEventListener('click', copyChanges);
   document.addEventListener('keydown', e => {
     if (e.key === 'Escape' && !modal.hidden) closeModal();
-    if ((e.ctrlKey || e.metaKey) && e.key.toLowerCase() === 's') { e.preventDefault(); e.stopPropagation(); save(true); }
+    if ((e.ctrlKey || e.metaKey) && e.key.toLowerCase() === 'c' && e.shiftKey) { e.preventDefault(); copyChanges(); }
   });
-  window.addEventListener('beforeunload', e => { if (dirty) { e.preventDefault(); e.returnValue = ''; } });
+
+  updateCountBadge();
+  // Reflect persisted state (e.g. picks loaded from a saved file) on initial render
+  for (const slide of state.slides) {
+    if (slide.user_pick || slide.wants_ai_suggestion) rerenderCard(slide);
+  }
 })();
