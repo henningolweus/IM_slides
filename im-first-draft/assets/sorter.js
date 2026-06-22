@@ -94,35 +94,60 @@
     if (saveTimer) clearTimeout(saveTimer);
     saveTimer = setTimeout(() => save(false), 1200);
   }
+  const toastEl = document.getElementById('ifd-toast');
+  let toastTimer = null;
+  function showToast(message, kind) {
+    if (!toastEl) { console.log('[im-first-draft]', message); return; }
+    toastEl.textContent = message;
+    toastEl.className = 'ifd-toast ifd-toast-' + (kind || 'info');
+    toastEl.hidden = false;
+    if (toastTimer) clearTimeout(toastTimer);
+    toastTimer = setTimeout(() => { toastEl.hidden = true; }, 4000);
+  }
+
   async function save(fromUserGesture) {
     syncStateToScript();
     const html = '<!DOCTYPE html>\n' + document.documentElement.outerHTML;
+    const filename = decodeURIComponent(location.pathname.split('/').pop()) || 'firstdraft.html';
     try {
       if (fileHandle && 'createWritable' in fileHandle) {
         const w = await fileHandle.createWritable();
         await w.write(html); await w.close();
-        markClean(); return;
+        markClean();
+        showToast('Saved in place', 'ok');
+        return;
       }
       if (!fromUserGesture) return;
       if ('showSaveFilePicker' in window) {
-        const h = await window.showSaveFilePicker({
-          suggestedName: location.pathname.split('/').pop() || 'firstdraft.html',
-          types: [{ description: 'HTML', accept: { 'text/html': ['.html'] } }]
-        });
-        fileHandle = h;
-        const w = await h.createWritable();
-        await w.write(html); await w.close();
-        markClean(); return;
+        try {
+          const h = await window.showSaveFilePicker({
+            suggestedName: filename,
+            types: [{ description: 'HTML', accept: { 'text/html': ['.html'] } }]
+          });
+          fileHandle = h;
+          const w = await h.createWritable();
+          await w.write(html); await w.close();
+          markClean();
+          showToast('Saved — future saves will write to the same file silently', 'ok');
+          return;
+        } catch (e) {
+          if (e.name === 'AbortError') { showToast('Save cancelled', 'info'); return; }
+          throw e;
+        }
       }
+      // Fallback: blob download. File:// + no FSA support means we trigger a browser download
+      // into the Downloads folder. User then manually replaces the original.
       const blob = new Blob([html], { type: 'text/html' });
       const a = document.createElement('a');
       a.href = URL.createObjectURL(blob);
-      a.download = location.pathname.split('/').pop() || 'firstdraft.html';
-      a.click(); URL.revokeObjectURL(a.href);
+      a.download = filename;
+      a.click();
+      URL.revokeObjectURL(a.href);
       markClean();
+      showToast('Downloaded ' + filename + ' — your browser does not support in-place save. Replace the original file with the download.', 'warn');
     } catch (e) {
-      if (e.name === 'AbortError') return;
       console.error('[im-first-draft] save failed:', e);
+      showToast('Save failed: ' + (e.message || e.name || 'unknown error'), 'err');
     }
   }
 
@@ -153,9 +178,11 @@
   modalClose.addEventListener('click', closeModal);
   modal.addEventListener('click', e => { if (e.target === modal) closeModal(); });
   suggestBtn.addEventListener('click', onSuggestMore);
+  const saveBtn = document.getElementById('ifd-save-btn');
+  if (saveBtn) saveBtn.addEventListener('click', () => save(true));
   document.addEventListener('keydown', e => {
     if (e.key === 'Escape' && !modal.hidden) closeModal();
-    if ((e.ctrlKey || e.metaKey) && e.key.toLowerCase() === 's') { e.preventDefault(); save(true); }
+    if ((e.ctrlKey || e.metaKey) && e.key.toLowerCase() === 's') { e.preventDefault(); e.stopPropagation(); save(true); }
   });
   window.addEventListener('beforeunload', e => { if (dirty) { e.preventDefault(); e.returnValue = ''; } });
 })();

@@ -12,6 +12,27 @@ html, body { margin: 0; background: #F2F2F1; font-family: Arial, Helvetica, sans
 #ifd-save-dot { font-size: 14px; color: #67817F; }
 #ifd-save-dot.ifd-dirty { color: #C07830; }
 
+.ifd-save-btn {
+  background: #67817F; color: #fff; border: none;
+  padding: 6px 14px; font-size: 12px; font-weight: 700;
+  cursor: pointer; border-radius: 3px; letter-spacing: 0.02em;
+}
+.ifd-save-btn:hover { background: #4F6764; }
+.ifd-save-btn:active { transform: translateY(1px); }
+
+.ifd-toast {
+  position: fixed; top: 64px; left: 50%; transform: translateX(-50%);
+  background: #1F1F23; color: #fff; padding: 10px 18px;
+  font-size: 13px; line-height: 1.4; max-width: 560px;
+  border-radius: 3px; box-shadow: 0 4px 16px rgba(0,0,0,0.25);
+  z-index: 500;
+}
+.ifd-toast[hidden] { display: none; }
+.ifd-toast-ok   { border-left: 3px solid #3D7A5A; }
+.ifd-toast-warn { border-left: 3px solid #C07830; }
+.ifd-toast-err  { border-left: 3px solid #A63228; }
+.ifd-toast-info { border-left: 3px solid #67817F; }
+
 .ifd-grid {
   display: grid;
   grid-template-columns: repeat(auto-fill, minmax(220px, 1fr));

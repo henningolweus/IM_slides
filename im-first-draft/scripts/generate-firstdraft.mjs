@@ -75,8 +75,13 @@ export async function generateFirstdraft(storyMd, storyFilename) {
 <body>
 <header class="ifd-header">
   <div class="ifd-header-title">${escapeHtml(storyFilename.replace(/-story\.md$/, ''))} — first draft</div>
-  <div class="ifd-header-meta"><span id="ifd-save-dot" class="ifd-saved">●</span> <span>${slides.length} slides</span></div>
+  <div class="ifd-header-meta">
+    <span id="ifd-save-dot" class="ifd-saved" title="All changes saved">●</span>
+    <span>${slides.length} slides</span>
+    <button id="ifd-save-btn" class="ifd-save-btn" type="button">Save</button>
+  </div>
 </header>
+<div class="ifd-toast" id="ifd-toast" hidden></div>
 <main class="ifd-grid" id="ifd-grid">
 ${cardHtml.join('\n')}
 </main>
