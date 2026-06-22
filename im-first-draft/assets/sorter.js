@@ -35,15 +35,32 @@
     activeSlideIndex = slideIdx;
     const slide = state.slides.find(s => s.index === slideIdx);
     if (!slide) return;
-    modalHeader.textContent = `Alternative layouts for slide ${slide.index} — ${truncate(slide.title, 70)}`;
+    modalHeader.textContent = `Alternative layouts for slide ${slide.index} — ${slide.title}`;
     modalCandidates.innerHTML = '';
-    for (const cand of slide.candidates) {
-      if (cand === slide.current_layout) continue;
-      const div = document.createElement('div');
-      div.className = 'ifd-candidate';
-      div.innerHTML = `<div class="ifd-candidate-thumb">${thumbnails[cand] || ''}</div><div class="ifd-candidate-name">${cand}</div>`;
-      div.addEventListener('click', () => pickLayout(slideIdx, cand));
-      modalCandidates.appendChild(div);
+    // Current-layout preview block
+    const currentBlock = document.createElement('div');
+    currentBlock.className = 'ifd-current-layout';
+    currentBlock.innerHTML = `
+      <div class="ifd-current-label">Current</div>
+      <div class="ifd-current-thumb">${thumbnails[slide.current_layout] || ''}</div>
+      <div class="ifd-current-name">${slide.current_layout}</div>
+    `;
+    modalCandidates.appendChild(currentBlock);
+    // Alternative candidates
+    const alternatives = slide.candidates.filter(c => c !== slide.current_layout);
+    if (alternatives.length === 0) {
+      const empty = document.createElement('div');
+      empty.className = 'ifd-empty-alts';
+      empty.textContent = 'No catalog alternatives. Click "Suggest something else" for AI proposals.';
+      modalCandidates.appendChild(empty);
+    } else {
+      for (const cand of alternatives) {
+        const div = document.createElement('div');
+        div.className = 'ifd-candidate';
+        div.innerHTML = `<div class="ifd-candidate-thumb">${thumbnails[cand] || ''}</div><div class="ifd-candidate-name">${cand}</div>`;
+        div.addEventListener('click', () => pickLayout(slideIdx, cand));
+        modalCandidates.appendChild(div);
+      }
     }
     modal.hidden = false;
   }
@@ -72,8 +89,6 @@
   function syncStateToScript() {
     stateEl.textContent = JSON.stringify(state, null, 2);
   }
-  function truncate(s, max) { return s.length > max ? s.slice(0, max - 1) + '…' : s; }
-
   let saveTimer = null;
   function scheduleSave() {
     if (saveTimer) clearTimeout(saveTimer);

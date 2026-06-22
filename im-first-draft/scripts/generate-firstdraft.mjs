@@ -49,7 +49,7 @@ export async function generateFirstdraft(storyMd, storyFilename) {
     <span class="ifd-slide-num">${String(slide.index).padStart(2, '0')}</span>
     <span class="ifd-slide-layout-badge">${layout}</span>
   </div>
-  <div class="ifd-slide-title">${escapeHtml(truncate(slide.title, 90))}</div>
+  <div class="ifd-slide-title" title="${escapeHtml(slide.title)}">${escapeHtml(truncate(slide.title, 90))}</div>
   <div class="ifd-thumb-wrap">${thumb}</div>
 </div>`);
   }

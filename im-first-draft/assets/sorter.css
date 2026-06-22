@@ -98,3 +98,28 @@ html, body { margin: 0; background: #F2F2F1; font-family: Arial, Helvetica, sans
   font-size: 12px; font-weight: 700; cursor: pointer; border-radius: 2px;
 }
 .ifd-suggest-more:hover { background: #67817F; }
+
+.ifd-current-layout {
+  grid-column: 1 / -1;
+  display: flex; align-items: center; gap: 14px;
+  padding: 10px; background: #F1F4F3;
+  border-radius: 3px; margin-bottom: 4px;
+}
+.ifd-current-label {
+  font-size: 10px; letter-spacing: 0.14em; text-transform: uppercase;
+  color: #4F6764; font-weight: 700; flex-shrink: 0;
+}
+.ifd-current-thumb {
+  width: 120px; aspect-ratio: 16 / 9;
+  border: 0.5px solid #E1E6E5; overflow: hidden; flex-shrink: 0;
+}
+.ifd-current-name { font-family: monospace; font-size: 11px; color: #1F1F23; flex: 1; }
+
+.ifd-empty-alts {
+  grid-column: 1 / -1;
+  padding: 16px; background: #F2F2F1;
+  border-radius: 3px; font-size: 12px; color: #888;
+  text-align: center;
+}
+
+.ifd-modal-header { padding-right: 30px; line-height: 1.4; }
