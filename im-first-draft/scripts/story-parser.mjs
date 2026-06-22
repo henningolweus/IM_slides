@@ -1,5 +1,5 @@
 const SLIDE_HEADER_RE = /^###\s+(\d+)\.\s+(.+?)\s*$/;
-const LAYOUT_HINT_RE = /^\*\*Layout hint:\*\*\s*(\S+)/;
+const LAYOUT_HINT_RE = /^\*\*Layout hint:\*\*\s*(.+)/;
 
 export function parseStory(md) {
   const lines = md.split(/\r?\n/);
