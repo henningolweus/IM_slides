@@ -1236,8 +1236,8 @@ ul.im-bullets ul.im-sub li strong { font-weight: 700; color: var(--im-black); }
 }
 .purpose-right {
   background: var(--im-blue-green-near-white);
-  padding: 42px 50px 60px;
-  display: flex; flex-direction: column; justify-content: center;
+  padding: 72px 50px 60px;
+  display: flex; flex-direction: column; justify-content: flex-start;
   position: relative; min-height: 0;
 }
 .purpose-right .slide-eyebrow {
