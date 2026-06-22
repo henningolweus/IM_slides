@@ -26,3 +26,20 @@ test('parseStory captures the brief bullets', async () => {
   const slides = parseStory(md);
   assert.ok(slides[1].brief.includes('Pillar one'));
 });
+
+test('parseStory captures variant suffix in layout hints', () => {
+  const md = [
+    '### 1. Cover',
+    '### 2. **Letter** | Thank-you opener',
+    '**Layout hint:** photo-left-content:letter',
+    '- partner signature',
+    '',
+    '### 3. **SCR** | Background',
+    '**Layout hint:** two-panel:scr',
+    '- left: situation',
+    '- right: key questions'
+  ].join('\n');
+  const slides = parseStory(md);
+  assert.equal(slides[1].layoutHint, 'photo-left-content:letter');
+  assert.equal(slides[2].layoutHint, 'two-panel:scr');
+});
