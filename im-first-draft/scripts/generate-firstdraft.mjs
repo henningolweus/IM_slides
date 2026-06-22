@@ -3,7 +3,7 @@ import { readFile, writeFile, access } from 'node:fs/promises';
 import { resolve, basename, dirname, join } from 'node:path';
 import { fileURLToPath } from 'node:url';
 import { parseStory } from './story-parser.mjs';
-import { loadCatalog, layoutsForTags } from './catalog.mjs';
+import { loadCatalog, layoutsForTags, normaliseLayoutHint } from './catalog.mjs';
 import { renderThumbnail } from './thumbnail-renderer.mjs';
 
 const __dirname = dirname(fileURLToPath(import.meta.url));
@@ -29,7 +29,8 @@ export async function generateFirstdraft(storyMd, storyFilename) {
   const cardHtml = [];
 
   for (const slide of slides) {
-    const layout = slide.layoutHint || 'full-width-body';
+    const normalised = normaliseLayoutHint(slide.layoutHint, catalog);
+    const layout = normalised || 'full-width-body';
     const entry = catalogByLayout[layout] || { tags: [] };
     const candidates = (await layoutsForTags(entry.tags, layout)).map(e => e.layout);
     candidates.unshift(layout);
