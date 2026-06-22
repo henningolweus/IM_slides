@@ -79,6 +79,7 @@ export async function generateFirstdraft(storyMd, storyFilename) {
     <span id="ifd-save-dot" class="ifd-saved" title="All changes saved">●</span>
     <span>${slides.length} slides</span>
     <button id="ifd-save-btn" class="ifd-save-btn" type="button">Save</button>
+    <button id="ifd-copy-picks-btn" class="ifd-copy-picks-btn" type="button" title="Copy your layout picks as JSON to paste in chat">Copy picks</button>
   </div>
 </header>
 <div class="ifd-toast" id="ifd-toast" hidden></div>

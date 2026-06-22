@@ -118,6 +118,7 @@
         return;
       }
       if (!fromUserGesture) return;
+      // Try in-place save via File System Access API
       if ('showSaveFilePicker' in window) {
         try {
           const h = await window.showSaveFilePicker({
@@ -132,11 +133,11 @@
           return;
         } catch (e) {
           if (e.name === 'AbortError') { showToast('Save cancelled', 'info'); return; }
-          throw e;
+          // NotAllowedError / SecurityError / file://-restricted contexts — fall through to download
+          console.warn('[im-first-draft] showSaveFilePicker rejected, falling back to download:', e.message);
         }
       }
-      // Fallback: blob download. File:// + no FSA support means we trigger a browser download
-      // into the Downloads folder. User then manually replaces the original.
+      // Fallback: blob download. Lands in the Downloads folder; user replaces the original.
       const blob = new Blob([html], { type: 'text/html' });
       const a = document.createElement('a');
       a.href = URL.createObjectURL(blob);
@@ -144,7 +145,7 @@
       a.click();
       URL.revokeObjectURL(a.href);
       markClean();
-      showToast('Downloaded ' + filename + ' — your browser does not support in-place save. Replace the original file with the download.', 'warn');
+      showToast('Downloaded ' + filename + ' to your Downloads folder. Replace the original to keep your picks. (Or use "Copy picks" for a no-file flow.)', 'warn');
     } catch (e) {
       console.error('[im-first-draft] save failed:', e);
       showToast('Save failed: ' + (e.message || e.name || 'unknown error'), 'err');
@@ -180,6 +181,37 @@
   suggestBtn.addEventListener('click', onSuggestMore);
   const saveBtn = document.getElementById('ifd-save-btn');
   if (saveBtn) saveBtn.addEventListener('click', () => save(true));
+  const copyPicksBtn = document.getElementById('ifd-copy-picks-btn');
+  if (copyPicksBtn) copyPicksBtn.addEventListener('click', copyPicks);
+
+  function copyPicks() {
+    const picks = state.slides
+      .filter(s => s.user_pick && s.user_pick !== s.candidates[s.candidates.length - 1])
+      .map(s => ({ index: s.index, title: s.title, layout: s.user_pick }));
+    const hasPicks = state.slides.some(s => s.user_pick);
+    if (!hasPicks) {
+      showToast('No picks to copy — swap a layout first by clicking a slide', 'info');
+      return;
+    }
+    const payload = {
+      story_file: state.story_file,
+      picks: state.slides
+        .filter(s => s.user_pick)
+        .map(s => ({ index: s.index, layout: s.user_pick }))
+    };
+    const json = JSON.stringify(payload, null, 2);
+    if (navigator.clipboard && navigator.clipboard.writeText) {
+      navigator.clipboard.writeText(json).then(
+        () => showToast('Picks copied. Paste in chat and say "apply these picks".', 'ok'),
+        () => promptCopy(json)
+      );
+    } else {
+      promptCopy(json);
+    }
+  }
+  function promptCopy(json) {
+    window.prompt('Copy this JSON and paste in chat:', json);
+  }
   document.addEventListener('keydown', e => {
     if (e.key === 'Escape' && !modal.hidden) closeModal();
     if ((e.ctrlKey || e.metaKey) && e.key.toLowerCase() === 's') { e.preventDefault(); e.stopPropagation(); save(true); }
