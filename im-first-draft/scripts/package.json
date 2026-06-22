@@ -1,0 +1,11 @@
+{
+  "name": "im-first-draft-scripts",
+  "version": "0.1.0",
+  "private": true,
+  "type": "module",
+  "engines": { "node": ">=20" },
+  "dependencies": {
+    "cheerio": "^1.0.0",
+    "marked": "^14.0.0"
+  }
+}
