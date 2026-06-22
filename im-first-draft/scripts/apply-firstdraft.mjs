@@ -64,14 +64,33 @@ export async function applyPicksJson(payload, storyPath) {
   return applyPicksToStory(picksByIndex, storyPath);
 }
 
+function printUsage() {
+  console.error('Usage:');
+  console.error('  node apply-firstdraft.mjs <firstdraft.html> [story.md]');
+  console.error('  node apply-firstdraft.mjs <story.md> --picks-json \'<json>\'');
+  console.error('  node apply-firstdraft.mjs <story.md> --picks-file <path-to-picks.json>');
+}
+
 if (import.meta.url === `file://${process.argv[1]}` || import.meta.url.endsWith(process.argv[1].replace(/\\/g, '/'))) {
   const args = process.argv.slice(2);
   const picksJsonIdx = args.indexOf('--picks-json');
-  if (picksJsonIdx >= 0) {
+  const picksFileIdx = args.indexOf('--picks-file');
+  if (picksFileIdx >= 0) {
+    const story = args[0];
+    const path = args[picksFileIdx + 1];
+    if (!story || !path) {
+      printUsage();
+      process.exit(1);
+    }
+    const json = await readFile(resolve(path), 'utf8');
+    const payload = JSON.parse(json.replace(/^﻿/, ''));
+    const r = await applyPicksJson(payload, resolve(story));
+    console.log(`Applied ${r.applied} layout pick(s) from JSON file; backup at ${r.backup}`);
+  } else if (picksJsonIdx >= 0) {
     const story = args[0];
     const json = args[picksJsonIdx + 1];
     if (!story || !json) {
-      console.error('Usage: node apply-firstdraft.mjs <story.md> --picks-json \'{"picks":[...]}\'');
+      printUsage();
       process.exit(1);
     }
     const payload = JSON.parse(json);
@@ -81,9 +100,7 @@ if (import.meta.url === `file://${process.argv[1]}` || import.meta.url.endsWith(
     const draft = args[0];
     const story = args[1] || (draft ? draft.replace(/-firstdraft\.html$/, '-story.md') : null);
     if (!draft) {
-      console.error('Usage:');
-      console.error('  node apply-firstdraft.mjs <firstdraft.html> [story.md]');
-      console.error('  node apply-firstdraft.mjs <story.md> --picks-json \'<json>\'');
+      printUsage();
       process.exit(1);
     }
     const r = await applyFirstdraft(resolve(draft), resolve(story));
