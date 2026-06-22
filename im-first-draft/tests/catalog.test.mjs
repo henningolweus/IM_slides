@@ -11,13 +11,16 @@ test('loadCatalog returns all 12 layouts with non-empty tag lists', async () => 
   }
 });
 
-test('layoutsForTags returns iconic-3-column for the pillars tag', async () => {
-  const matches = await layoutsForTags(['pillars']);
+test('layoutsForTags returns multiple layouts for the comparison tag', async () => {
+  const matches = await layoutsForTags(['comparison']);
   const names = matches.map(e => e.layout);
-  assert.ok(names.includes('iconic-3-column'));
+  assert.ok(names.includes('two-panel'));
+  assert.ok(names.includes('comparison-table'));
 });
 
 test('layoutsForTags excludes a given currentLayout', async () => {
   const matches = await layoutsForTags(['comparison'], 'two-panel');
   assert.ok(!matches.some(e => e.layout === 'two-panel'));
+  // Should still include comparison-table
+  assert.ok(matches.some(e => e.layout === 'comparison-table'));
 });
