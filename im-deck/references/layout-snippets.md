@@ -10,37 +10,33 @@
 
 **When to use:** First slide of every deck. The only slide without an action title.
 
+**Variants:** `:dark` (banded dark stripe + photo right, Proposal 4 style)
+
 ```html
+<!-- Standard proposal cover: solid green-grey left + photo-placeholder right -->
 <section class="slide slide-cover" data-slide="1">
   <div class="cover-left">
     <div class="im-mark">IM_</div>
     <div>
       <h1 data-imedit-id="{IMEDIT_ID:title:0}"><!-- FILL: deck title; use <em>word</em> to italicise key words --></h1>
-      <p class="subtitle" data-imedit-id="{IMEDIT_ID:subtitle:0}"><!-- FILL: one-line subtitle, e.g. "A strategic read of the January 2026 acquisition." --></p>
+      <p class="subtitle" data-imedit-id="{IMEDIT_ID:subtitle:0}"><!-- FILL: one-line italic subtitle, e.g. "A letter of proposal for [Client]" --></p>
     </div>
     <p class="meta" data-imedit-id="{IMEDIT_ID:meta:0}">
-      <strong><!-- FILL: deck type label, e.g. "Strategic briefing" or "Letter of proposal" --></strong> · <!-- FILL: Month YYYY --><br>
+      <strong><!-- FILL: deck type label, e.g. "Letter of proposal" --></strong> · <!-- FILL: Month YYYY --><br>
       Implement Consulting Group
     </p>
   </div>
-  <div class="cover-right">
-    <div>
-      <p class="panel-sub on-dark" data-imedit-id="{IMEDIT_ID:panel-sub:0}"><!-- FILL: panel heading, e.g. "About this briefing" or "Dear [Name]," --></p>
-      <div class="panel-sub-underline on-dark"></div>
-      <p class="body-text" data-imedit-id="{IMEDIT_ID:body:0}"><!-- FILL: 1–2 sentences of context or opening statement --></p>
-      <p class="body-text" data-imedit-id="{IMEDIT_ID:body:1}" style="margin-top: 10.2px;">
-        <!-- FILL: what the deck covers or the ask; use <strong> for key phrases -->
-      </p>
-    </div>
-    <p class="footer-meta" data-imedit-id="{IMEDIT_ID:footer-meta:0}">
-      <strong>Source basis</strong> · <!-- FILL: data sources, or omit this block for proposals --><br>
-      <strong>Status</strong> · <!-- FILL: e.g. "Lightly interpreted, non-confidential" or "Confidential — prepared for [Client]" -->
-    </p>
+  <div class="cover-right-photo">
+    <div class="photo-placeholder-cover">Image placeholder</div>
+    <span class="im-mark-vertical">IMPLEMENT CONSULTING GROUP_</span>
   </div>
 </section>
+
+<!-- Dark variant: add class variant-dark for Proposal 4 style -->
+<!-- <section class="slide slide-cover variant-dark" data-slide="1"> -->
 ```
 
-**Notes:** For proposals, replace the footer-meta block with the lead partner's name and contact info. For the personal intro slide (slide 2 of proposals), use Layout 12 (full-width body text) instead of a second cover.
+**Notes:** The `.cover-left` has `background: var(--im-blue-green)` (proposal green). For non-proposal decks that need the dark right panel with body text, use `.cover-right` (not `.cover-right-photo`) — the old styles are preserved on `.cover-right`. For the `:dark` variant add `variant-dark` class to the section.
 
 ---
 
@@ -400,39 +396,38 @@
 
 ---
 
-## Layout 7 — Section divider
+## Layout 7 — Segment divider (replaces Section divider)
 
-**When to use:** Part transitions (Part 1/2/3), ToC markers, section breaks between major deck chapters. Full-bleed two-tone: blue-green left, dark ash right.
+**When to use:** Section breaks between major proposal chapters. Full-bleed photo-background treatment (default) or solid-colour variant. Alias: `section-divider` still works for back-compat.
+
+**Variants:** `:photo` (default — full-bleed image placeholder + dark overlay + Palatino title bottom-left), `:solid` (light green-grey solid + big serif number + dark title)
 
 ```html
-<section class="slide slide-divider" data-slide="N">
-  <div class="logo">IM_</div>
-  <div class="divider-left">
-    <p class="div-eyebrow" data-imedit-id="{IMEDIT_ID:div-eyebrow:0}"><!-- FILL: e.g. "Part 1" or "Section" or omit --></p>
-    <h2 class="div-title" data-imedit-id="{IMEDIT_ID:div-title:0}"><!-- FILL: section name in Palatino; use <em> for italic --></h2>
+<!-- Photo variant (default) -->
+<section class="slide segment-divider" data-slide="N">
+  <span class="logo">IM_</span>
+  <!-- Full-bleed photo background -->
+  <div class="sdiv-photo-bg">
+    <div class="photo-placeholder-divider"></div>
   </div>
-  <div class="divider-right">
-    <!-- FILL: either a list of what this section covers, or leave this panel minimal -->
-    <div class="div-items">
-      <div class="div-item">
-        <span class="div-num" data-imedit-id="{IMEDIT_ID:div-num:0}">01</span>
-        <p class="div-label" data-imedit-id="{IMEDIT_ID:div-label:0}" style="margin:0"><!-- FILL: item label --></p>
-      </div>
-      <div class="div-item">
-        <span class="div-num" data-imedit-id="{IMEDIT_ID:div-num:1}">02</span>
-        <p class="div-label" data-imedit-id="{IMEDIT_ID:div-label:1}" style="margin:0"><!-- FILL --></p>
-      </div>
-      <div class="div-item">
-        <span class="div-num" data-imedit-id="{IMEDIT_ID:div-num:2}">03</span>
-        <p class="div-label" data-imedit-id="{IMEDIT_ID:div-label:2}" style="margin:0"><!-- FILL --></p>
-      </div>
-    </div>
+  <!-- Dark gradient overlay -->
+  <div class="sdiv-overlay"></div>
+  <!-- Title block bottom-left -->
+  <div class="sdiv-content">
+    <span class="sdiv-section-num" data-imedit-id="{IMEDIT_ID:sdiv-section-num:0}"><!-- FILL: e.g. 01 --></span>
+    <p class="sdiv-eyebrow" data-imedit-id="{IMEDIT_ID:sdiv-eyebrow:0}"><!-- FILL: e.g. "Section 01" --></p>
+    <h2 class="sdiv-title" data-imedit-id="{IMEDIT_ID:sdiv-title:0}"><!-- FILL: section name in Palatino; use <em> for italic --></h2>
   </div>
-  <p class="page-number"><!-- FILL: NN / TT --></p>
+  <p class="page-number" style="color:rgba(255,255,255,0.4);"><!-- FILL: NN / TT --></p>
 </section>
+
+<!-- Solid variant: add class variant-solid -->
+<!-- <section class="slide segment-divider variant-solid" data-slide="N"> -->
+<!-- Same inner structure; colours flip automatically via CSS. -->
+<!-- In variant-solid: sdiv-title becomes dark (#1F1F23), sdiv-section-num becomes blue-green -->
 ```
 
-**Notes:** For a ToC divider with no right-panel content, leave `.divider-right` empty or add a single-line subtitle. For a simple section transition, omit `.div-items` and add only a `.div-eyebrow` + `.div-title` on the left.
+**Notes:** The old `.slide-divider` two-tone split layout is deprecated. Use `segment-divider` for all new and updated decks. The `.section-divider` class is a CSS alias for back-compat. The large serif number in `.sdiv-section-num` renders at 80px Palatino — use 2-character strings like `01`, `02` etc. Photo placeholder fills the full slide and is styled via `.sdiv-photo-bg .photo-placeholder-divider`.
 
 ---
 
@@ -639,6 +634,1073 @@
   <p class="page-number"><!-- FILL: NN / TT --></p>
 </section>
 ```
+
+---
+
+---
+
+## Layout 13 — Photo-left-content
+
+**When to use:** Proposal opener letter (`:letter`), contents/agenda page (`:contents`), or workshop objectives (`:purpose`). Replaces the old `purpose-photo-left` layout. 35/65 split with photo-placeholder left and content right.
+
+**Variants:** `:purpose` (icon-boxes for objectives — matches old purpose-photo-left), `:letter` (Palatino body text + partner signature), `:contents` (numbered section list)
+
+```html
+<!-- Base: use class variant-purpose, variant-letter, or variant-contents -->
+<section class="slide photo-left-content variant-purpose" data-slide="N">
+  <div class="plc-left">
+    <div class="photo-placeholder">Image placeholder</div>
+  </div>
+  <div class="plc-right">
+    <div class="logo">IM_</div>
+    <p class="slide-eyebrow" data-imedit-id="{IMEDIT_ID:slide-eyebrow:0}"><!-- FILL: EYEBROW LABEL, e.g. "ABOUT THIS PROJECT" --></p>
+    <h2 class="plc-heading" data-imedit-id="{IMEDIT_ID:plc-heading:0}"><!-- FILL: main heading in Palatino, 2–4 words --></h2>
+
+    <!-- Purpose variant: icon-boxes for objectives -->
+    <div class="purpose-boxes">
+      <!-- NOTE: increment :N in data-imedit-id for each repeated purpose-box -->
+      <div class="purpose-box">
+        <div class="purpose-box-icon">
+          <svg viewBox="0 0 36 36" stroke="#67817F" fill="none" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round">
+            <!-- FILL: icon paths -->
+          </svg>
+        </div>
+        <div>
+          <div class="purpose-box-title" data-imedit-id="{IMEDIT_ID:purpose-box-title:0}"><p><!-- FILL: objective title --></p></div>
+          <div class="purpose-box-body" data-imedit-id="{IMEDIT_ID:purpose-box-body:0}"><p><!-- FILL: 1–2 sentence description --></p></div>
+        </div>
+      </div>
+      <!-- repeat purpose-box × 1-2 more (use :1, :2 for imedit ids) -->
+    </div>
+
+    <p class="page-number"><!-- FILL: NN / TT --></p>
+  </div>
+</section>
+```
+
+```html
+<!-- Letter variant -->
+<section class="slide photo-left-content variant-letter" data-slide="N">
+  <div class="plc-left">
+    <div class="photo-placeholder">Image placeholder</div>
+  </div>
+  <div class="plc-right">
+    <div class="logo">IM_</div>
+    <p class="slide-eyebrow" data-imedit-id="{IMEDIT_ID:slide-eyebrow:0}"><!-- FILL: e.g. "DEAR [CLIENT NAME]," --></p>
+    <div class="plc-letter-body" data-imedit-id="{IMEDIT_ID:letter-body:0}">
+      <p><!-- FILL: opening paragraph of the partner letter --></p>
+      <p><!-- FILL: second paragraph — state what the proposal covers --></p>
+      <p><!-- FILL: closing sentence, e.g. "We look forward to the conversation." --></p>
+    </div>
+    <div class="plc-signature">
+      <div class="plc-signature-avatar"></div>
+      <div>
+        <p class="plc-signature-name" data-imedit-id="{IMEDIT_ID:signature-name:0}"><!-- FILL: Partner name --></p>
+        <p class="plc-signature-role" data-imedit-id="{IMEDIT_ID:signature-role:0}"><!-- FILL: Partner role · Implement Consulting Group --></p>
+      </div>
+    </div>
+    <p class="page-number"><!-- FILL: NN / TT --></p>
+  </div>
+</section>
+```
+
+```html
+<!-- Contents / agenda variant -->
+<section class="slide photo-left-content variant-contents" data-slide="N">
+  <div class="plc-left">
+    <div class="photo-placeholder">Image placeholder</div>
+  </div>
+  <div class="plc-right">
+    <div class="logo">IM_</div>
+    <p class="slide-eyebrow" data-imedit-id="{IMEDIT_ID:slide-eyebrow:0}"><!-- FILL: e.g. "CONTENTS" --></p>
+    <h2 class="plc-heading" data-imedit-id="{IMEDIT_ID:plc-heading:0}"><!-- FILL: e.g. "Our proposal" or omit --></h2>
+    <div class="plc-contents-list">
+      <!-- NOTE: increment :N for each repeated plc-contents-item -->
+      <!-- Add class active-section to highlight the current section -->
+      <div class="plc-contents-item" data-imedit-id="{IMEDIT_ID:contents-item:0}">
+        <span class="plc-contents-num">01</span>
+        <span class="plc-contents-label" data-imedit-id="{IMEDIT_ID:contents-label:0}"><!-- FILL: section name --></span>
+      </div>
+      <div class="plc-contents-item" data-imedit-id="{IMEDIT_ID:contents-item:1}">
+        <span class="plc-contents-num">02</span>
+        <span class="plc-contents-label" data-imedit-id="{IMEDIT_ID:contents-label:1}"><!-- FILL --></span>
+      </div>
+      <div class="plc-contents-item" data-imedit-id="{IMEDIT_ID:contents-item:2}">
+        <span class="plc-contents-num">03</span>
+        <span class="plc-contents-label" data-imedit-id="{IMEDIT_ID:contents-label:2}"><!-- FILL --></span>
+      </div>
+      <div class="plc-contents-item" data-imedit-id="{IMEDIT_ID:contents-item:3}">
+        <span class="plc-contents-num">04</span>
+        <span class="plc-contents-label" data-imedit-id="{IMEDIT_ID:contents-label:3}"><!-- FILL --></span>
+      </div>
+      <div class="plc-contents-item" data-imedit-id="{IMEDIT_ID:contents-item:4}">
+        <span class="plc-contents-num">05</span>
+        <span class="plc-contents-label" data-imedit-id="{IMEDIT_ID:contents-label:4}"><!-- FILL --></span>
+      </div>
+    </div>
+    <p class="page-number"><!-- FILL: NN / TT --></p>
+  </div>
+</section>
+```
+
+**Notes:** Default (no variant class) behaves like `:purpose`. The `:letter` variant sets `.plc-right { background: white }` for a cleaner letter feel. For the `:contents` variant, add class `active-section` to the `.plc-contents-item` that represents the current section (useful on repeated contents slides within a proposal). The old `slide-purpose` / `purpose-photo-left` snippet still works — it is a CSS alias.
+
+---
+
+## Layout 14 — Photo card grid
+
+**When to use:** Credentials, project references, expert panels. Configurable 2/3/4 column density. Each card: photo placeholder top + bold title + 2-line description.
+
+```html
+<section class="slide" data-slide="N">
+  <div class="logo">IM_</div>
+  <h2 class="action-title" data-imedit-id="{IMEDIT_ID:action-title:0}">
+    <strong><!-- FILL: section label --></strong> | <!-- FILL: declarative action title -->
+  </h2>
+  <div class="content-wrap">
+    <div class="photo-card-grid">
+      <!-- Set --pcg-cols to 2, 3, or 4 depending on content density -->
+      <div class="photo-card-grid-inner" style="--pcg-cols: 3;">
+        <!-- NOTE: increment :N in data-imedit-id for each repeated photo-card -->
+        <div class="photo-card" data-imedit-id="{IMEDIT_ID:photo-card:0}">
+          <div class="photo-card-img">Image placeholder</div>
+          <p class="photo-card-title" data-imedit-id="{IMEDIT_ID:photo-card-title:0}"><!-- FILL: bold title — client or engagement name --></p>
+          <p class="photo-card-desc" data-imedit-id="{IMEDIT_ID:photo-card-desc:0}"><!-- FILL: 1–2 line description; use <strong> for key detail --></p>
+        </div>
+        <div class="photo-card" data-imedit-id="{IMEDIT_ID:photo-card:1}">
+          <div class="photo-card-img">Image placeholder</div>
+          <p class="photo-card-title" data-imedit-id="{IMEDIT_ID:photo-card-title:1}"><!-- FILL --></p>
+          <p class="photo-card-desc" data-imedit-id="{IMEDIT_ID:photo-card-desc:1}"><!-- FILL --></p>
+        </div>
+        <div class="photo-card" data-imedit-id="{IMEDIT_ID:photo-card:2}">
+          <div class="photo-card-img">Image placeholder</div>
+          <p class="photo-card-title" data-imedit-id="{IMEDIT_ID:photo-card-title:2}"><!-- FILL --></p>
+          <p class="photo-card-desc" data-imedit-id="{IMEDIT_ID:photo-card-desc:2}"><!-- FILL --></p>
+        </div>
+        <!-- FILL: repeat photo-card as needed; typical: 3 per row, 1–2 rows -->
+      </div>
+    </div>
+  </div>
+  <p class="source-line"><!-- FILL: or omit --></p>
+  <p class="page-number"><!-- FILL: NN / TT --></p>
+</section>
+```
+
+**Notes:** For 4-column dense grids (e.g. 8 references), set `--pcg-cols: 4`. For 2-column large-card grids (e.g. 2 flagship credentials), set `--pcg-cols: 2` and the cards naturally expand. The `.photo-card-img` uses a 4:3 `aspect-ratio` so card heights stay consistent within a row.
+
+---
+
+## Layout 15 — Ring diagram
+
+**When to use:** Co-creation model, collaboration structure, one-project-team concept. Two overlapping circles (outlined left, filled right) with bullet lists on each side. Optional bottom icon row.
+
+```html
+<section class="slide" data-slide="N">
+  <div class="logo">IM_</div>
+  <h2 class="action-title" data-imedit-id="{IMEDIT_ID:action-title:0}">
+    <strong><!-- FILL: section label --></strong> | <!-- FILL: declarative action title -->
+  </h2>
+  <div class="content-wrap">
+    <div class="ring-diagram">
+      <div class="ring-diagram-inner">
+
+        <!-- Left bullets (client side) -->
+        <div class="ring-bullets-left">
+          <p class="ring-left-label" data-imedit-id="{IMEDIT_ID:ring-left-label:0}"><!-- FILL: left side label, e.g. "[CLIENT]" --></p>
+          <!-- NOTE: increment :N for each ring-bullet -->
+          <p class="ring-bullet" data-imedit-id="{IMEDIT_ID:ring-bullet-left:0}"><!-- FILL: left side bullet --></p>
+          <p class="ring-bullet" data-imedit-id="{IMEDIT_ID:ring-bullet-left:1}"><!-- FILL --></p>
+          <p class="ring-bullet" data-imedit-id="{IMEDIT_ID:ring-bullet-left:2}"><!-- FILL --></p>
+          <p class="ring-bullet" data-imedit-id="{IMEDIT_ID:ring-bullet-left:3}"><!-- FILL --></p>
+        </div>
+
+        <!-- Overlapping circles -->
+        <div class="ring-diagram-circles">
+          <div class="ring-circle-left"></div>
+          <div class="ring-circle-right"></div>
+          <div class="ring-center">
+            <p class="ring-center-label" data-imedit-id="{IMEDIT_ID:ring-center-label:0}"><!-- FILL: center overlap label, e.g. "One project team" --></p>
+          </div>
+        </div>
+
+        <!-- Right bullets (Implement side) -->
+        <div class="ring-bullets-right">
+          <p class="ring-right-label" data-imedit-id="{IMEDIT_ID:ring-right-label:0}"><!-- FILL: right side label, e.g. "IMPLEMENT" --></p>
+          <p class="ring-bullet" data-imedit-id="{IMEDIT_ID:ring-bullet-right:0}"><!-- FILL: right side bullet --></p>
+          <p class="ring-bullet" data-imedit-id="{IMEDIT_ID:ring-bullet-right:1}"><!-- FILL --></p>
+          <p class="ring-bullet" data-imedit-id="{IMEDIT_ID:ring-bullet-right:2}"><!-- FILL --></p>
+          <p class="ring-bullet" data-imedit-id="{IMEDIT_ID:ring-bullet-right:3}"><!-- FILL --></p>
+        </div>
+
+      </div>
+
+      <!-- Optional bottom icon row — omit entire .ring-icons block if not needed -->
+      <div class="ring-icons">
+        <div class="ring-icons-side">
+          <div class="ring-icon-item" data-imedit-id="{IMEDIT_ID:ring-icon:0}">
+            <div class="ring-icon-circle">
+              <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><!-- FILL: icon paths --></svg>
+            </div>
+            <span class="ring-icon-label" data-imedit-id="{IMEDIT_ID:ring-icon-label:0}"><!-- FILL: icon label --></span>
+          </div>
+          <!-- repeat ring-icon-item × 1-3 more -->
+        </div>
+        <div></div><!-- center spacer (circles column) -->
+        <div class="ring-icons-side">
+          <div class="ring-icon-item" data-imedit-id="{IMEDIT_ID:ring-icon:4}">
+            <div class="ring-icon-circle">
+              <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><!-- FILL --></svg>
+            </div>
+            <span class="ring-icon-label" data-imedit-id="{IMEDIT_ID:ring-icon-label:4}"><!-- FILL --></span>
+          </div>
+          <!-- repeat ring-icon-item × 1-3 more -->
+        </div>
+      </div>
+
+    </div>
+  </div>
+  <p class="source-line"><!-- FILL: or omit --></p>
+  <p class="page-number"><!-- FILL: NN / TT --></p>
+</section>
+```
+
+**Notes:** The left circle is outlined only (`border: 2.5px solid #B9C7C2; background: transparent`) — representing the client. The right circle is filled `#67817F` — representing Implement. The overlap center has a white Palatino italic label. For the bottom icon row, keep left icons parallel to left bullets and right icons parallel to right bullets.
+
+---
+
+## Layout 16 — Team and investment
+
+**When to use:** Proposal team + fee slide. 2/1 split: team photo grid left (optionally split into Core team + SMEs subsections) and Investment panel right. Optional "Updated price" callout tag.
+
+```html
+<section class="slide" data-slide="N">
+  <div class="logo">IM_</div>
+  <h2 class="action-title" data-imedit-id="{IMEDIT_ID:action-title:0}">
+    <strong><!-- FILL: section label --></strong> | <!-- FILL: declarative action title -->
+  </h2>
+  <div class="content-wrap">
+    <div class="team-and-investment">
+
+      <!-- Left: team photo grid -->
+      <div class="team-grid-wrap">
+        <!-- Optional subsection label — omit if only one group -->
+        <p class="team-section-label" data-imedit-id="{IMEDIT_ID:team-section-label:0}">Core team</p>
+        <div class="team-grid">
+          <!-- NOTE: increment :N in data-imedit-id for each repeated team-card -->
+          <div class="team-card" data-imedit-id="{IMEDIT_ID:team-card:0}">
+            <div class="team-card-photo">Image placeholder</div>
+            <p class="team-card-name" data-imedit-id="{IMEDIT_ID:team-card-name:0}"><!-- FILL: Name --></p>
+            <p class="team-card-role" data-imedit-id="{IMEDIT_ID:team-card-role:0}"><!-- FILL: Role / title --></p>
+            <p class="team-card-email" data-imedit-id="{IMEDIT_ID:team-card-email:0}"><!-- FILL: email@implement.no --></p>
+          </div>
+          <div class="team-card" data-imedit-id="{IMEDIT_ID:team-card:1}">
+            <div class="team-card-photo">Image placeholder</div>
+            <p class="team-card-name" data-imedit-id="{IMEDIT_ID:team-card-name:1}"><!-- FILL --></p>
+            <p class="team-card-role" data-imedit-id="{IMEDIT_ID:team-card-role:1}"><!-- FILL --></p>
+            <p class="team-card-email" data-imedit-id="{IMEDIT_ID:team-card-email:1}"><!-- FILL --></p>
+          </div>
+          <div class="team-card" data-imedit-id="{IMEDIT_ID:team-card:2}">
+            <div class="team-card-photo">Image placeholder</div>
+            <p class="team-card-name" data-imedit-id="{IMEDIT_ID:team-card-name:2}"><!-- FILL --></p>
+            <p class="team-card-role" data-imedit-id="{IMEDIT_ID:team-card-role:2}"><!-- FILL --></p>
+            <p class="team-card-email" data-imedit-id="{IMEDIT_ID:team-card-email:2}"><!-- FILL --></p>
+          </div>
+          <!-- repeat team-card × up to 3 more for a 2×3 grid (use :3, :4, :5) -->
+        </div>
+        <!-- Optional SMEs subsection -->
+        <!-- <p class="team-section-label">Subject matter experts</p>
+             <div class="team-grid"> ... more team-cards ... </div> -->
+      </div>
+
+      <!-- Right: investment panel -->
+      <div class="investment-panel">
+        <!-- Optional callout tag — omit if not needed -->
+        <div class="investment-callout" data-imedit-id="{IMEDIT_ID:investment-callout:0}"><!-- FILL: e.g. "Updated price" — or remove this element --></div>
+        <h3 class="investment-heading" data-imedit-id="{IMEDIT_ID:investment-heading:0}">Investment</h3>
+        <p class="investment-body" data-imedit-id="{IMEDIT_ID:investment-body:0}"><!-- FILL: 1–2 sentence fee summary, e.g. "Our estimated fee for this engagement is..." --></p>
+        <ul class="investment-bullets">
+          <li data-imedit-id="{IMEDIT_ID:investment-bullet:0}"><strong><!-- FILL: category, e.g. "Fee" --></strong> <!-- FILL: amount --></li>
+          <li data-imedit-id="{IMEDIT_ID:investment-bullet:1}"><strong><!-- FILL: "Expenses" --></strong> <!-- FILL: --></li>
+          <li data-imedit-id="{IMEDIT_ID:investment-bullet:2}"><strong><!-- FILL: "Terms" --></strong> <!-- FILL: --></li>
+          <!-- add more as needed -->
+        </ul>
+      </div>
+
+    </div>
+  </div>
+  <p class="source-line"><!-- FILL: or omit --></p>
+  <p class="page-number"><!-- FILL: NN / TT --></p>
+</section>
+```
+
+**Notes:** Default team grid is 3 columns (matching CSS `.team-grid { grid-template-columns: repeat(3, 1fr) }`). For a 2×2 grid (4 people), override with `style="grid-template-columns: 1fr 1fr"` on `.team-grid`. The `.investment-callout` element is absolutely positioned and should be removed when there is no callout.
+
+---
+
+## Layout 17 — Person bio
+
+**When to use:** Individual team member CV slides. 30/70 split: large photo left with name and contact info; CV content right with Palatino name, role, and two-column sections (Experience, Education, Selected projects, Areas of expertise).
+
+```html
+<section class="slide person-bio" data-slide="N">
+  <!-- Left: photo column -->
+  <div class="person-photo-col">
+    <div class="person-photo-placeholder">Image placeholder</div>
+    <p class="person-photo-name" data-imedit-id="{IMEDIT_ID:person-photo-name:0}"><!-- FILL: Full name --></p>
+    <p class="person-photo-contact" data-imedit-id="{IMEDIT_ID:person-photo-contact:0}">
+      <!-- FILL: email --><br><!-- FILL: phone -->
+    </p>
+  </div>
+  <!-- Right: CV content -->
+  <div class="person-content-col">
+    <div class="logo">IM_</div>
+    <h2 class="person-name-large" data-imedit-id="{IMEDIT_ID:person-name:0}"><!-- FILL: Full name in Palatino --></h2>
+    <p class="person-role" data-imedit-id="{IMEDIT_ID:person-role:0}"><!-- FILL: Role / title --></p>
+    <div class="person-sections-grid">
+
+      <!-- Experience -->
+      <div class="person-section">
+        <p class="person-section-label">Experience</p>
+        <ul class="person-section-items">
+          <li data-imedit-id="{IMEDIT_ID:experience:0}"><!-- FILL: 1-line engagement or role description --></li>
+          <li data-imedit-id="{IMEDIT_ID:experience:1}"><!-- FILL --></li>
+          <li data-imedit-id="{IMEDIT_ID:experience:2}"><!-- FILL --></li>
+          <li data-imedit-id="{IMEDIT_ID:experience:3}"><!-- FILL --></li>
+        </ul>
+      </div>
+
+      <!-- Education -->
+      <div class="person-section">
+        <p class="person-section-label">Education</p>
+        <div class="person-section-body" data-imedit-id="{IMEDIT_ID:education:0}">
+          <p><!-- FILL: degree, institution, year --></p>
+          <p><!-- FILL: additional qualification if any --></p>
+        </div>
+      </div>
+
+      <!-- Selected projects -->
+      <div class="person-section">
+        <p class="person-section-label">Selected projects</p>
+        <ul class="person-section-items">
+          <li data-imedit-id="{IMEDIT_ID:project:0}"><!-- FILL: client/project description --></li>
+          <li data-imedit-id="{IMEDIT_ID:project:1}"><!-- FILL --></li>
+          <li data-imedit-id="{IMEDIT_ID:project:2}"><!-- FILL --></li>
+        </ul>
+      </div>
+
+      <!-- Areas of expertise -->
+      <div class="person-section">
+        <p class="person-section-label">Areas of expertise</p>
+        <ul class="person-section-items">
+          <li data-imedit-id="{IMEDIT_ID:expertise:0}"><!-- FILL: expertise area --></li>
+          <li data-imedit-id="{IMEDIT_ID:expertise:1}"><!-- FILL --></li>
+          <li data-imedit-id="{IMEDIT_ID:expertise:2}"><!-- FILL --></li>
+          <li data-imedit-id="{IMEDIT_ID:expertise:3}"><!-- FILL --></li>
+        </ul>
+      </div>
+
+    </div>
+    <p class="page-number"><!-- FILL: NN / TT --></p>
+  </div>
+</section>
+```
+
+**Notes:** The `.person-bio` slide is a full-bleed grid (no standard action title) — the name serves as the heading. The two-column `.person-sections-grid` uses `grid-template-columns: 1fr 1fr` with items flowing left-top then right-top. For a shorter bio (fewer sections), simply omit a `.person-section` block. The right column has `position: relative` so the `.logo` and `.page-number` can be absolutely positioned inside it.
+
+---
+
+## Layout 18 — Quantified summary
+
+**When to use:** Cost potential, value opportunity, or quantified initiative overview. 1/1.4 split: chart placeholder left (with sub-label and source line); numbered initiative cards right in dotted-border boxes.
+
+```html
+<section class="slide" data-slide="N">
+  <div class="logo">IM_</div>
+  <h2 class="action-title" data-imedit-id="{IMEDIT_ID:action-title:0}">
+    <strong><!-- FILL: section label --></strong> | <!-- FILL: declarative action title -->
+  </h2>
+  <div class="content-wrap">
+    <div class="quantified-summary">
+
+      <!-- Left: chart placeholder -->
+      <div class="qs-chart-col">
+        <div class="qs-chart-placeholder">Chart placeholder</div>
+        <p class="qs-chart-label" data-imedit-id="{IMEDIT_ID:qs-chart-label:0}"><!-- FILL: chart title, e.g. "Cost reduction potential (NOK m)" --></p>
+        <p class="qs-chart-source" data-imedit-id="{IMEDIT_ID:qs-chart-source:0}"><!-- FILL: Source: ... --></p>
+      </div>
+
+      <!-- Right: numbered initiative cards -->
+      <div class="qs-initiatives-col">
+
+        <!-- NOTE: increment :N in data-imedit-id for each repeated qs-initiative-card -->
+        <div class="qs-initiative-card" data-imedit-id="{IMEDIT_ID:qs-card:0}">
+          <div class="qs-initiative-num">1</div>
+          <div class="qs-initiative-content">
+            <p class="qs-initiative-title" data-imedit-id="{IMEDIT_ID:qs-card-title:0}"><!-- FILL: initiative title --></p>
+            <ul class="qs-initiative-bullets">
+              <li data-imedit-id="{IMEDIT_ID:qs-bullet:0}"><!-- FILL: specific lever --></li>
+              <li data-imedit-id="{IMEDIT_ID:qs-bullet:1}"><!-- FILL --></li>
+              <li data-imedit-id="{IMEDIT_ID:qs-bullet:2}"><!-- FILL --></li>
+            </ul>
+          </div>
+        </div>
+
+        <div class="qs-initiative-card" data-imedit-id="{IMEDIT_ID:qs-card:1}">
+          <div class="qs-initiative-num">2</div>
+          <div class="qs-initiative-content">
+            <p class="qs-initiative-title" data-imedit-id="{IMEDIT_ID:qs-card-title:1}"><!-- FILL --></p>
+            <ul class="qs-initiative-bullets">
+              <li data-imedit-id="{IMEDIT_ID:qs-bullet:3}"><!-- FILL --></li>
+              <li data-imedit-id="{IMEDIT_ID:qs-bullet:4}"><!-- FILL --></li>
+              <li data-imedit-id="{IMEDIT_ID:qs-bullet:5}"><!-- FILL --></li>
+            </ul>
+          </div>
+        </div>
+
+        <div class="qs-initiative-card" data-imedit-id="{IMEDIT_ID:qs-card:2}">
+          <div class="qs-initiative-num">3</div>
+          <div class="qs-initiative-content">
+            <p class="qs-initiative-title" data-imedit-id="{IMEDIT_ID:qs-card-title:2}"><!-- FILL --></p>
+            <ul class="qs-initiative-bullets">
+              <li data-imedit-id="{IMEDIT_ID:qs-bullet:6}"><!-- FILL --></li>
+              <li data-imedit-id="{IMEDIT_ID:qs-bullet:7}"><!-- FILL --></li>
+              <li data-imedit-id="{IMEDIT_ID:qs-bullet:8}"><!-- FILL --></li>
+            </ul>
+          </div>
+        </div>
+
+      </div>
+
+    </div>
+  </div>
+  <p class="source-line"><!-- FILL: or omit --></p>
+  <p class="page-number"><!-- FILL: NN / TT --></p>
+</section>
+```
+
+**Notes:** The `.qs-chart-placeholder` fills the available vertical space via `flex: 1`. The dotted border on `.qs-initiative-card` uses `border: 1px dashed #B9C7C2`. The three cards use `flex: 1` to share vertical space equally — for 2 or 4 cards, simply add or remove a `.qs-initiative-card` block.
+
+---
+
+## Layout 19 — Vertical numbered list
+
+**When to use:** 5 stacked criteria, considerations, principles, or phases. Each row has a numbered or lettered circle, a bold title, and 1–2 bullets. Distinct from the horizontal moves-grid.
+
+**Variants:** `:numbered` (1–5 in filled green-grey circles), `:lettered` (A–E in same circles)
+
+```html
+<!-- Numbered variant -->
+<section class="slide vertical-numbered-list variant-numbered" data-slide="N">
+  <div class="logo">IM_</div>
+  <h2 class="action-title" data-imedit-id="{IMEDIT_ID:action-title:0}">
+    <strong><!-- FILL: section label --></strong> | <!-- FILL: declarative action title -->
+  </h2>
+  <!-- Optional left arc decoration — add position:relative to content-wrap, then include .vnl-decoration -->
+  <div class="content-wrap" style="position: relative;">
+    <!-- <div class="vnl-decoration"></div> -->
+    <div class="vertical-numbered-list">
+
+      <!-- NOTE: increment :N in data-imedit-id for each repeated vnl-row -->
+      <div class="vnl-row" data-imedit-id="{IMEDIT_ID:vnl-row:0}">
+        <div class="vnl-circle">1</div>
+        <div class="vnl-content">
+          <p class="vnl-title" data-imedit-id="{IMEDIT_ID:vnl-title:0}"><!-- FILL: criterion/phase title --></p>
+          <ul class="vnl-bullets">
+            <li data-imedit-id="{IMEDIT_ID:vnl-bullet:0}"><!-- FILL: supporting detail --></li>
+            <li data-imedit-id="{IMEDIT_ID:vnl-bullet:1}"><!-- FILL --></li>
+          </ul>
+        </div>
+      </div>
+
+      <div class="vnl-row" data-imedit-id="{IMEDIT_ID:vnl-row:1}">
+        <div class="vnl-circle">2</div>
+        <div class="vnl-content">
+          <p class="vnl-title" data-imedit-id="{IMEDIT_ID:vnl-title:1}"><!-- FILL --></p>
+          <ul class="vnl-bullets">
+            <li data-imedit-id="{IMEDIT_ID:vnl-bullet:2}"><!-- FILL --></li>
+            <li data-imedit-id="{IMEDIT_ID:vnl-bullet:3}"><!-- FILL --></li>
+          </ul>
+        </div>
+      </div>
+
+      <div class="vnl-row" data-imedit-id="{IMEDIT_ID:vnl-row:2}">
+        <div class="vnl-circle">3</div>
+        <div class="vnl-content">
+          <p class="vnl-title" data-imedit-id="{IMEDIT_ID:vnl-title:2}"><!-- FILL --></p>
+          <ul class="vnl-bullets">
+            <li data-imedit-id="{IMEDIT_ID:vnl-bullet:4}"><!-- FILL --></li>
+            <li data-imedit-id="{IMEDIT_ID:vnl-bullet:5}"><!-- FILL --></li>
+          </ul>
+        </div>
+      </div>
+
+      <div class="vnl-row" data-imedit-id="{IMEDIT_ID:vnl-row:3}">
+        <div class="vnl-circle">4</div>
+        <div class="vnl-content">
+          <p class="vnl-title" data-imedit-id="{IMEDIT_ID:vnl-title:3}"><!-- FILL --></p>
+          <ul class="vnl-bullets">
+            <li data-imedit-id="{IMEDIT_ID:vnl-bullet:6}"><!-- FILL --></li>
+            <li data-imedit-id="{IMEDIT_ID:vnl-bullet:7}"><!-- FILL --></li>
+          </ul>
+        </div>
+      </div>
+
+      <div class="vnl-row" data-imedit-id="{IMEDIT_ID:vnl-row:4}">
+        <div class="vnl-circle">5</div>
+        <div class="vnl-content">
+          <p class="vnl-title" data-imedit-id="{IMEDIT_ID:vnl-title:4}"><!-- FILL --></p>
+          <ul class="vnl-bullets">
+            <li data-imedit-id="{IMEDIT_ID:vnl-bullet:8}"><!-- FILL --></li>
+            <li data-imedit-id="{IMEDIT_ID:vnl-bullet:9}"><!-- FILL --></li>
+          </ul>
+        </div>
+      </div>
+
+    </div>
+  </div>
+  <p class="source-line"><!-- FILL: or omit --></p>
+  <p class="page-number"><!-- FILL: NN / TT --></p>
+</section>
+
+<!-- Lettered variant: change class to variant-lettered and use A-E in .vnl-circle -->
+<!-- <section class="slide vertical-numbered-list variant-lettered" ...> -->
+<!-- <div class="vnl-circle">A</div> ... B ... C ... D ... E -->
+```
+
+**Notes:** The `.vnl-row` elements use `flex: 1` to distribute vertical space equally across all 5 rows. For a slide with only 3 or 4 criteria, simply remove the excess `.vnl-row` blocks — remaining rows expand to fill. The optional `.vnl-decoration` (quarter-arc) is placed as a sibling of `.vertical-numbered-list` inside the `position: relative` content-wrap. To activate, uncomment the decoration line and ensure `content-wrap` has `position: relative`.
+
+---
+
+## Layout 20 — Gantt process
+
+**When to use:** Week-by-week or month-by-month project plan. Month/week column headers × workstream rows. Activity bands in cells. Optional bottom legend + dashed "future phase" column at right.
+
+```html
+<section class="slide" data-slide="N">
+  <div class="logo">IM_</div>
+  <h2 class="action-title" data-imedit-id="{IMEDIT_ID:action-title:0}">
+    <strong><!-- FILL: section label --></strong> | <!-- FILL: declarative action title -->
+  </h2>
+  <div class="content-wrap">
+    <div class="gantt-process">
+
+      <!-- Set --gantt-col-template to match your columns: label col + N content cols -->
+      <!-- Example: 160px + 8 week columns = repeat(8, 1fr) -->
+      <div class="gantt-table" style="--gantt-col-template: 160px repeat(8, 1fr);">
+
+        <!-- Row 1: Month headers -->
+        <div class="gantt-header-row">
+          <div class="gantt-header-month"><!-- empty label corner --></div>
+          <!-- NOTE: use colspan-like spans by repeating or merging header cells manually -->
+          <!-- Adjust header cells to span the appropriate number of week columns -->
+          <div class="gantt-header-month" data-imedit-id="{IMEDIT_ID:gantt-month:0}" style="grid-column: span 2;"><!-- FILL: e.g. OCT --></div>
+          <div class="gantt-header-month" data-imedit-id="{IMEDIT_ID:gantt-month:1}" style="grid-column: span 2;"><!-- FILL: NOV --></div>
+          <div class="gantt-header-month" data-imedit-id="{IMEDIT_ID:gantt-month:2}" style="grid-column: span 2;"><!-- FILL: DEC --></div>
+          <div class="gantt-header-month" data-imedit-id="{IMEDIT_ID:gantt-month:3}" style="grid-column: span 2;"><!-- FILL: JAN --></div>
+        </div>
+
+        <!-- Row 2: Week/sub-column labels -->
+        <div class="gantt-subheader-row">
+          <div class="gantt-subheader-cell">Workstream</div>
+          <div class="gantt-subheader-cell">W1</div><div class="gantt-subheader-cell">W2</div>
+          <div class="gantt-subheader-cell">W1</div><div class="gantt-subheader-cell">W2</div>
+          <div class="gantt-subheader-cell">W1</div><div class="gantt-subheader-cell">W2</div>
+          <div class="gantt-subheader-cell">W1</div><div class="gantt-subheader-cell">W2</div>
+        </div>
+
+        <!-- Workstream rows -->
+        <div class="gantt-workstream-rows">
+
+          <!-- NOTE: increment :N in data-imedit-id for each workstream row -->
+          <div class="gantt-workstream-row" data-imedit-id="{IMEDIT_ID:gantt-row:0}">
+            <div class="gantt-workstream-label" data-imedit-id="{IMEDIT_ID:gantt-label:0}"><!-- FILL: Mobilisation --></div>
+            <!-- FILL: each cell below is one column; add .gantt-band spans where activity occurs -->
+            <!-- Use band-start on first cell, band-mid on intermediate, band-end on last -->
+            <div class="gantt-cell"><div class="gantt-band band-start" data-imedit-id="{IMEDIT_ID:gantt-band:0}"><!-- FILL: activity label or leave empty --></div></div>
+            <div class="gantt-cell"><div class="gantt-band band-end"></div></div>
+            <div class="gantt-cell"></div>
+            <div class="gantt-cell"></div>
+            <div class="gantt-cell"></div>
+            <div class="gantt-cell"></div>
+            <div class="gantt-cell"></div>
+            <div class="gantt-cell"></div>
+          </div>
+
+          <div class="gantt-workstream-row" data-imedit-id="{IMEDIT_ID:gantt-row:1}">
+            <div class="gantt-workstream-label" data-imedit-id="{IMEDIT_ID:gantt-label:1}"><!-- FILL: Phase 1 --></div>
+            <div class="gantt-cell"></div>
+            <div class="gantt-cell"><div class="gantt-band band-start band-light" data-imedit-id="{IMEDIT_ID:gantt-band:1}"><!-- FILL --></div></div>
+            <div class="gantt-cell"><div class="gantt-band band-mid band-light"></div></div>
+            <div class="gantt-cell"><div class="gantt-band band-end band-light"></div></div>
+            <div class="gantt-cell"></div>
+            <div class="gantt-cell"></div>
+            <div class="gantt-cell"></div>
+            <div class="gantt-cell"></div>
+          </div>
+
+          <div class="gantt-workstream-row" data-imedit-id="{IMEDIT_ID:gantt-row:2}">
+            <div class="gantt-workstream-label" data-imedit-id="{IMEDIT_ID:gantt-label:2}"><!-- FILL: Phase 2 --></div>
+            <div class="gantt-cell"></div>
+            <div class="gantt-cell"></div>
+            <div class="gantt-cell"></div>
+            <div class="gantt-cell"><div class="gantt-band band-start" data-imedit-id="{IMEDIT_ID:gantt-band:2}"><!-- FILL --></div></div>
+            <div class="gantt-cell"><div class="gantt-band band-mid"></div></div>
+            <div class="gantt-cell"><div class="gantt-band band-mid"></div></div>
+            <div class="gantt-cell"><div class="gantt-band band-end"></div></div>
+            <!-- Optional future phase: add class gantt-future-phase -->
+            <div class="gantt-cell gantt-future-phase"></div>
+          </div>
+
+          <div class="gantt-workstream-row" data-imedit-id="{IMEDIT_ID:gantt-row:3}">
+            <div class="gantt-workstream-label" data-imedit-id="{IMEDIT_ID:gantt-label:3}"><!-- FILL: Main touchpoints --></div>
+            <div class="gantt-cell"><div class="gantt-milestone"></div></div>
+            <div class="gantt-cell"></div>
+            <div class="gantt-cell"><div class="gantt-milestone"></div></div>
+            <div class="gantt-cell"></div>
+            <div class="gantt-cell"><div class="gantt-milestone"></div></div>
+            <div class="gantt-cell"></div>
+            <div class="gantt-cell"><div class="gantt-milestone"></div></div>
+            <div class="gantt-cell gantt-future-phase"></div>
+          </div>
+
+          <!-- FILL: repeat gantt-workstream-row as needed (typically 4-5 rows) -->
+
+        </div>
+
+      </div>
+
+      <!-- Optional legend row -->
+      <div class="gantt-legend">
+        <div class="gantt-legend-item">
+          <div class="gantt-legend-swatch"></div>
+          <span data-imedit-id="{IMEDIT_ID:gantt-legend:0}"><!-- FILL: e.g. "Core workstream" --></span>
+        </div>
+        <div class="gantt-legend-item">
+          <div class="gantt-legend-swatch swatch-light"></div>
+          <span data-imedit-id="{IMEDIT_ID:gantt-legend:1}"><!-- FILL: e.g. "Supporting workstream" --></span>
+        </div>
+        <div class="gantt-legend-item">
+          <div class="gantt-legend-diamond"></div>
+          <span data-imedit-id="{IMEDIT_ID:gantt-legend:2}"><!-- FILL: e.g. "Key milestone / touchpoint" --></span>
+        </div>
+      </div>
+
+    </div>
+  </div>
+  <p class="source-line"><!-- FILL: or omit --></p>
+  <p class="page-number"><!-- FILL: NN / TT --></p>
+</section>
+```
+
+**Notes:** The `--gantt-col-template` CSS variable controls the grid columns for all four gantt sub-rows — set once on `.gantt-table` and it applies everywhere. For month-span headers, use `style="grid-column: span N"` on `.gantt-header-month` cells. The `.gantt-band` chevron shape uses `clip-path: polygon(...)` — `band-start` has the left side flush, `band-end` has the right side flush, `band-mid` has both sides angled. For a "future phase" dashed column, add class `gantt-future-phase` to the relevant `.gantt-cell` elements in each row AND to the matching label with `future-label`. The legend is optional; omit the `.gantt-legend` div entirely if the slide has a source line.
+
+---
+
+## Layout 4 variants — Two-panel variant slots
+
+**When to use (SCR):** Situation-Complication-Resolution framing. Left panel = situation/context; right panel = key questions or objectives with numbered green circles. Optional "FOR DISCUSSION" tag top-right.
+
+```html
+<!-- Two-panel:scr variant -->
+<section class="slide two-panel variant-scr" data-slide="N">
+  <div class="logo">IM_</div>
+  <h2 class="action-title" data-imedit-id="{IMEDIT_ID:action-title:0}">
+    <strong><!-- FILL: section label --></strong> | <!-- FILL: declarative action title -->
+  </h2>
+  <!-- Optional FOR DISCUSSION tag -->
+  <div class="scr-discussion-tag" data-imedit-id="{IMEDIT_ID:scr-tag:0}">For discussion</div>
+  <div class="content-wrap">
+    <div class="gov-layout">
+
+      <!-- Left: situation / context -->
+      <div class="gov-side">
+        <p class="table-label" data-imedit-id="{IMEDIT_ID:table-label:0}"><!-- FILL: e.g. "Situation" or "Background" --></p>
+        <div class="table-label-underline"></div>
+        <div class="gov-panel left-panel">
+          <ul class="gov-bullets">
+            <li data-imedit-id="{IMEDIT_ID:bullet:0}"><!-- FILL: context point --></li>
+            <li data-imedit-id="{IMEDIT_ID:bullet:1}"><!-- FILL --></li>
+            <li data-imedit-id="{IMEDIT_ID:bullet:2}"><!-- FILL --></li>
+          </ul>
+        </div>
+      </div>
+
+      <!-- Chevron arrow between panels -->
+      <div class="scr-arrow" aria-hidden="true"></div>
+
+      <!-- Right: key questions or objectives -->
+      <div class="gov-side">
+        <p class="table-label" data-imedit-id="{IMEDIT_ID:table-label:1}"><!-- FILL: e.g. "Key questions" --></p>
+        <div class="table-label-underline"></div>
+        <div class="gov-panel right-panel">
+          <div class="gov-blocks">
+            <!-- FILL: each block uses a scr-numbered-circle before the text -->
+            <div class="gov-block">
+              <p class="gov-block-label" data-imedit-id="{IMEDIT_ID:gov-block-label:0}">
+                <span class="scr-numbered-circle">1</span><!-- FILL: question or objective title -->
+              </p>
+              <ul class="gov-bullets">
+                <li data-imedit-id="{IMEDIT_ID:bullet:3}"><!-- FILL --></li>
+              </ul>
+            </div>
+            <div class="gov-block">
+              <p class="gov-block-label" data-imedit-id="{IMEDIT_ID:gov-block-label:1}">
+                <span class="scr-numbered-circle">2</span><!-- FILL --></p>
+              <ul class="gov-bullets">
+                <li data-imedit-id="{IMEDIT_ID:bullet:4}"><!-- FILL --></li>
+              </ul>
+            </div>
+            <div class="gov-block">
+              <p class="gov-block-label" data-imedit-id="{IMEDIT_ID:gov-block-label:2}">
+                <span class="scr-numbered-circle">3</span><!-- FILL --></p>
+              <ul class="gov-bullets">
+                <li data-imedit-id="{IMEDIT_ID:bullet:5}"><!-- FILL --></li>
+              </ul>
+            </div>
+          </div>
+        </div>
+      </div>
+
+    </div>
+  </div>
+  <p class="source-line"><!-- FILL: or omit --></p>
+  <p class="page-number"><!-- FILL: NN / TT --></p>
+</section>
+```
+
+**Notes for SCR variant:** The `.scr-arrow` is absolutely positioned between the two `.gov-side` panels using `position: absolute; left: 50%; top: 50%; transform: translate(-50%, -50%)` — it requires `position: relative` on `.gov-layout`. The `.scr-discussion-tag` is absolutely positioned top-right relative to `.content-wrap`. Omit both elements if not needed. The `.scr-numbered-circle` sits inline before the label text.
+
+---
+
+**When to use (header-band):** Two parallel content panels sharing a single dark header band across the top — creates a table-like visual structure for methodology or framework slides.
+
+```html
+<!-- Two-panel:header-band variant -->
+<section class="slide two-panel variant-header-band" data-slide="N">
+  <div class="logo">IM_</div>
+  <h2 class="action-title" data-imedit-id="{IMEDIT_ID:action-title:0}">
+    <strong><!-- FILL: section label --></strong> | <!-- FILL: declarative action title -->
+  </h2>
+  <div class="content-wrap">
+    <!-- Shared header band spanning both panels -->
+    <div class="thb-header-band">
+      <span class="thb-header-band-title" data-imedit-id="{IMEDIT_ID:thb-title:0}"><!-- FILL: left column heading --></span>
+      <span class="thb-header-band-sub" data-imedit-id="{IMEDIT_ID:thb-sub:0}" style="margin-left:auto"><!-- FILL: right column heading --></span>
+    </div>
+    <div class="gov-layout" style="flex:1; margin-top:0;">
+
+      <!-- Left panel -->
+      <div class="gov-side">
+        <div class="gov-panel left-panel">
+          <div class="gov-blocks">
+            <div class="gov-block">
+              <p class="gov-block-label" data-imedit-id="{IMEDIT_ID:gov-block-label:0}"><!-- FILL: sub-heading --></p>
+              <ul class="gov-bullets">
+                <li data-imedit-id="{IMEDIT_ID:bullet:0}"><!-- FILL --></li>
+                <li data-imedit-id="{IMEDIT_ID:bullet:1}"><!-- FILL --></li>
+              </ul>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Right panel -->
+      <div class="gov-side">
+        <div class="gov-panel right-panel">
+          <div class="gov-blocks">
+            <div class="gov-block">
+              <p class="gov-block-label" data-imedit-id="{IMEDIT_ID:gov-block-label:1}"><!-- FILL: sub-heading --></p>
+              <ul class="gov-bullets">
+                <li data-imedit-id="{IMEDIT_ID:bullet:2}"><!-- FILL --></li>
+                <li data-imedit-id="{IMEDIT_ID:bullet:3}"><!-- FILL --></li>
+              </ul>
+            </div>
+          </div>
+        </div>
+      </div>
+
+    </div>
+  </div>
+  <p class="source-line"><!-- FILL: or omit --></p>
+  <p class="page-number"><!-- FILL: NN / TT --></p>
+</section>
+```
+
+---
+
+**When to use (about-firm):** "About Implement" slide at the end of a proposal. Dark left panel with white title + firm description + chart area; white right with 4 numbered Palatino "We are..." principle blocks.
+
+```html
+<!-- Two-panel:about-firm variant -->
+<section class="slide two-panel variant-about-firm" data-slide="N">
+  <div class="logo" style="color: rgba(255,255,255,0.55);">IM_</div>
+  <h2 class="action-title" data-imedit-id="{IMEDIT_ID:action-title:0}">
+    <strong><!-- FILL: section label --></strong> | <!-- FILL: declarative action title -->
+  </h2>
+  <div class="content-wrap" style="flex-direction:row; gap:0; padding:0; margin:0;">
+
+    <!-- Left dark panel -->
+    <div class="about-left">
+      <h3 class="about-left-title" data-imedit-id="{IMEDIT_ID:about-title:0}"><!-- FILL: e.g. "We are Implement Consulting Group" --></h3>
+      <p class="about-left-body" data-imedit-id="{IMEDIT_ID:about-body:0}"><!-- FILL: 2–3 sentence firm description --></p>
+      <div class="about-chart-slot">Chart placeholder</div>
+    </div>
+
+    <!-- Right white panel -->
+    <div class="about-right">
+      <!-- FILL: 4 principle blocks (We are... statements) -->
+      <!-- NOTE: increment :N in data-imedit-id for each principle -->
+      <div class="about-principle">
+        <span class="about-principle-num" data-imedit-id="{IMEDIT_ID:about-num:0}">1</span>
+        <p class="about-principle-text" data-imedit-id="{IMEDIT_ID:about-principle:0}"><!-- FILL: "We are <em>decisive</em> and direct..." --></p>
+      </div>
+      <div class="about-principle">
+        <span class="about-principle-num" data-imedit-id="{IMEDIT_ID:about-num:1}">2</span>
+        <p class="about-principle-text" data-imedit-id="{IMEDIT_ID:about-principle:1}"><!-- FILL --></p>
+      </div>
+      <div class="about-principle">
+        <span class="about-principle-num" data-imedit-id="{IMEDIT_ID:about-num:2}">3</span>
+        <p class="about-principle-text" data-imedit-id="{IMEDIT_ID:about-principle:2}"><!-- FILL --></p>
+      </div>
+      <div class="about-principle">
+        <span class="about-principle-num" data-imedit-id="{IMEDIT_ID:about-num:3}">4</span>
+        <p class="about-principle-text" data-imedit-id="{IMEDIT_ID:about-principle:3}"><!-- FILL --></p>
+      </div>
+    </div>
+
+  </div>
+  <p class="source-line"><!-- FILL: or omit --></p>
+  <p class="page-number"><!-- FILL: NN / TT --></p>
+</section>
+```
+
+**Notes for about-firm:** The `.content-wrap` needs `flex-direction: row; gap: 0; padding: 0` to let the two panels fill edge-to-edge below the action title. The `.about-left` and `.about-right` each get `flex: 1` by default (50/50). The `.about-principle-text` uses Palatino italic for emphasis — wrap key words in `<em>`.
+
+---
+
+## Layout 3 variants — Iconic 3-column variant slots
+
+**When to use (photo):** Experience pillars or capability columns where a photograph is more persuasive than a line-art icon. The icon circle becomes a 4:3 photo placeholder.
+
+```html
+<!-- Iconic-3-column:photo variant -->
+<section class="slide iconic-3-column variant-photo" data-slide="N">
+  <div class="logo">IM_</div>
+  <h2 class="action-title" data-imedit-id="{IMEDIT_ID:action-title:0}">
+    <strong><!-- FILL: section label --></strong> | <!-- FILL: declarative action title -->
+  </h2>
+  <div class="content-wrap">
+    <div class="iconic-three-col">
+
+      <div class="iconic-card" data-imedit-id="{IMEDIT_ID:iconic-card:0}">
+        <!-- Photo replaces icon circle — the class overrides width/height/border-radius -->
+        <div class="iconic-circle">Image placeholder</div>
+        <p class="iconic-title" data-imedit-id="{IMEDIT_ID:iconic-title:0}"><!-- FILL: pillar title in Palatino --></p>
+        <p class="iconic-subtitle" data-imedit-id="{IMEDIT_ID:iconic-subtitle:0}"><!-- FILL: italic descriptor --></p>
+        <ul class="iconic-bullets">
+          <li data-imedit-id="{IMEDIT_ID:bullet:0}"><!-- FILL --></li>
+          <li data-imedit-id="{IMEDIT_ID:bullet:1}"><!-- FILL --></li>
+          <li data-imedit-id="{IMEDIT_ID:bullet:2}"><!-- FILL --></li>
+        </ul>
+      </div>
+
+      <div class="iconic-card" data-imedit-id="{IMEDIT_ID:iconic-card:1}">
+        <div class="iconic-circle">Image placeholder</div>
+        <p class="iconic-title" data-imedit-id="{IMEDIT_ID:iconic-title:1}"><!-- FILL --></p>
+        <p class="iconic-subtitle" data-imedit-id="{IMEDIT_ID:iconic-subtitle:1}"><!-- FILL --></p>
+        <ul class="iconic-bullets">
+          <li data-imedit-id="{IMEDIT_ID:bullet:3}"><!-- FILL --></li>
+          <li data-imedit-id="{IMEDIT_ID:bullet:4}"><!-- FILL --></li>
+          <li data-imedit-id="{IMEDIT_ID:bullet:5}"><!-- FILL --></li>
+        </ul>
+      </div>
+
+      <div class="iconic-card" data-imedit-id="{IMEDIT_ID:iconic-card:2}">
+        <div class="iconic-circle">Image placeholder</div>
+        <p class="iconic-title" data-imedit-id="{IMEDIT_ID:iconic-title:2}"><!-- FILL --></p>
+        <p class="iconic-subtitle" data-imedit-id="{IMEDIT_ID:iconic-subtitle:2}"><!-- FILL --></p>
+        <ul class="iconic-bullets">
+          <li data-imedit-id="{IMEDIT_ID:bullet:6}"><!-- FILL --></li>
+          <li data-imedit-id="{IMEDIT_ID:bullet:7}"><!-- FILL --></li>
+          <li data-imedit-id="{IMEDIT_ID:bullet:8}"><!-- FILL --></li>
+        </ul>
+      </div>
+
+    </div>
+  </div>
+  <p class="source-line"><!-- FILL: or omit --></p>
+  <p class="page-number"><!-- FILL: NN / TT --></p>
+</section>
+```
+
+---
+
+**When to use (sidebar):** "Why Implement?" or "Why X?" slides where a left sidebar adds a framing question/icon next to 3 main columns.
+
+```html
+<!-- Iconic-3-column:sidebar variant -->
+<section class="slide iconic-3-column variant-sidebar" data-slide="N">
+  <div class="logo">IM_</div>
+  <h2 class="action-title" data-imedit-id="{IMEDIT_ID:action-title:0}">
+    <strong><!-- FILL: section label --></strong> | <!-- FILL: declarative action title -->
+  </h2>
+  <div class="content-wrap">
+
+    <!-- Left sidebar -->
+    <div class="iconic-sidebar">
+      <div class="iconic-sidebar-icon">
+        <svg viewBox="0 0 48 48" stroke="currentColor" fill="none" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round">
+          <!-- FILL: sidebar icon paths -->
+        </svg>
+      </div>
+      <p class="iconic-sidebar-label" data-imedit-id="{IMEDIT_ID:sidebar-label:0}"><!-- FILL: e.g. "Why Implement?" --></p>
+    </div>
+
+    <!-- 3 columns (same structure as base iconic-3-column) -->
+    <div class="iconic-three-col">
+      <div class="iconic-card" data-imedit-id="{IMEDIT_ID:iconic-card:0}">
+        <div class="iconic-circle">
+          <svg viewBox="0 0 32 32"><!-- FILL --></svg>
+        </div>
+        <p class="iconic-title" data-imedit-id="{IMEDIT_ID:iconic-title:0}"><!-- FILL --></p>
+        <p class="iconic-subtitle" data-imedit-id="{IMEDIT_ID:iconic-subtitle:0}"><!-- FILL --></p>
+        <ul class="iconic-bullets">
+          <li data-imedit-id="{IMEDIT_ID:bullet:0}"><!-- FILL --></li>
+          <li data-imedit-id="{IMEDIT_ID:bullet:1}"><!-- FILL --></li>
+          <li data-imedit-id="{IMEDIT_ID:bullet:2}"><!-- FILL --></li>
+        </ul>
+      </div>
+      <div class="iconic-card" data-imedit-id="{IMEDIT_ID:iconic-card:1}">
+        <div class="iconic-circle"><svg viewBox="0 0 32 32"><!-- FILL --></svg></div>
+        <p class="iconic-title" data-imedit-id="{IMEDIT_ID:iconic-title:1}"><!-- FILL --></p>
+        <p class="iconic-subtitle" data-imedit-id="{IMEDIT_ID:iconic-subtitle:1}"><!-- FILL --></p>
+        <ul class="iconic-bullets">
+          <li data-imedit-id="{IMEDIT_ID:bullet:3}"><!-- FILL --></li>
+          <li data-imedit-id="{IMEDIT_ID:bullet:4}"><!-- FILL --></li>
+          <li data-imedit-id="{IMEDIT_ID:bullet:5}"><!-- FILL --></li>
+        </ul>
+      </div>
+      <div class="iconic-card" data-imedit-id="{IMEDIT_ID:iconic-card:2}">
+        <div class="iconic-circle"><svg viewBox="0 0 32 32"><!-- FILL --></svg></div>
+        <p class="iconic-title" data-imedit-id="{IMEDIT_ID:iconic-title:2}"><!-- FILL --></p>
+        <p class="iconic-subtitle" data-imedit-id="{IMEDIT_ID:iconic-subtitle:2}"><!-- FILL --></p>
+        <ul class="iconic-bullets">
+          <li data-imedit-id="{IMEDIT_ID:bullet:6}"><!-- FILL --></li>
+          <li data-imedit-id="{IMEDIT_ID:bullet:7}"><!-- FILL --></li>
+          <li data-imedit-id="{IMEDIT_ID:bullet:8}"><!-- FILL --></li>
+        </ul>
+      </div>
+    </div>
+
+  </div>
+  <p class="source-line"><!-- FILL: or omit --></p>
+  <p class="page-number"><!-- FILL: NN / TT --></p>
+</section>
+```
+
+**Notes for sidebar variant:** The `.content-wrap` is set to `flex-direction: row` via the variant CSS. The `.iconic-sidebar` takes 14% width, leaving 86% for the 3 columns. The sidebar label uses `writing-mode: vertical-rl; transform: rotate(180deg)` to read bottom-to-top.
+
+---
+
+## Layout 10 variant — Comparison table:strategic-options
+
+**When to use:** Strategic options matrix where each row represents a distinct option (A/B/C/D/E) with a letter-tagged colored circle in the first column and an italic option name below it.
+
+```html
+<section class="slide comparison-table variant-strategic-options" data-slide="N">
+  <div class="logo">IM_</div>
+  <h2 class="action-title" data-imedit-id="{IMEDIT_ID:action-title:0}">
+    <strong><!-- FILL: section label --></strong> | <!-- FILL: declarative action title -->
+  </h2>
+  <div class="content-wrap">
+    <div class="im-table-wrap">
+      <table class="im-table">
+        <thead>
+          <tr>
+            <th data-imedit-id="{IMEDIT_ID:th:0}"><!-- FILL: e.g. "Option" --></th>
+            <th data-imedit-id="{IMEDIT_ID:th:1}"><!-- FILL: dimension 1, e.g. "Risk" --></th>
+            <th data-imedit-id="{IMEDIT_ID:th:2}"><!-- FILL: dimension 2 --></th>
+            <th data-imedit-id="{IMEDIT_ID:th:3}"><!-- FILL: dimension 3 --></th>
+            <th data-imedit-id="{IMEDIT_ID:th:4}"><!-- FILL: dimension 4 --></th>
+          </tr>
+        </thead>
+        <tbody>
+          <!-- Row A -->
+          <!-- NOTE: increment td :N row-major (left-to-right, top-to-bottom) starting at 0 -->
+          <tr>
+            <td data-imedit-id="{IMEDIT_ID:td:0}">
+              <div class="cto-row-label">
+                <span class="cto-row-label-circle option-a">A</span>
+                <span class="cto-row-label-name" data-imedit-id="{IMEDIT_ID:cto-name:0}"><!-- FILL: option name in italics --></span>
+              </div>
+            </td>
+            <td data-imedit-id="{IMEDIT_ID:td:1}"><!-- FILL --></td>
+            <td data-imedit-id="{IMEDIT_ID:td:2}"><!-- FILL --></td>
+            <td data-imedit-id="{IMEDIT_ID:td:3}"><!-- FILL --></td>
+            <td data-imedit-id="{IMEDIT_ID:td:4}"><!-- FILL --></td>
+          </tr>
+          <!-- Row B -->
+          <tr>
+            <td data-imedit-id="{IMEDIT_ID:td:5}">
+              <div class="cto-row-label">
+                <span class="cto-row-label-circle option-b">B</span>
+                <span class="cto-row-label-name" data-imedit-id="{IMEDIT_ID:cto-name:1}"><!-- FILL --></span>
+              </div>
+            </td>
+            <td data-imedit-id="{IMEDIT_ID:td:6}"><!-- FILL --></td>
+            <td data-imedit-id="{IMEDIT_ID:td:7}"><!-- FILL --></td>
+            <td data-imedit-id="{IMEDIT_ID:td:8}"><!-- FILL --></td>
+            <td data-imedit-id="{IMEDIT_ID:td:9}"><!-- FILL --></td>
+          </tr>
+          <!-- Row C -->
+          <tr>
+            <td data-imedit-id="{IMEDIT_ID:td:10}">
+              <div class="cto-row-label">
+                <span class="cto-row-label-circle option-c">C</span>
+                <span class="cto-row-label-name" data-imedit-id="{IMEDIT_ID:cto-name:2}"><!-- FILL --></span>
+              </div>
+            </td>
+            <td data-imedit-id="{IMEDIT_ID:td:11}"><!-- FILL --></td>
+            <td data-imedit-id="{IMEDIT_ID:td:12}"><!-- FILL --></td>
+            <td data-imedit-id="{IMEDIT_ID:td:13}"><!-- FILL --></td>
+            <td data-imedit-id="{IMEDIT_ID:td:14}"><!-- FILL --></td>
+          </tr>
+          <!-- Row D -->
+          <tr>
+            <td data-imedit-id="{IMEDIT_ID:td:15}">
+              <div class="cto-row-label">
+                <span class="cto-row-label-circle option-d">D</span>
+                <span class="cto-row-label-name" data-imedit-id="{IMEDIT_ID:cto-name:3}"><!-- FILL --></span>
+              </div>
+            </td>
+            <td data-imedit-id="{IMEDIT_ID:td:16}"><!-- FILL --></td>
+            <td data-imedit-id="{IMEDIT_ID:td:17}"><!-- FILL --></td>
+            <td data-imedit-id="{IMEDIT_ID:td:18}"><!-- FILL --></td>
+            <td data-imedit-id="{IMEDIT_ID:td:19}"><!-- FILL --></td>
+          </tr>
+          <!-- Row E (optional) -->
+          <tr>
+            <td data-imedit-id="{IMEDIT_ID:td:20}">
+              <div class="cto-row-label">
+                <span class="cto-row-label-circle option-e">E</span>
+                <span class="cto-row-label-name" data-imedit-id="{IMEDIT_ID:cto-name:4}"><!-- FILL --></span>
+              </div>
+            </td>
+            <td data-imedit-id="{IMEDIT_ID:td:21}"><!-- FILL --></td>
+            <td data-imedit-id="{IMEDIT_ID:td:22}"><!-- FILL --></td>
+            <td data-imedit-id="{IMEDIT_ID:td:23}"><!-- FILL --></td>
+            <td data-imedit-id="{IMEDIT_ID:td:24}"><!-- FILL --></td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+  <p class="source-line"><!-- FILL: or omit --></p>
+  <p class="page-number"><!-- FILL: NN / TT --></p>
+</section>
+```
+
+**Notes:** The `.cto-row-label-circle` uses five option classes (`option-a` through `option-e`) with distinct palette colours. The `.cto-row-label-name` uses Palatino italic. Standard table cell colour-coding (`cell-green`, `cell-amber`, `cell-red`, `cell-highlight`) still applies to non-label cells in this variant.
 
 ---
 
