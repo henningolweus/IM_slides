@@ -106,3 +106,19 @@ Tell the user the filename and that they can now run `im-deck` to generate the H
 - Fact-verify any specific product, company, event, or statistic claims with WebSearch before writing them into the story
 - Mark unverified figures as `[VERIFY: description]` in the content brief
 - Never invent financial figures, dates, or market data — note where the user needs to supply them
+
+## Proposal storyline guidance
+
+For **Proposal / pitch** decks, load the full 25-slide scaffold from `references/deck-types.md` (Section 2). The scaffold maps each slide to a specific layout from the new proposal template set.
+
+Key conventions to apply when writing proposal storylines:
+
+1. **Slides 2 and 25 are always partner letters.** Use `photo-left-content:letter`. Tone is warm and personal — a signed letter, not a bullet summary. Note in the content brief that the photo on the left carries the "Change with impact" wordmark overlay so im-deck applies the correct class.
+2. **Slide 3 is the Contents page.** Action title is "Contents" only — no declarative sentence. List 4–6 section names matching the segment-dividers that follow, numbered "01 / 02 / 03…". Use `photo-left-content:contents`.
+3. **Every section opens with a `segment-divider`.** No action title. Use the photo variant by default; solid variant if no contextual image exists.
+4. **Section 1 always uses the SCR pattern.** The `two-panel:scr` layout holds situation + complications left and numbered key questions/objectives right. Never substitute a plain bullet list here.
+5. **Section 4 combines team and investment on one slide** using `team-and-investment`. Only split if the team exceeds 8 people.
+6. **Slides 5–24 (all substantive content) must have declarative action titles.** Section dividers, letters, and the contents page are the only exceptions.
+7. **The process plan slide is always `gantt-process`**, not `timeline`. Note the workstream names and approximate week-count in the content brief so im-deck can render the correct grid.
+
+See `references/deck-types.md` for the complete slide-by-slide scaffold with layout hints, action title guidance, and content briefs for each position in the standard 25-slide structure.
