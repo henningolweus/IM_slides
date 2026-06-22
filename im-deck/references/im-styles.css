@@ -1340,3 +1340,1466 @@ p, li { color: #E1E0DE !important; }
 .cover-right .footer-meta strong { color: #30373B !important; }
 */
 
+/* =========================================================
+   COVER REPLACEMENT — Proposal-style split cover
+   55% solid green-grey left (Palatino white title) + 45% photo-or-solid right.
+   Replaces the old cover-right dark panel for proposals.
+   Variant: .slide-cover.variant-dark (banded dark top + photo right)
+   ========================================================= */
+.slide-cover.active { display: grid !important; grid-template-columns: 55% 45%; padding: 0 !important; }
+/* Override existing cover-left to use deeper blue-green (#67817F) for proposal style */
+.slide-cover .cover-left {
+  background: var(--im-blue-green);
+  color: var(--im-white);
+  padding: 52px 52px 40px;
+  position: relative;
+}
+.slide-cover .cover-left .im-mark {
+  font-weight: 700; font-size: 17.2px; letter-spacing: 0.04em;
+  color: rgba(255,255,255,0.75);
+}
+.slide-cover .cover-left h1 {
+  font-family: var(--font-display);
+  font-weight: normal;
+  font-size: var(--type-callout-large);
+  line-height: 1.12;
+  color: var(--im-white);
+  max-width: 92%;
+  padding-right: 0;
+}
+.slide-cover .cover-left h1 em { font-style: italic; }
+.slide-cover .cover-left .subtitle {
+  font-family: var(--font-display);
+  font-style: italic;
+  font-size: var(--type-callout);
+  line-height: 1.35;
+  max-width: 85%;
+  margin-top: 16px;
+  color: rgba(255,255,255,0.85);
+}
+.slide-cover .cover-left .meta {
+  font-size: var(--type-body-small);
+  letter-spacing: 0.04em;
+  color: rgba(255,255,255,0.7);
+  line-height: 1.6;
+}
+.slide-cover .cover-left .meta strong { color: var(--im-white); font-weight: 700; }
+/* Proposal cover right — photo placeholder egg-tone */
+.slide-cover .cover-right-photo {
+  background: var(--im-egg);
+  position: relative;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  overflow: hidden;
+}
+.slide-cover .cover-right-photo .photo-placeholder-cover {
+  width: 70%;
+  height: 60%;
+  border: 1.5px dashed var(--im-ash);
+  opacity: 0.4;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: var(--type-eyebrow);
+  letter-spacing: 0.18em;
+  text-transform: uppercase;
+  color: var(--im-grey);
+  font-weight: 700;
+}
+/* Vertical IMPLEMENT mark top-right on cover */
+.slide-cover .cover-right-photo .im-mark-vertical {
+  position: absolute;
+  top: 24px;
+  right: 18px;
+  writing-mode: vertical-rl;
+  font-family: var(--font-body);
+  font-weight: 700;
+  font-size: 12px;
+  letter-spacing: 0.08em;
+  color: var(--im-ash);
+  opacity: 0.6;
+}
+/* Dark variant — Proposal 4 style: dark banded top + dark below + photo right */
+.slide-cover.variant-dark .cover-left {
+  background: var(--im-ash);
+}
+.slide-cover.variant-dark .cover-left .im-mark { color: rgba(255,255,255,0.5); }
+.slide-cover.variant-dark .cover-left .meta { color: rgba(255,255,255,0.55); }
+
+/* =========================================================
+   SEGMENT DIVIDER — Replaces old .slide-divider
+   Two variants: :photo (full-bleed photo + overlay + title bottom-left)
+   and :solid (light green-grey solid + big serif number)
+   .section-divider kept as backwards-compat alias.
+   ========================================================= */
+.slide-divider, .segment-divider, .section-divider { display: none; }
+.slide-divider.active, .segment-divider.active, .section-divider.active {
+  display: flex !important;
+  flex-direction: column;
+  padding: 0 !important;
+  position: relative;
+  overflow: hidden;
+}
+/* Photo variant (default) — full-bleed image placeholder with dark overlay */
+.segment-divider .sdiv-photo-bg {
+  position: absolute;
+  inset: 0;
+  background: var(--im-ash);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+.segment-divider .sdiv-photo-bg .photo-placeholder-divider {
+  width: 100%;
+  height: 100%;
+  background: var(--im-egg);
+  border: 1.5px dashed var(--im-ash);
+  opacity: 0.25;
+}
+.segment-divider .sdiv-overlay {
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(to top, rgba(31,31,35,0.72) 0%, rgba(31,31,35,0.3) 60%, rgba(31,31,35,0.15) 100%);
+}
+.segment-divider .sdiv-content {
+  position: absolute;
+  bottom: 60px;
+  left: 60px;
+  right: 120px;
+  z-index: 2;
+}
+.segment-divider .sdiv-section-num {
+  font-family: var(--font-display);
+  font-size: 80px;
+  line-height: 1;
+  color: rgba(255,255,255,0.22);
+  font-weight: normal;
+  display: block;
+  margin-bottom: 4px;
+}
+.segment-divider .sdiv-eyebrow {
+  font-family: var(--font-body);
+  font-size: var(--type-eyebrow);
+  font-weight: 700;
+  letter-spacing: 0.22em;
+  text-transform: uppercase;
+  color: rgba(255,255,255,0.65);
+  margin-bottom: 12px;
+}
+.segment-divider .sdiv-title {
+  font-family: var(--font-display);
+  font-weight: normal;
+  font-size: var(--type-callout-large);
+  line-height: 1.1;
+  color: var(--im-white);
+}
+.segment-divider .sdiv-title em { font-style: italic; }
+/* IM_ mark top-right on divider */
+.segment-divider .logo {
+  position: absolute;
+  top: 24px;
+  right: 22px;
+  color: rgba(255,255,255,0.5);
+  z-index: 3;
+}
+/* Solid variant */
+.segment-divider.variant-solid .sdiv-photo-bg {
+  background: var(--im-green-grey);
+}
+.segment-divider.variant-solid .sdiv-photo-bg .photo-placeholder-divider {
+  display: none;
+}
+.segment-divider.variant-solid .sdiv-overlay {
+  background: none;
+}
+.segment-divider.variant-solid .sdiv-section-num {
+  color: var(--im-blue-green);
+  opacity: 0.35;
+}
+.segment-divider.variant-solid .sdiv-title { color: var(--im-black); }
+.segment-divider.variant-solid .sdiv-eyebrow { color: var(--im-blue-green-dark); }
+.segment-divider.variant-solid .logo { color: var(--im-black); opacity: 0.4; }
+/* Back-compat: old slide-divider styles still function via above rules */
+
+/* =========================================================
+   LAYOUT 13 — PHOTO-LEFT-CONTENT
+   35/65 split. Photo placeholder left, content right.
+   Variants: :purpose (icon boxes), :letter (Palatino body + signature),
+   :contents (numbered section list)
+   Replaces old purpose-photo-left (kept as alias via .slide-purpose).
+   ========================================================= */
+.photo-left-content { display: none; }
+.photo-left-content.active {
+  display: grid !important;
+  grid-template-columns: 35% 65%;
+  padding: 0 !important;
+}
+.plc-left {
+  background: var(--im-egg);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 16px;
+  padding: 48px 36px;
+  position: relative;
+}
+.plc-left .photo-placeholder {
+  width: 78%;
+  aspect-ratio: 3/4;
+  border: 1.5px dashed var(--im-ash);
+  background: transparent;
+  opacity: 0.4;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: var(--type-eyebrow);
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  color: var(--im-grey);
+  font-weight: 700;
+}
+.plc-right {
+  background: var(--im-blue-green-near-white);
+  padding: 60px 52px 52px;
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-start;
+  position: relative;
+  min-height: 0;
+}
+.plc-right .logo {
+  position: absolute;
+  top: 24px;
+  right: 22px;
+  color: var(--im-black);
+}
+.plc-right .slide-eyebrow {
+  font-family: var(--font-body);
+  font-size: var(--type-eyebrow);
+  font-weight: 700;
+  letter-spacing: 0.18em;
+  text-transform: uppercase;
+  color: var(--im-blue-green);
+  margin-bottom: 10px;
+}
+.plc-right .plc-heading {
+  font-family: var(--font-display);
+  font-weight: normal;
+  font-size: var(--type-callout-large);
+  line-height: 1.1;
+  color: var(--im-black);
+  margin-bottom: 28px;
+  padding-right: 40px;
+}
+.plc-right .plc-heading em { font-style: italic; }
+
+/* -- Purpose variant (icon boxes) — matches old purpose-photo-left -- */
+.photo-left-content.variant-purpose .purpose-boxes { display: flex; flex-direction: column; gap: 12px; }
+.photo-left-content.variant-purpose .purpose-box {
+  display: grid;
+  grid-template-columns: 44px 1fr;
+  gap: 16px;
+  align-items: flex-start;
+  padding: 12px 0;
+  border-top: 1px solid var(--im-blue-green-light);
+}
+.photo-left-content.variant-purpose .purpose-box:first-child { border-top: none; padding-top: 4px; }
+.photo-left-content.variant-purpose .purpose-box-icon { width: 36px; height: 36px; color: var(--im-blue-green); }
+.photo-left-content.variant-purpose .purpose-box-icon svg { width: 36px; height: 36px; stroke: currentColor; fill: none; stroke-width: 1.4; stroke-linecap: round; stroke-linejoin: round; }
+.photo-left-content.variant-purpose .purpose-box-title { font-family: var(--font-body); font-weight: 700; font-size: var(--type-subheading); color: var(--im-black); margin-bottom: 3px; }
+.photo-left-content.variant-purpose .purpose-box-body { font-size: var(--type-body-small); line-height: 1.45; color: var(--im-ash); }
+.photo-left-content.variant-purpose .purpose-box-body strong { font-weight: 700; color: var(--im-black); }
+
+/* -- Letter variant (long-form Palatino body + signature block) -- */
+.photo-left-content.variant-letter .plc-right {
+  background: var(--im-white);
+  padding: 56px 60px 48px;
+}
+.plc-letter-body {
+  font-family: var(--font-display);
+  font-size: 17.3px; /* ~13pt — slightly larger than body for letter feel */
+  line-height: 1.65;
+  color: var(--im-ash);
+  margin-bottom: 20px;
+  flex: 1;
+}
+.plc-letter-body p + p { margin-top: 16px; }
+.plc-letter-body strong { font-weight: 700; color: var(--im-black); }
+.plc-signature {
+  display: grid;
+  grid-template-columns: 52px 1fr;
+  gap: 14px;
+  align-items: center;
+  padding-top: 20px;
+  border-top: 1px solid var(--im-blue-green-light);
+  margin-top: auto;
+}
+.plc-signature-avatar {
+  width: 48px;
+  height: 48px;
+  border-radius: 50%;
+  background: var(--im-egg);
+  border: 1.5px dashed var(--im-ash);
+  opacity: 0.5;
+}
+.plc-signature-name {
+  font-family: var(--font-body);
+  font-weight: 700;
+  font-size: var(--type-body);
+  color: var(--im-black);
+  line-height: 1.3;
+}
+.plc-signature-role {
+  font-size: var(--type-body-small);
+  color: var(--im-grey);
+  line-height: 1.3;
+}
+
+/* -- Contents variant (numbered section list) -- */
+.photo-left-content.variant-contents .plc-right {
+  background: var(--im-blue-green-near-white);
+}
+.plc-contents-list { display: flex; flex-direction: column; gap: 0; }
+.plc-contents-item {
+  display: grid;
+  grid-template-columns: 56px 1fr;
+  gap: 16px;
+  align-items: baseline;
+  padding: 14px 0;
+  border-top: 1px solid var(--im-blue-green-light);
+}
+.plc-contents-item:first-child { border-top: none; }
+.plc-contents-num {
+  font-family: var(--font-display);
+  font-size: 32px;
+  line-height: 1;
+  color: var(--im-green-grey);
+  font-weight: normal;
+}
+.plc-contents-label {
+  font-family: var(--font-body);
+  font-size: var(--type-subheading);
+  font-weight: 700;
+  color: var(--im-black);
+  line-height: 1.25;
+}
+.plc-contents-label.active {
+  color: var(--im-blue-green-dark);
+}
+.plc-contents-item.active-section .plc-contents-num {
+  color: var(--im-blue-green);
+}
+.plc-contents-item.active-section {
+  background: var(--im-blue-green-light);
+  margin: 0 -16px;
+  padding: 14px 16px;
+}
+
+/* =========================================================
+   LAYOUT 14 — PHOTO CARD GRID
+   Action title full-width above; configurable 2/3/4 column card grid below.
+   Each card: photo placeholder top + bold title + 2-line description.
+   ========================================================= */
+.photo-card-grid {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  min-height: 0;
+  gap: 0;
+}
+.photo-card-grid-inner {
+  flex: 1;
+  display: grid;
+  grid-template-columns: repeat(var(--pcg-cols, 3), 1fr);
+  gap: 20px;
+  align-content: start;
+  padding-top: 4px;
+  min-height: 0;
+}
+.photo-card {
+  display: flex;
+  flex-direction: column;
+  min-height: 0;
+}
+.photo-card-img {
+  aspect-ratio: 4/3;
+  background: var(--im-egg);
+  border: 1.5px dashed var(--im-ash);
+  opacity: 0.5;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: var(--type-eyebrow);
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  color: var(--im-grey);
+  font-weight: 700;
+  margin-bottom: 10px;
+  flex-shrink: 0;
+}
+.photo-card-title {
+  font-family: var(--font-body);
+  font-weight: 700;
+  font-size: var(--type-subheading);
+  color: var(--im-black);
+  line-height: 1.2;
+  margin-bottom: 5px;
+}
+.photo-card-desc {
+  font-size: var(--type-body-small);
+  line-height: 1.45;
+  color: var(--im-ash);
+}
+.photo-card-desc strong { font-weight: 700; color: var(--im-black); }
+
+/* =========================================================
+   LAYOUT 15 — RING DIAGRAM
+   Two overlapping circles (outlined left, filled right, shared center label)
+   + bullet lists each side + optional bottom icon row.
+   ========================================================= */
+.ring-diagram {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  min-height: 0;
+}
+.ring-diagram-inner {
+  flex: 1;
+  display: grid;
+  grid-template-columns: 1fr 360px 1fr;
+  gap: 24px;
+  align-items: center;
+  min-height: 0;
+  padding-top: 8px;
+}
+.ring-bullets-left,
+.ring-bullets-right {
+  display: flex;
+  flex-direction: column;
+  gap: 0;
+}
+.ring-bullets-left .ring-bullet,
+.ring-bullets-right .ring-bullet {
+  font-size: var(--type-body);
+  line-height: 1.5;
+  color: var(--im-ash);
+  padding: 9px 0;
+  border-top: 1px solid var(--im-blue-green-light);
+  position: relative;
+  padding-left: 22px;
+}
+.ring-bullets-left .ring-bullet:first-child,
+.ring-bullets-right .ring-bullet:first-child { border-top: none; }
+.ring-bullets-left .ring-bullet::before,
+.ring-bullets-right .ring-bullet::before {
+  content: "•";
+  position: absolute;
+  left: 0;
+  top: 9px;
+  color: var(--im-blue-green);
+  font-weight: 700;
+  line-height: 1.5;
+}
+.ring-bullets-left .ring-bullet strong,
+.ring-bullets-right .ring-bullet strong { font-weight: 700; color: var(--im-black); }
+.ring-diagram-circles {
+  position: relative;
+  height: 260px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+.ring-circle-left {
+  position: absolute;
+  left: 0;
+  width: 220px;
+  height: 220px;
+  border-radius: 50%;
+  border: 2.5px solid var(--im-green-grey);
+  background: transparent;
+  z-index: 1;
+}
+.ring-circle-right {
+  position: absolute;
+  right: 0;
+  width: 220px;
+  height: 220px;
+  border-radius: 50%;
+  background: var(--im-blue-green);
+  opacity: 0.85;
+  z-index: 1;
+}
+.ring-center {
+  position: absolute;
+  left: 50%;
+  top: 50%;
+  transform: translate(-50%, -50%);
+  z-index: 3;
+  text-align: center;
+  width: 130px;
+}
+.ring-center-label {
+  font-family: var(--font-display);
+  font-style: italic;
+  font-size: var(--type-body);
+  color: var(--im-white);
+  line-height: 1.3;
+  text-shadow: 0 1px 3px rgba(0,0,0,0.35);
+}
+.ring-left-label {
+  font-family: var(--font-body);
+  font-size: var(--type-eyebrow);
+  font-weight: 700;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  color: var(--im-blue-green-dark);
+  margin-bottom: 10px;
+}
+.ring-right-label {
+  font-family: var(--font-body);
+  font-size: var(--type-eyebrow);
+  font-weight: 700;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  color: var(--im-blue-green-dark);
+  margin-bottom: 10px;
+  text-align: right;
+}
+/* Optional bottom icon row */
+.ring-icons {
+  display: grid;
+  grid-template-columns: 1fr 360px 1fr;
+  gap: 24px;
+  padding-top: 16px;
+  border-top: 1px solid var(--im-blue-green-light);
+  margin-top: 8px;
+}
+.ring-icons-side {
+  display: flex;
+  gap: 16px;
+  align-items: flex-start;
+}
+.ring-icon-item {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 4px;
+  text-align: center;
+  flex: 1;
+}
+.ring-icon-circle {
+  width: 40px;
+  height: 40px;
+  background: var(--im-blue-green-near-white);
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: var(--im-blue-green);
+}
+.ring-icon-label {
+  font-size: var(--type-eyebrow);
+  color: var(--im-ash);
+  line-height: 1.3;
+  letter-spacing: 0.04em;
+}
+
+/* =========================================================
+   LAYOUT 16 — TEAM AND INVESTMENT
+   2/1 split. Left: team photo grid (Core team + SMEs).
+   Right: light-grey panel with Investment header + bullets.
+   Optional callout tag top-right.
+   ========================================================= */
+.team-and-investment {
+  flex: 1;
+  display: grid;
+  grid-template-columns: 2fr 1fr;
+  gap: 24px;
+  min-height: 0;
+}
+.team-grid-wrap { display: flex; flex-direction: column; min-height: 0; }
+.team-section-label {
+  font-family: var(--font-body);
+  font-size: var(--type-eyebrow);
+  font-weight: 700;
+  letter-spacing: 0.18em;
+  text-transform: uppercase;
+  color: var(--im-blue-green);
+  margin-bottom: 10px;
+  margin-top: 12px;
+  border-bottom: 1px solid var(--im-blue-green-light);
+  padding-bottom: 4px;
+}
+.team-section-label:first-child { margin-top: 0; }
+.team-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 14px;
+  align-content: start;
+}
+.team-card {
+  display: flex;
+  flex-direction: column;
+  gap: 5px;
+}
+.team-card-photo {
+  width: 100%;
+  aspect-ratio: 3/4;
+  background: var(--im-egg);
+  border: 1.5px dashed var(--im-ash);
+  opacity: 0.45;
+  margin-bottom: 6px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 9px;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  color: var(--im-grey);
+  font-weight: 700;
+}
+.team-card-name {
+  font-family: var(--font-body);
+  font-weight: 700;
+  font-size: var(--type-body-small);
+  color: var(--im-black);
+  line-height: 1.25;
+}
+.team-card-role {
+  font-size: var(--type-eyebrow);
+  color: var(--im-grey);
+  line-height: 1.3;
+}
+.team-card-email {
+  font-size: var(--type-eyebrow);
+  color: var(--im-blue-green);
+  line-height: 1.3;
+  word-break: break-all;
+}
+.investment-panel {
+  background: var(--im-blue-green-near-white);
+  padding: 22px 22px 20px;
+  display: flex;
+  flex-direction: column;
+  position: relative;
+  min-height: 0;
+}
+.investment-callout {
+  position: absolute;
+  top: -12px;
+  right: -8px;
+  background: var(--im-blue-green);
+  color: var(--im-white);
+  font-size: 9.6px;
+  font-weight: 700;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  padding: 4px 10px;
+}
+.investment-heading {
+  font-family: var(--font-display);
+  font-size: var(--type-heading);
+  font-weight: normal;
+  color: var(--im-black);
+  margin-bottom: 12px;
+  padding-bottom: 10px;
+  border-bottom: 1px solid var(--im-blue-green-light);
+}
+.investment-body {
+  font-size: var(--type-body-small);
+  line-height: 1.55;
+  color: var(--im-ash);
+  margin-bottom: 14px;
+}
+.investment-bullets { list-style: none; padding: 0; display: flex; flex-direction: column; gap: 8px; }
+.investment-bullets li {
+  font-size: var(--type-body-small);
+  line-height: 1.45;
+  color: var(--im-ash);
+  padding-left: 18px;
+  position: relative;
+}
+.investment-bullets li::before {
+  content: "•";
+  position: absolute;
+  left: 0;
+  top: 0;
+  color: var(--im-blue-green);
+  font-weight: 700;
+  line-height: 1.45;
+}
+.investment-bullets li strong { font-weight: 700; color: var(--im-black); }
+
+/* =========================================================
+   LAYOUT 17 — PERSON BIO
+   30/70 split. Left: large photo + name + contact.
+   Right: Palatino name (large), role, two-column sections (CV-style).
+   ========================================================= */
+.person-bio { display: none; }
+.person-bio.active {
+  display: grid !important;
+  grid-template-columns: 30% 70%;
+  padding: 0 !important;
+}
+.person-photo-col {
+  background: var(--im-egg);
+  padding: 40px 28px 36px;
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  align-items: center;
+}
+.person-photo-placeholder {
+  width: 82%;
+  aspect-ratio: 2/3;
+  background: transparent;
+  border: 1.5px dashed var(--im-ash);
+  opacity: 0.45;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: var(--type-eyebrow);
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  color: var(--im-grey);
+  font-weight: 700;
+}
+.person-photo-name {
+  font-family: var(--font-body);
+  font-weight: 700;
+  font-size: var(--type-body-small);
+  color: var(--im-black);
+  text-align: center;
+  line-height: 1.3;
+}
+.person-photo-contact {
+  font-size: var(--type-eyebrow);
+  color: var(--im-grey);
+  text-align: center;
+  line-height: 1.6;
+}
+.person-photo-contact a { color: var(--im-blue-green); text-decoration: none; }
+.person-content-col {
+  padding: 44px 48px 40px;
+  display: flex;
+  flex-direction: column;
+  min-height: 0;
+  position: relative;
+}
+.person-content-col .logo {
+  position: absolute;
+  top: 24px;
+  right: 22px;
+}
+.person-name-large {
+  font-family: var(--font-display);
+  font-size: 38px;
+  font-weight: normal;
+  line-height: 1.08;
+  color: var(--im-black);
+  margin-bottom: 4px;
+}
+.person-role {
+  font-family: var(--font-body);
+  font-size: var(--type-body);
+  color: var(--im-blue-green);
+  font-weight: 700;
+  letter-spacing: 0.02em;
+  margin-bottom: 20px;
+  padding-bottom: 14px;
+  border-bottom: 1px solid var(--im-blue-green-light);
+}
+.person-sections-grid {
+  flex: 1;
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 0 32px;
+  align-content: start;
+  min-height: 0;
+}
+.person-section {
+  padding-bottom: 16px;
+  margin-bottom: 4px;
+}
+.person-section-label {
+  font-family: var(--font-body);
+  font-size: var(--type-eyebrow);
+  font-weight: 700;
+  letter-spacing: 0.18em;
+  text-transform: uppercase;
+  color: var(--im-blue-green);
+  margin-bottom: 7px;
+  padding-bottom: 4px;
+  border-bottom: 1px solid var(--im-blue-green-light);
+}
+.person-section-body {
+  font-size: var(--type-body-small);
+  line-height: 1.5;
+  color: var(--im-ash);
+}
+.person-section-body p + p { margin-top: 6px; }
+.person-section-body strong { font-weight: 700; color: var(--im-black); }
+.person-section-items { list-style: none; padding: 0; }
+.person-section-items li {
+  font-size: var(--type-body-small);
+  line-height: 1.45;
+  color: var(--im-ash);
+  padding: 4px 0 4px 16px;
+  position: relative;
+  border-top: 1px solid var(--im-blue-green-light);
+}
+.person-section-items li:first-child { border-top: none; }
+.person-section-items li::before {
+  content: "–";
+  position: absolute;
+  left: 0;
+  top: 4px;
+  color: var(--im-green-grey);
+  line-height: 1.45;
+}
+
+/* =========================================================
+   LAYOUT 18 — QUANTIFIED SUMMARY
+   1/1.4 split. Left: chart placeholder + sub-label + source.
+   Right: 3 numbered initiative cards in dotted-border boxes.
+   ========================================================= */
+.quantified-summary {
+  flex: 1;
+  display: grid;
+  grid-template-columns: 1fr 1.4fr;
+  gap: 28px;
+  min-height: 0;
+}
+.qs-chart-col {
+  display: flex;
+  flex-direction: column;
+  min-height: 0;
+}
+.qs-chart-placeholder {
+  flex: 1;
+  background: var(--im-egg);
+  border: 1.5px dashed var(--im-ash);
+  opacity: 0.45;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: var(--type-eyebrow);
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  color: var(--im-grey);
+  font-weight: 700;
+  margin-bottom: 8px;
+}
+.qs-chart-label {
+  font-size: var(--type-body-small);
+  font-weight: 700;
+  color: var(--im-black);
+  line-height: 1.3;
+  margin-bottom: 3px;
+}
+.qs-chart-source {
+  font-size: var(--type-footer);
+  color: var(--im-grey);
+  line-height: 1.35;
+}
+.qs-initiatives-col {
+  display: flex;
+  flex-direction: column;
+  gap: 14px;
+  min-height: 0;
+}
+.qs-initiative-card {
+  border: 1px dashed var(--im-green-grey);
+  padding: 14px 16px;
+  display: flex;
+  gap: 14px;
+  align-items: flex-start;
+  flex: 1;
+  min-height: 0;
+}
+.qs-initiative-num {
+  width: 28px;
+  height: 28px;
+  background: var(--im-blue-green);
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-family: var(--font-body);
+  font-weight: 700;
+  font-size: var(--type-body-small);
+  color: var(--im-white);
+  flex-shrink: 0;
+  margin-top: 1px;
+}
+.qs-initiative-content { flex: 1; min-width: 0; }
+.qs-initiative-title {
+  font-family: var(--font-body);
+  font-weight: 700;
+  font-size: var(--type-subheading);
+  color: var(--im-black);
+  line-height: 1.2;
+  margin-bottom: 7px;
+}
+.qs-initiative-bullets { list-style: none; padding: 0; }
+.qs-initiative-bullets li {
+  font-size: var(--type-body-small);
+  line-height: 1.45;
+  color: var(--im-ash);
+  padding-left: 16px;
+  position: relative;
+  margin-bottom: 4px;
+}
+.qs-initiative-bullets li:last-child { margin-bottom: 0; }
+.qs-initiative-bullets li::before {
+  content: "•";
+  position: absolute;
+  left: 0;
+  top: 0;
+  color: var(--im-blue-green);
+  font-weight: 700;
+  line-height: 1.45;
+}
+.qs-initiative-bullets li strong { font-weight: 700; color: var(--im-black); }
+
+/* =========================================================
+   LAYOUT 19 — VERTICAL NUMBERED LIST
+   5 stacked rows. Each row: circle (numbered or lettered) + bold title + bullets.
+   Variants: :numbered (1-5 green-grey circles), :lettered (A-E circles).
+   Optional left quarter-arc decoration.
+   ========================================================= */
+.vertical-numbered-list {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  gap: 0;
+  min-height: 0;
+}
+.vnl-row {
+  display: grid;
+  grid-template-columns: 52px 1fr;
+  gap: 16px;
+  align-items: flex-start;
+  padding: 14px 0;
+  border-top: 1px solid var(--im-blue-green-light);
+  flex: 1;
+  min-height: 0;
+}
+.vnl-row:first-child { border-top: none; }
+.vnl-circle {
+  width: 36px;
+  height: 36px;
+  background: var(--im-blue-green);
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-family: var(--font-body);
+  font-weight: 700;
+  font-size: var(--type-body-small);
+  color: var(--im-white);
+  flex-shrink: 0;
+  margin-top: 2px;
+}
+.vertical-numbered-list.variant-lettered .vnl-circle {
+  font-size: var(--type-body-small);
+  letter-spacing: 0.02em;
+}
+.vnl-content { display: flex; flex-direction: column; gap: 4px; }
+.vnl-title {
+  font-family: var(--font-body);
+  font-weight: 700;
+  font-size: var(--type-subheading);
+  color: var(--im-black);
+  line-height: 1.25;
+}
+.vnl-bullets { list-style: none; padding: 0; margin-top: 4px; }
+.vnl-bullets li {
+  font-size: var(--type-body);
+  line-height: 1.5;
+  color: var(--im-ash);
+  padding-left: 18px;
+  position: relative;
+  margin-bottom: 3px;
+}
+.vnl-bullets li:last-child { margin-bottom: 0; }
+.vnl-bullets li::before {
+  content: "•";
+  position: absolute;
+  left: 0;
+  top: 0;
+  color: var(--im-blue-green);
+  font-weight: 700;
+  line-height: 1.5;
+}
+.vnl-bullets li strong { font-weight: 700; color: var(--im-black); }
+/* Optional left decoration (quarter-arc) */
+.vnl-decoration {
+  position: absolute;
+  left: -60px;
+  top: 50%;
+  transform: translateY(-50%);
+  width: 120px;
+  height: 240px;
+  border-right: 3px solid var(--im-green-grey);
+  border-top: 3px solid var(--im-green-grey);
+  border-radius: 0 120px 0 0;
+  opacity: 0.35;
+  pointer-events: none;
+}
+
+/* =========================================================
+   LAYOUT 20 — GANTT PROCESS
+   Month/week headers (dark) × workstream rows.
+   Activity bands as colored cells. Bottom legend.
+   Optional dashed "future phase" column at right.
+   ========================================================= */
+.gantt-process {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  min-height: 0;
+  overflow: hidden;
+}
+.gantt-table {
+  flex: 1;
+  display: grid;
+  grid-template-rows: auto auto 1fr;
+  min-height: 0;
+  border: 1px solid var(--im-blue-green-light);
+}
+.gantt-header-row {
+  display: grid;
+  grid-template-columns: var(--gantt-col-template, 160px repeat(8, 1fr));
+  background: var(--im-ash);
+}
+.gantt-header-month {
+  padding: 7px 10px;
+  font-family: var(--font-body);
+  font-size: var(--type-eyebrow);
+  font-weight: 700;
+  letter-spacing: 0.16em;
+  text-transform: uppercase;
+  color: var(--im-white);
+  border-right: 1px solid rgba(255,255,255,0.15);
+  text-align: center;
+}
+.gantt-header-month:first-child {
+  background: transparent;
+  border-right: 1px solid rgba(255,255,255,0.2);
+}
+.gantt-subheader-row {
+  display: grid;
+  grid-template-columns: var(--gantt-col-template, 160px repeat(8, 1fr));
+  background: var(--im-blue-green-dark);
+  border-bottom: 2px solid var(--im-ash);
+}
+.gantt-subheader-cell {
+  padding: 4px 8px;
+  font-size: 10.7px;
+  font-weight: 700;
+  letter-spacing: 0.1em;
+  color: rgba(255,255,255,0.65);
+  border-right: 1px solid rgba(255,255,255,0.12);
+  text-align: center;
+}
+.gantt-subheader-cell:first-child { text-align: left; color: rgba(255,255,255,0.4); }
+.gantt-workstream-rows { display: flex; flex-direction: column; flex: 1; min-height: 0; }
+.gantt-workstream-row {
+  display: grid;
+  grid-template-columns: var(--gantt-col-template, 160px repeat(8, 1fr));
+  border-top: 1px solid var(--im-blue-green-light);
+  flex: 1;
+  align-items: center;
+  min-height: 0;
+}
+.gantt-workstream-row:first-child { border-top: none; }
+.gantt-workstream-label {
+  padding: 6px 12px;
+  font-family: var(--font-body);
+  font-size: var(--type-body-small);
+  font-weight: 700;
+  color: var(--im-black);
+  background: var(--im-blue-green-near-white);
+  border-right: 2px solid var(--im-blue-green-light);
+  height: 100%;
+  display: flex;
+  align-items: center;
+  line-height: 1.3;
+}
+.gantt-cell {
+  height: 100%;
+  display: flex;
+  align-items: center;
+  padding: 4px 2px;
+  border-right: 1px solid var(--im-blue-green-light);
+  position: relative;
+}
+.gantt-cell:last-child { border-right: none; }
+.gantt-band {
+  height: 22px;
+  background: var(--im-blue-green);
+  display: flex;
+  align-items: center;
+  padding: 0 8px;
+  font-size: 9.6px;
+  font-weight: 700;
+  color: var(--im-white);
+  letter-spacing: 0.04em;
+  white-space: nowrap;
+  overflow: hidden;
+  clip-path: polygon(0 0, calc(100% - 8px) 0, 100% 50%, calc(100% - 8px) 100%, 0 100%);
+  width: 100%;
+}
+.gantt-band.band-light {
+  background: var(--im-green-grey);
+  color: var(--im-black);
+}
+.gantt-band.band-start {
+  clip-path: polygon(0 0, calc(100% - 8px) 0, 100% 50%, calc(100% - 8px) 100%, 0 100%);
+  border-radius: 2px 0 0 2px;
+}
+.gantt-band.band-mid {
+  clip-path: polygon(8px 0, calc(100% - 8px) 0, 100% 50%, calc(100% - 8px) 100%, 8px 100%, 0 50%);
+}
+.gantt-band.band-end {
+  clip-path: polygon(8px 0, 100% 0, 100% 100%, 8px 100%, 0 50%);
+  border-radius: 0 2px 2px 0;
+}
+.gantt-milestone {
+  width: 12px;
+  height: 12px;
+  background: var(--im-black);
+  transform: rotate(45deg);
+  position: absolute;
+  left: 50%;
+  margin-left: -6px;
+}
+.gantt-future-phase {
+  border-right: none;
+  border-left: 2px dashed var(--im-green-grey);
+  background: repeating-linear-gradient(
+    -45deg,
+    transparent,
+    transparent 6px,
+    rgba(185,199,194,0.12) 6px,
+    rgba(185,199,194,0.12) 12px
+  );
+}
+.gantt-workstream-label.future-label {
+  font-style: italic;
+  color: var(--im-grey);
+  background: var(--im-blue-green-near-white);
+}
+.gantt-legend {
+  display: flex;
+  gap: 20px;
+  align-items: center;
+  padding: 8px 0 0;
+  border-top: 1px solid var(--im-blue-green-light);
+  margin-top: 6px;
+}
+.gantt-legend-item {
+  display: flex;
+  align-items: center;
+  gap: 7px;
+  font-size: var(--type-eyebrow);
+  color: var(--im-grey);
+  letter-spacing: 0.04em;
+}
+.gantt-legend-swatch {
+  width: 20px;
+  height: 10px;
+  background: var(--im-blue-green);
+  border-radius: 1px;
+}
+.gantt-legend-swatch.swatch-light { background: var(--im-green-grey); }
+.gantt-legend-diamond {
+  width: 10px;
+  height: 10px;
+  background: var(--im-black);
+  transform: rotate(45deg);
+  flex-shrink: 0;
+}
+
+/* =========================================================
+   VARIANT SLOT — TWO-PANEL:SCR
+   Chevron arrow between panels + numbered green circles in right.
+   Optional "FOR DISCUSSION" tag top-right.
+   ========================================================= */
+.two-panel.variant-scr .gov-layout {
+  position: relative;
+}
+.two-panel.variant-scr .gov-panel.left-panel {
+  background: var(--im-blue-green-near-white);
+}
+.two-panel.variant-scr .gov-panel.right-panel {
+  background: var(--im-white);
+  border: 1px solid var(--im-blue-green-light);
+}
+.scr-arrow {
+  position: absolute;
+  left: 50%;
+  top: 50%;
+  transform: translate(-50%, -50%);
+  z-index: 5;
+  width: 36px;
+  height: 36px;
+  background: var(--im-blue-green);
+  clip-path: polygon(0 0, 60% 0, 100% 50%, 60% 100%, 0 100%, 40% 50%);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+.scr-numbered-circle {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 26px;
+  height: 26px;
+  background: var(--im-blue-green);
+  border-radius: 50%;
+  font-family: var(--font-body);
+  font-weight: 700;
+  font-size: var(--type-body-small);
+  color: var(--im-white);
+  flex-shrink: 0;
+  margin-right: 10px;
+  vertical-align: middle;
+}
+.scr-discussion-tag {
+  position: absolute;
+  top: -6px;
+  right: 0;
+  background: var(--im-ash);
+  color: var(--im-white);
+  font-size: 9.6px;
+  font-weight: 700;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  padding: 3px 10px;
+}
+
+/* =========================================================
+   VARIANT SLOT — TWO-PANEL:HEADER-BAND
+   Shared dark header band spanning both panels.
+   ========================================================= */
+.two-panel.variant-header-band { position: relative; }
+.thb-header-band {
+  background: var(--im-blue-green-dark);
+  padding: 10px 16px;
+  display: flex;
+  align-items: center;
+  gap: 24px;
+  margin-bottom: 0;
+  width: 100%;
+}
+.thb-header-band-title {
+  font-family: var(--font-body);
+  font-weight: 700;
+  font-size: var(--type-body);
+  color: var(--im-white);
+  letter-spacing: 0.04em;
+}
+.thb-header-band-sub {
+  font-family: var(--font-body);
+  font-size: var(--type-body-small);
+  color: rgba(255,255,255,0.65);
+}
+.two-panel.variant-header-band .gov-layout {
+  grid-template-rows: auto 1fr;
+}
+
+/* =========================================================
+   VARIANT SLOT — TWO-PANEL:ABOUT-FIRM
+   Dark left (ash) with white Palatino title + paragraph + chart slot.
+   White right with 4 numbered principle blocks.
+   ========================================================= */
+.two-panel.variant-about-firm .gov-layout {
+  grid-template-columns: 1fr 1fr;
+}
+.about-left {
+  background: var(--im-ash);
+  padding: 32px 32px 28px;
+  display: flex;
+  flex-direction: column;
+  min-height: 0;
+}
+.about-left-title {
+  font-family: var(--font-display);
+  font-size: var(--type-heading);
+  font-weight: normal;
+  color: var(--im-white);
+  line-height: 1.15;
+  margin-bottom: 14px;
+}
+.about-left-body {
+  font-size: var(--type-body-small);
+  line-height: 1.55;
+  color: rgba(255,255,255,0.8);
+  margin-bottom: 16px;
+}
+.about-chart-slot {
+  flex: 1;
+  background: rgba(255,255,255,0.06);
+  border: 1.5px dashed rgba(255,255,255,0.25);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: var(--type-eyebrow);
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  color: rgba(255,255,255,0.35);
+  font-weight: 700;
+  margin-top: auto;
+}
+.about-right {
+  background: var(--im-white);
+  padding: 28px 28px 24px;
+  display: flex;
+  flex-direction: column;
+  gap: 18px;
+  min-height: 0;
+}
+.about-principle {
+  display: grid;
+  grid-template-columns: 36px 1fr;
+  gap: 14px;
+  align-items: flex-start;
+  padding-top: 14px;
+  border-top: 1px solid var(--im-blue-green-light);
+}
+.about-principle:first-child { border-top: none; padding-top: 0; }
+.about-principle-num {
+  font-family: var(--font-display);
+  font-size: var(--type-callout);
+  font-weight: normal;
+  color: var(--im-green-grey);
+  line-height: 1;
+}
+.about-principle-text {
+  font-family: var(--font-display);
+  font-size: var(--type-subheading);
+  font-weight: normal;
+  color: var(--im-black);
+  line-height: 1.35;
+}
+.about-principle-text em { font-style: italic; color: var(--im-blue-green-dark); }
+
+/* =========================================================
+   VARIANT SLOT — ICONIC-3-COLUMN:PHOTO
+   Icon circles replaced with rectangular 4:3 photo placeholders.
+   ========================================================= */
+.iconic-3-column.variant-photo .iconic-circle {
+  width: 100%;
+  height: auto;
+  aspect-ratio: 4/3;
+  border-radius: 0;
+  background: var(--im-egg);
+  border: 1.5px dashed var(--im-ash);
+  opacity: 0.5;
+  margin-bottom: 12px;
+  font-size: var(--type-eyebrow);
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  color: var(--im-grey);
+  font-weight: 700;
+  justify-content: center;
+  align-items: center;
+}
+.iconic-3-column.variant-photo .iconic-circle svg { display: none; }
+/* Remove fixed-height; photos are naturally taller */
+.iconic-3-column.variant-photo .iconic-three-col { align-items: start; }
+
+/* =========================================================
+   VARIANT SLOT — ICONIC-3-COLUMN:SIDEBAR
+   14% left sidebar with icon + label. Remaining 86% = 3 columns.
+   ========================================================= */
+.iconic-3-column.variant-sidebar .content-wrap {
+  flex-direction: row;
+  gap: 0;
+}
+.iconic-sidebar {
+  width: 14%;
+  flex-shrink: 0;
+  background: var(--im-blue-green-near-white);
+  border-right: 1px solid var(--im-blue-green-light);
+  padding: 24px 16px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 12px;
+  justify-content: center;
+}
+.iconic-sidebar-icon {
+  width: 48px;
+  height: 48px;
+  color: var(--im-blue-green);
+}
+.iconic-sidebar-icon svg {
+  width: 48px;
+  height: 48px;
+  stroke: currentColor;
+  fill: none;
+  stroke-width: 1.4;
+  stroke-linecap: round;
+  stroke-linejoin: round;
+}
+.iconic-sidebar-label {
+  font-family: var(--font-display);
+  font-style: italic;
+  font-size: var(--type-body);
+  color: var(--im-blue-green-dark);
+  text-align: center;
+  line-height: 1.3;
+  writing-mode: vertical-rl;
+  transform: rotate(180deg);
+  letter-spacing: 0.03em;
+}
+.iconic-3-column.variant-sidebar .iconic-three-col {
+  flex: 1;
+  padding-left: 24px;
+  min-width: 0;
+}
+
+/* =========================================================
+   VARIANT SLOT — COMPARISON-TABLE:STRATEGIC-OPTIONS
+   Letter-tagged colored row labels (A/B/C/D/E circles in colored cells).
+   ========================================================= */
+.comparison-table.variant-strategic-options .im-table th:first-child {
+  width: 30%;
+}
+.cto-row-label {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+.cto-row-label-circle {
+  width: 28px;
+  height: 28px;
+  border-radius: 50%;
+  background: var(--im-blue-green);
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  font-family: var(--font-body);
+  font-weight: 700;
+  font-size: var(--type-body-small);
+  color: var(--im-white);
+  flex-shrink: 0;
+}
+.cto-row-label-circle.option-a { background: var(--im-blue-green-dark); }
+.cto-row-label-circle.option-b { background: var(--im-blue-green); }
+.cto-row-label-circle.option-c { background: var(--im-ash); }
+.cto-row-label-circle.option-d { background: var(--im-grey); }
+.cto-row-label-circle.option-e { background: var(--im-green-grey); color: var(--im-black); }
+.cto-row-label-name {
+  font-family: var(--font-display);
+  font-style: italic;
+  font-size: var(--type-body-small);
+  color: var(--im-black);
+  line-height: 1.3;
+}
+
