@@ -206,6 +206,38 @@
     styleEl.id = `ime-style-css-${styleName}`;
     styleEl.textContent = css;
     document.head.appendChild(styleEl);
+    // Keep globals CSS at the very end of <head> so it remains higher
+    // in cascade order than any later-added per-element recipe styles.
+    const globals = document.getElementById('ime-globals-css');
+    if (globals) document.head.appendChild(globals);
+  }
+
+  // Extra deck-specific CSS class selectors a named-style global should ALSO target —
+  // lifted to module scope so the globals panel can compute target counts per row.
+  const NAMED_STYLE_EXTRA_SELECTORS = {
+    'section-label': ['.section-label', '.table-label'],
+    'kpi-kicker':    ['.kpi-kicker', '.mh-num', '.st-num', '.ml-kicker', '.ki-kicker'],
+    'kpi-value':     ['.kpi-value'],
+    'eyebrow':       ['.eyebrow', '.div-eyebrow', '.slide-eyebrow', '.photo-caption'],
+    'caption':       ['.caption', '.asset-loc', '.asset-type'],
+    'action-title':  ['.action-title', '.div-title', '.purpose-heading'],
+    'quote':         ['.pull-quote-text'],
+    'h1':            ['h1'],
+  };
+
+  function selectorsForNamedStyle(styleName) {
+    const sels = [`.ime-style-${styleName}`, `.${styleName}`];
+    for (const s of (NAMED_STYLE_EXTRA_SELECTORS[styleName] || [])) {
+      if (!sels.includes(s)) sels.push(s);
+    }
+    return sels;
+  }
+  function targetCountForSelectors(selectors) {
+    let n = 0;
+    for (const sel of selectors) {
+      try { n += document.querySelectorAll(sel).length; } catch {}
+    }
+    return n;
   }
 
   // ---------- Toolbar ----------
@@ -839,9 +871,28 @@
     ];
 
     for (const tok of tokens) {
+      // For type tokens, count elements whose computed font-size matches the variable.
+      // Cheaper proxy: count elements that DECLARE font-size via var(--type-X) — we can't
+      // walk stylesheets reliably across cross-origin/inline rules, so we compare computed
+      // font-size to the variable's resolved px value.
+      const rootStyle = getComputedStyle(document.documentElement);
+      const varValuePx = parseFloat(rootStyle.getPropertyValue(tok.varName)) || tok.defaultPx;
+      let tokTargetCount = 0;
+      try {
+        // Limit query to the slide deck content (skip toolbar/panel chrome)
+        const decks = document.querySelectorAll('.deck, [class*="slide"]');
+        decks.forEach(root => {
+          root.querySelectorAll('*').forEach(el => {
+            const cs = getComputedStyle(el);
+            if (Math.abs(parseFloat(cs.fontSize) - varValuePx) < 0.6) tokTargetCount++;
+          });
+        });
+      } catch {}
       panel.appendChild(makeRow({
         label: tok.name,
         currentPx: parseFloat(IME.state.global_overrides[tok.varName] || (tok.defaultPx + 'px')),
+        targetCount: tokTargetCount,
+        targetKind: 'type-token',
         onChangePx: (px) => {
           IME.state.global_overrides[tok.varName] = px + 'px';
           applyGlobalOverrides();
@@ -865,9 +916,12 @@
       const defaultPx = parseFloat(recipe['font-size'] || '16px');
       const overrideKey = 'style:' + styleName;
       const currentPx = parseFloat(IME.state.global_overrides[overrideKey] || (defaultPx + 'px'));
+      const namedTargetCount = targetCountForSelectors(selectorsForNamedStyle(styleName));
       panel.appendChild(makeRow({
         label: styleName,
         currentPx,
+        targetCount: namedTargetCount,
+        targetKind: 'named-style',
         onChangePx: (px) => {
           IME.state.global_overrides[overrideKey] = px + 'px';
           applyGlobalOverrides();
@@ -880,9 +934,13 @@
     document.getElementById('ime-globals-close').addEventListener('click', () => panel.remove());
   }
 
-  function makeRow({ label, currentPx, onChangePx }) {
+  function makeRow({ label, currentPx, onChangePx, targetCount, targetKind }) {
     const row = document.createElement('div');
-    row.style.cssText = 'display:grid; grid-template-columns: 140px 1fr 60px; gap:8px; align-items:center; margin-bottom:6px; padding-bottom:6px; border-bottom: 1px solid rgba(255,255,255,0.06);';
+    const noTargets = targetCount === 0;
+    row.style.cssText = `display:grid; grid-template-columns: 140px 1fr 60px 60px; gap:8px; align-items:center; margin-bottom:6px; padding-bottom:6px; border-bottom: 1px solid rgba(255,255,255,0.06); opacity: ${noTargets ? '0.4' : '1'};`;
+    row.title = noTargets
+      ? `No elements in this deck use the "${label}" style — control disabled.`
+      : `${targetCount} element${targetCount === 1 ? '' : 's'} in this deck match "${label}".`;
 
     const lab = document.createElement('span');
     lab.textContent = label;
@@ -893,26 +951,34 @@
     input.type = 'number';
     input.step = '0.5'; input.min = '4'; input.max = '90';
     input.value = (currentPx * 0.75).toFixed(1); // px → pt
-    input.style.cssText = 'background:#2F363B; color:#F2F2F1; border:1px solid rgba(255,255,255,0.1); border-radius:4px; padding:4px 8px; font-size:12px;';
+    input.disabled = noTargets;
+    input.style.cssText = `background:#2F363B; color:#F2F2F1; border:1px solid rgba(255,255,255,0.1); border-radius:4px; padding:4px 8px; font-size:12px; ${noTargets ? 'cursor:not-allowed;' : ''}`;
 
     const pxHint = document.createElement('span');
     pxHint.style.cssText = 'opacity:0.5; font-size:10.5px;';
     pxHint.textContent = currentPx.toFixed(1) + 'px';
 
-    input.addEventListener('input', () => {
-      const pt = parseFloat(input.value);
-      if (!Number.isNaN(pt)) pxHint.textContent = (pt / 0.75).toFixed(1) + 'px';
-    });
-    input.addEventListener('change', () => {
-      const pt = parseFloat(input.value);
-      if (Number.isNaN(pt)) return;
-      const px = pt / 0.75; // pt → px
-      onChangePx(px.toFixed(2));
-      pxHint.textContent = px.toFixed(1) + 'px';
-    });
+    const countHint = document.createElement('span');
+    countHint.style.cssText = `font-size:10.5px; text-align:right; color:${noTargets ? '#C07830' : '#67817F'};`;
+    countHint.textContent = noTargets ? 'no targets' : `${targetCount} target${targetCount === 1 ? '' : 's'}`;
+
+    if (!noTargets) {
+      input.addEventListener('input', () => {
+        const pt = parseFloat(input.value);
+        if (!Number.isNaN(pt)) pxHint.textContent = (pt / 0.75).toFixed(1) + 'px';
+      });
+      input.addEventListener('change', () => {
+        const pt = parseFloat(input.value);
+        if (Number.isNaN(pt)) return;
+        const px = pt / 0.75; // pt → px
+        onChangePx(px.toFixed(2));
+        pxHint.textContent = px.toFixed(1) + 'px';
+      });
+    }
 
     row.appendChild(input);
     row.appendChild(pxHint);
+    row.appendChild(countHint);
     return row;
   }
 
@@ -921,8 +987,12 @@
     if (!styleEl) {
       styleEl = document.createElement('style');
       styleEl.id = 'ime-globals-css';
-      document.head.appendChild(styleEl);
     }
+    // Always re-append so the element is the LAST <style> in <head>.
+    // This guarantees globals beat any per-element recipe styles added later
+    // in the same session (which would otherwise win the cascade tie at !important).
+    document.head.appendChild(styleEl);
+
     const overrides = IME.state.global_overrides || {};
 
     // CSS variable overrides — applied at :root, affect all rules using var(--type-*)
@@ -932,34 +1002,12 @@
       .join(' ');
     let css = varRules ? `:root { ${varRules} }\n` : '';
 
-    // Extra CSS class selectors that a named-style override should also target.
-    // These are deck-specific CSS classes that don't share the named-style name
-    // but visually represent the same style (e.g., .table-label IS the bold eyebrow).
-    const namedStyleExtraSelectors = {
-      'section-label': ['.section-label', '.table-label'],
-      'kpi-kicker':    ['.kpi-kicker', '.mh-num', '.st-num', '.ml-kicker', '.ki-kicker'],
-      'kpi-value':     ['.kpi-value'],
-      'eyebrow':       ['.eyebrow', '.div-eyebrow', '.slide-eyebrow', '.photo-caption'],
-      'caption':       ['.caption', '.asset-loc', '.asset-type'],
-      'action-title':  ['.action-title', '.div-title', '.purpose-heading'],
-      'quote':         ['.pull-quote-text'],
-      'h1':            ['h1'],
-    };
-
     // Named-style recipe overrides — affect elements with .ime-style-<name> class
-    // (so when the user picks "Heading" in the catalog dropdown, the size override applies)
+    // PLUS the deck-specific extra selectors from NAMED_STYLE_EXTRA_SELECTORS.
     for (const [key, value] of Object.entries(overrides)) {
       if (!key.startsWith('style:')) continue;
       const styleName = key.slice(6);
-      // Always target the catalog-class selector
-      const selectors = [`.ime-style-${styleName}`];
-      // Plus the named-style's own CSS class name (harmless if nothing matches)
-      selectors.push(`.${styleName}`);
-      // Plus any deck-specific selectors that visually represent the same style
-      const extras = namedStyleExtraSelectors[styleName] || [];
-      for (const sel of extras) {
-        if (!selectors.includes(sel)) selectors.push(sel);
-      }
+      const selectors = selectorsForNamedStyle(styleName);
       css += `${selectors.join(', ')} { font-size: ${value} !important; }\n`;
     }
 
