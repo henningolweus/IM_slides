@@ -113,6 +113,38 @@ Tell the user:
 
 If any `[VERIFY]` markers are present, list them explicitly so the user knows what to check.
 
+## Editing self-contained decks safely (UTF-8 contract)
+
+A generated deck file is self-contained — all CSS is inlined into a single `<style>` block. When iterating on CSS, you regenerate that inline block from the master `im-styles.css`. **You must never** use the naive PowerShell pattern:
+
+```powershell
+# WRONG — corrupts every UTF-8 character (€, …, •, —, ·) into mojibake
+$css = Get-Content "im-styles.css" -Raw
+$deck = Get-Content "deck.html" -Raw
+$deck = $deck -replace '<style>.*?</style>', "<style>$css</style>"
+Set-Content "deck.html" $deck
+```
+
+Windows PowerShell 5.1's `Get-Content` and `Set-Content` default to Windows-1252, not UTF-8. Every round-trip mojibakes UTF-8 sequences. This has bitten this skill multiple times.
+
+**Always use the helper** `scripts/refresh-deck-inline-css.ps1` instead:
+
+```powershell
+powershell "C:\Users\heol\.claude\skills\im-deck\scripts\refresh-deck-inline-css.ps1" `
+  -DeckPath "C:\path\to\your-deck.html"
+```
+
+This reads and writes via `[System.IO.File]::ReadAllText` / `WriteAllText` with an explicit `UTF8Encoding($false)` — no BOM, no codepage drift. It also fails loudly if no `<style>` block is found, so you don't silently no-op.
+
+After every CSS change inside the repo, the standard flow is:
+
+1. Edit `im-deck/references/im-styles.css`
+2. Mirror via `Copy-Item ... -Force` to `~/.claude/skills/im-deck/references/im-styles.css`
+3. Run `refresh-deck-inline-css.ps1 -DeckPath <deck>` to push the new CSS into your working deck
+4. Commit the CSS change to the repo
+
+If you find mojibake in a deck file (search for `â€¦` or `â,¬`), the file is already corrupted — regenerating the deck from scratch (via the im-deck skill) is the cleanest fix; partial sed-style replacements rarely catch every mojibaked sequence.
+
 ### Step 7 — PPTX export (opt-in)
 
 After saving the HTML deck, ask the user:
