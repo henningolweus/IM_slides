@@ -1469,6 +1469,42 @@ p, li { color: #E1E0DE !important; }
   transform: translate(-50%, -50%) scale(var(--scale, 1)) !important;
   overflow: hidden !important;
 }
+/* Solid variant — light green-grey bg, italic Palatino "01 Introduction" side-by-side, no photo */
+.segment-divider.variant-solid { background: var(--im-green-grey); }
+.segment-divider.variant-solid .sdiv-photo-bg { display: none; }
+.segment-divider.variant-solid .sdiv-overlay { display: none; }
+.segment-divider.variant-solid .sdiv-content {
+  bottom: auto;
+  top: 50%;
+  left: 12%;
+  right: auto;
+  transform: translateY(-50%);
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  gap: 36px;
+}
+.segment-divider.variant-solid .sdiv-section-num {
+  font-family: var(--font-display);
+  font-style: italic;
+  font-weight: normal;
+  font-size: 150px;
+  line-height: 1;
+  color: var(--im-blue-green-dark);
+}
+.segment-divider.variant-solid .sdiv-eyebrow { display: none; }
+.segment-divider.variant-solid .sdiv-title {
+  font-family: var(--font-display);
+  font-style: italic;
+  font-weight: normal;
+  font-size: 56px;
+  line-height: 1.1;
+  color: var(--im-black);
+  margin: 0;
+}
+.segment-divider.variant-solid .logo { color: var(--im-black); opacity: 0.85; }
+.segment-divider.variant-solid .page-number { color: rgba(31,31,35,0.5) !important; }
+
 .segment-divider .sdiv-photo-bg {
   position: absolute;
   inset: 0;
