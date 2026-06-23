@@ -2604,14 +2604,26 @@ p, li { color: #E1E0DE !important; }
   border-radius: 0 2px 2px 0;
 }
 .gantt-milestone {
-  width: 12px;
-  height: 12px;
+  width: 14px;
+  height: 14px;
   background: var(--im-black);
   transform: rotate(45deg);
   position: absolute;
   left: 50%;
-  margin-left: -6px;
+  top: 50%;
+  margin-left: -7px;
+  margin-top: -7px;
 }
+.gantt-milestone.milestone-kickoff { background: var(--im-blue-green); }
+.gantt-milestone.milestone-checkin { background: var(--im-egg); border: 1px solid var(--im-blue-green-dark); }
+.gantt-milestone.milestone-workshop { background: var(--im-blue-green-dark); }
+.gantt-milestone.milestone-decision { background: var(--im-black); width: 16px; height: 16px; margin-left: -8px; margin-top: -8px; }
+.gantt-milestones-row { background: var(--im-white); }
+.gantt-milestones-row .gantt-workstream-label { background: var(--im-black); color: var(--im-white); }
+.gantt-legend-diamond.diamond-kickoff { background: var(--im-blue-green); }
+.gantt-legend-diamond.diamond-checkin { background: var(--im-egg); border: 1px solid var(--im-blue-green-dark); }
+.gantt-legend-diamond.diamond-workshop { background: var(--im-blue-green-dark); }
+.gantt-legend-diamond.diamond-decision { background: var(--im-black); }
 .gantt-future-phase {
   border-right: none;
   border-left: 2px dashed var(--im-green-grey);
