@@ -3,7 +3,7 @@ import assert from 'node:assert/strict';
 import { writeFile, readFile, rm } from 'node:fs/promises';
 import { join } from 'node:path';
 import { tmpdir } from 'node:os';
-import { applyFirstdraft } from '../scripts/apply-firstdraft.mjs';
+import { applyFirstdraft, applyPicksJson } from '../scripts/apply-firstdraft.mjs';
 
 test('applyFirstdraft updates the layout hint for picked slides', async () => {
   const tmp = join(tmpdir(), `ifd-apply-${Date.now()}`);
@@ -45,4 +45,32 @@ test('applyFirstdraft updates the layout hint for picked slides', async () => {
   await rm(storyPath, { force: true });
   await rm(`${storyPath}.before-apply.md`, { force: true });
   await rm(draftPath, { force: true });
+});
+
+test('applyPicksJson updates layout hints from a parsed picks payload', async () => {
+  const tmp = join(tmpdir(), `ifd-picks-${Date.now()}`);
+  const storyPath = `${tmp}-story.md`;
+
+  await writeFile(storyPath, [
+    '### 4. Intro',
+    '- Title: hello',
+    '',
+    '### 5. **Three icons** | iconic',
+    '**Layout hint:** two-panel',
+    '- a',
+    '- b',
+    '- c',
+    ''
+  ].join('\n'), 'utf8');
+
+  const payload = { picks: [{ index: 5, layout: 'iconic-3-column' }] };
+  const summary = await applyPicksJson(payload, storyPath);
+  assert.equal(summary.applied, 1);
+
+  const updated = await readFile(storyPath, 'utf8');
+  assert.match(updated, /\*\*Layout hint:\*\* iconic-3-column/);
+  assert.doesNotMatch(updated, /\*\*Layout hint:\*\* two-panel/);
+
+  await rm(storyPath, { force: true });
+  await rm(`${storyPath}.before-apply.md`, { force: true });
 });
