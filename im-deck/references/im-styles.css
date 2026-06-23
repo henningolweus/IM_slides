@@ -2650,14 +2650,17 @@ p, li { color: #E1E0DE !important; }
 
 /* Multiline: title (bold) first child + subtitle (regular) second child, both full-width.
    Use explicit <span class="gbar-title"> + <span class="gbar-sub"> children — text nodes
-   inside flex-column render unreliably and chevron clip-path may crop second line. */
+   inside flex-column render unreliably. Bar MUST be tall enough to contain both lines
+   within the chevron clip-path (overflow stays hidden — overflow:visible would let the
+   subtitle bleed past the bar outline). */
 .gantt-bar.gantt-bar-multiline {
   white-space: normal;
   align-items: stretch;
   padding: 10px 22px 10px 14px;
   line-height: 1.3;
   font-weight: 400;
-  overflow: visible;
+  min-height: 56px;
+  height: 100%;
 }
 .gantt-bar.gantt-bar-multiline .gbar-title { display: block; font-weight: 700; font-size: 11.5px; margin-bottom: 2px; }
 .gantt-bar.gantt-bar-multiline .gbar-sub   { display: block; font-weight: 400; font-size: 10.5px; opacity: 0.92; }
