@@ -2088,7 +2088,7 @@ p, li { color: #E1E0DE !important; }
 }
 .team-card-photo {
   width: 72px;
-  height: 72px;
+  height: 96px;
   background: var(--im-egg);
   border: 1.5px dashed var(--im-ash);
   opacity: 0.45;
