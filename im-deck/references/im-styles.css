@@ -1486,16 +1486,16 @@ p, li { color: #E1E0DE !important; }
 }
 .segment-divider.variant-solid .sdiv-section-num {
   font-family: var(--font-display);
-  font-style: italic;
+  font-style: normal;
   font-weight: normal;
   font-size: 150px;
   line-height: 1;
-  color: var(--im-blue-green-dark);
+  color: var(--im-blue-green);
 }
 .segment-divider.variant-solid .sdiv-eyebrow { display: none; }
 .segment-divider.variant-solid .sdiv-title {
   font-family: var(--font-display);
-  font-style: italic;
+  font-style: normal;
   font-weight: normal;
   font-size: 56px;
   line-height: 1.1;
