@@ -25,6 +25,8 @@ For each slide in the story or user's description:
 3. Select the best-fit layout number
 4. Note deviations from the deck type's default sequence and why
 
+For **Proposal / pitch** decks, if the corpus at `im-examples/manifest.json` is present (run `node im-examples/lookup.mjs --status` to check), consult the matching section before finalising the layout choice for any scaffold slot. See the "Inspiration corpus" section below for the mapping table and lookup commands.
+
 ### Step 3 — Color
 Ask once, clearly:
 
@@ -181,6 +183,100 @@ node "C:\Users\heol\.claude\skills\im-deck\scripts\export-pptx.mjs" --slides "[s
 
 > "Optional: run `C:\Users\heol\.claude\skills\im-deck\scripts\find-implement-design.ps1` to enable the full icon library. The bundled essentials work without it."
 
+### Step 8 — Brand-master swap (opt-in)
+
+`export-pptx.mjs` builds a PPTX from scratch with pptxgenjs, which means the file ships with pptxgenjs's default slide master — not the Implement (IM_) corporate master with the logo, fonts, and section colours. To inherit a real PowerPoint master, run the post-processor `apply-master.mjs` after Step 7.
+
+Ask the user:
+
+> "Apply a corporate slide master? (Wraps the deck in your brand frame — logo, footer, theme — without changing slide content. Needs a path to a template .pptx or .potx.)"
+
+If yes:
+
+1. Optionally inspect what layouts the template has (helpful for proposing the right cover layout):
+
+```powershell
+node "C:\Users\heol\.claude\skills\im-deck\scripts\apply-master.mjs" --template "<template path>" --list-layouts
+```
+
+2. Run the swap:
+
+```powershell
+node "C:\Users\heol\.claude\skills\im-deck\scripts\apply-master.mjs" `
+  --deck "[slug]-deck.pptx" `
+  --template "<template path>" `
+  --out "[slug]-deck-branded.pptx"
+```
+
+By default the script picks the layout named **"Blank"** for content slides and **"Cover A1"** (or the first `type=title` layout) for slide 1. Override with `--content-layout "<name>"` and `--cover-layout "<name>"` if the template uses different names.
+
+**What `apply-master.mjs` does to slide content automatically:**
+
+- **Master frame is provided by the template** — the deck's own `.logo`, `.im-mark`, `.im-mark-vertical`, and `.page-number` elements are filtered out at the HTML→PPTX stage (in `html2pptx.js`) so we don't render a duplicate logo / page number on top of the master's.
+- **Action titles become real placeholders** — `.action-title` shapes get tagged `objectName="IM_TITLE"` during HTML→PPTX, then promoted to `<p:ph type="title"/>` in `apply-master.mjs`. The layout's "Click to add title" prompt disappears and the shape registers as the slide's title (used by PowerPoint's outline view, accessibility, etc.).
+- **Titles inherit layout defaults** — by default, the title shape's hardcoded position (`<a:xfrm>`), paragraph properties, and text formatting (font, size, weight, colour, alignment) are stripped so the layout's title placeholder controls them. This fixes the common "white title on white master" problem when a dark-theme deck is re-mastered onto a light template, and ensures titles line up with the template's grid. Pass `--no-reset-titles` to keep the deck's hardcoded title styling instead.
+
+3. On success, tell the user:
+
+> "Branded PPTX saved as `[slug]-deck-branded.pptx` — slides inherit the template's master (logo, theme, footer) and titles snap to the layout's title placeholder. Body shapes still use the deck's hardcoded positions and colours. Open and verify in PowerPoint."
+
+4. Caveat to mention if the user reports unexpected body-text colours: the reset only applies to titles. Body shapes (lists, captions, table cells) keep their CSS-derived hex values. A separate CSS-side colour sweep mapping the deck's greens/greys to the template's theme colours is needed for full theme inheritance on body content.
+
+## Inspiration corpus (im-examples)
+
+When a real corpus of past IM_ proposal slides has been indexed at `im-examples/manifest.json` (sibling folder to this skill), consult it during Step 2 (Layout matching) and Step 4 (Build) for **Proposal / pitch** decks. Do **not** consult it for Strategic briefing, Status update, or Workshop decks — those have no corpus coverage.
+
+**Detection.**
+
+```powershell
+node im-examples/lookup.mjs --status
+```
+
+If `present=false` or the path doesn't exist, proceed without it — the corpus is optional.
+
+**Section ↔ slot mapping.** Each corpus section maps to one scaffold slot:
+
+| Scaffold slot | Layout | Corpus section |
+|---|---|---|
+| Slide 2 / 25 (partner letters) | `photo-left-content:letter` | `closing-letter` |
+| Slide 5 (SCR) | `two-panel:scr` | `intro-scq` |
+| Slide 11 (collaboration model) | `ring-diagram` | `collaboration` |
+| Slide 14 (scope & approach) | `moves-grid` | `approach-scope` |
+| Slide 15 (project plan) | `gantt-process` | `project-plan` |
+| Slide 18 (team & investment) | `team-and-investment` | `team-investment` |
+| Slide 23 (about Implement) | `two-panel:about-firm` | `about-implement` |
+| Slide 24 (why Implement) | `iconic-3-column:sidebar` | `why-implement` |
+
+Slides outside this table (cover, ToC, segment dividers, methodology, references, etc.) have no corpus section — build them from the scaffold + story brief alone.
+
+**Loading slices (token-efficient).** Never `Read` `manifest.json` directly — it's hundreds of slides. Use `lookup.mjs`:
+
+```powershell
+# Scan: titles + 200-char previews
+node im-examples/lookup.mjs --section project-plan --brief
+
+# Drill: full content of one slide
+node im-examples/lookup.mjs --section project-plan --slide 7
+
+# Cross-section: all slides matching a layout tag
+node im-examples/lookup.mjs --layout gantt-process --brief
+```
+
+Read `--brief` first; pull the full slide(s) only for the 1–3 that look most relevant.
+
+**How to use what you find.** The corpus exists to inform **layout choice, structure, and phrasing**, not to be copied. For each slot:
+- Look at how prior decks resolved the same content type (e.g., how many workstreams on a gantt? how many partners on a ring diagram? how is the SCR right panel numbered?)
+- Adopt patterns that fit this client's brief; never lift specific client names, figures, dates, or claims
+- If the story brief carries a `*Inspired by: <section> slide N*` line from im-story, fetch that exact slide first to honour the original intent
+
+**Citation.** When a slide's structure is materially shaped by corpus inspiration, add an HTML comment immediately inside the `<section class="slide">` tag:
+
+```html
+<!-- inspired-by: collaboration slide 4 -->
+```
+
+This keeps the lineage discoverable in the source without affecting render.
+
 ## Quality checks before saving
 - [ ] Every `<!-- FILL: ... -->` has been replaced with real content
 - [ ] Slide count in counter (`1 / N`) matches the actual number of `<section class="slide">` elements
@@ -190,6 +286,7 @@ node "C:\Users\heol\.claude\skills\im-deck\scripts\export-pptx.mjs" --slides "[s
 - [ ] Cover slide does not have `<div class="logo">IM_</div>` (logo is inside cover-left as `<div class="im-mark">`)
 - [ ] Color theme override block (if non-Standard) is the FIRST thing inside `<style>`, before im-styles.css content
 - [ ] If PPTX export requested: all 5 (or N) slides converted with no errors; `[slug]-deck.pptx` opens cleanly in PowerPoint with editable text
+- [ ] If brand-master swap requested: `[slug]-deck-branded.pptx` opens in PowerPoint and shows the template's logo/frame; counts in the run output match (slides rewired = slide count, layouts copied = template's full set)
 - [ ] Icon-catalog and color-scales references read whenever the content brief includes icons or color choices
 - [ ] Every action title is ≤120 characters (≈3 lines at 24pt). If longer, restructure as `<strong>Section label</strong> | short declarative clause`.
 - [ ] No layout exceeds its safe card count: `.team-grid` ≤ 6 cards in 3 columns (2 rows); `.assets-grid` ≤ 4 cards; `.qs-initiative-card` ≤ 4.

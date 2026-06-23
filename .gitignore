@@ -20,3 +20,6 @@ build/
 
 # Local user state
 *.local
+
+# Local corporate brand assets — kept out of the public repo
+Slide Master.pptx

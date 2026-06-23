@@ -43,3 +43,24 @@ test('parseStory captures variant suffix in layout hints', () => {
   assert.equal(slides[1].layoutHint, 'photo-left-content:letter');
   assert.equal(slides[2].layoutHint, 'two-panel:scr');
 });
+
+test('parseStory strips wrapping markdown formatting from layout hints', () => {
+  const md = [
+    '### 1. Cover',
+    '### 2. **Letter** | backtick-wrapped',
+    '**Layout hint:** `photo-left-content:letter`',
+    '- a',
+    '',
+    '### 3. **SCR** | bracket-wrapped (template placeholder syntax)',
+    '**Layout hint:** [two-panel:scr]',
+    '- a',
+    '',
+    '### 4. **Ring** | bare (control)',
+    '**Layout hint:** ring-diagram',
+    '- a'
+  ].join('\n');
+  const slides = parseStory(md);
+  assert.equal(slides[1].layoutHint, 'photo-left-content:letter');
+  assert.equal(slides[2].layoutHint, 'two-panel:scr');
+  assert.equal(slides[3].layoutHint, 'ring-diagram');
+});

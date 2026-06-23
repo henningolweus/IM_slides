@@ -80,6 +80,37 @@ export async function html2pptx(htmlPath, pres) {
       return true;
     }
 
+    // Classes whose elements belong to the *master frame* (logo, page numbers,
+    // brand bars). When the deck is later re-mastered via apply-master.mjs,
+    // the corporate slide master provides these — emitting them here would
+    // duplicate them. Skip them at the html→pptx layer so we don't have to
+    // post-strip in the OOXML.
+    const MASTER_CHROME_CLASSES = new Set([
+      'logo', 'im-mark', 'im-mark-vertical', 'page-number',
+    ]);
+    function isMasterChrome(el) {
+      if (!el.classList) return false;
+      for (const c of el.classList) if (MASTER_CHROME_CLASSES.has(c)) return true;
+      let p = el.parentElement;
+      while (p) {
+        if (p.classList) {
+          for (const c of p.classList) if (MASTER_CHROME_CLASSES.has(c)) return true;
+          if (p.classList.contains('slide')) break;
+        }
+        p = p.parentElement;
+      }
+      return false;
+    }
+
+    // .action-title is the canonical IM_ "action title" on every content slide.
+    // We tag the emitted shape with objectName='IM_TITLE' so apply-master.mjs
+    // can find it and promote it to a real <p:ph type="title"/> placeholder,
+    // which makes the layout's "Click to add title" prompt disappear and lets
+    // the title inherit any styling the layout chooses to apply.
+    function isActionTitle(el) {
+      return el.classList && el.classList.contains('action-title');
+    }
+
     const TEXT_TAGS = new Set(['P','H1','H2','H3','H4','H5','H6','SPAN','TH','TD']);
     const LIST_TAGS = new Set(['UL','OL']);
     const INLINE_FORMATTING_TAGS = new Set(['STRONG','B','EM','I','U']);
@@ -269,6 +300,7 @@ export async function html2pptx(htmlPath, pres) {
       };
       const runs = extractRuns(el);
       if (runs) item.runs = runs;
+      if (isActionTitle(el)) item.isTitle = true;
       return item;
     }
 
@@ -348,6 +380,7 @@ export async function html2pptx(htmlPath, pres) {
     let domIndex = 0;
     for (const el of all) {
       if (!visible(el)) continue;
+      if (isMasterChrome(el)) continue;
       const tag = el.tagName;
       if (tag === 'svg' || tag === 'SVG') continue;
       if (el.closest && el.closest('svg')) continue;
@@ -615,6 +648,8 @@ export async function html2pptx(htmlPath, pres) {
         margin: 0,
       };
       if (rot !== 0) opts.rotate = rot;
+      // Tag .action-title shapes so apply-master.mjs can promote them to title placeholders.
+      if (el.isTitle) opts.objectName = 'IM_TITLE';
 
       // Step 10: letter-spacing → charSpacing (C21)
       if (el.letterSpacing && el.letterSpacing !== '0px' && el.letterSpacing !== 'normal') {

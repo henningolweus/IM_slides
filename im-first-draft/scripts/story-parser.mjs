@@ -24,7 +24,7 @@ export function parseStory(md) {
     if (!current) continue;
     const hint = line.match(LAYOUT_HINT_RE);
     if (hint) {
-      current.layoutHint = hint[1].trim();
+      current.layoutHint = hint[1].trim().replace(/^[`\[]+|[`\]]+$/g, '').trim();
       continue;
     }
     current.brief += line + '\n';

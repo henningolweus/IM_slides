@@ -70,6 +70,8 @@ For each slide (except cover, ToC dividers, closing), add a brief:
 - 2–4 bullets describing: what data/evidence goes here, what structure fits the content (e.g. "3 pillars", "6-row ownership chain", "2×3 moves grid"), any specific names/numbers/sources to include
 - Do not write HTML. Do not select layouts. Keep it structural.
 
+For **Proposal / pitch** decks: before writing the brief for any slide that maps to a corpus section (see the table in "Inspiration corpus" below), consult the matching section via `node im-examples/lookup.mjs --section <name> --brief` to see how prior IM_ proposals structured that slot. Note inspirations as `*Inspired by: <section> slide N*` at the end of the brief so the lineage is traceable in im-deck.
+
 ### Step 7 — Output
 Save the complete storyline to `[topic-slug]-story.md` in the current working directory.
 
@@ -122,3 +124,50 @@ Key conventions to apply when writing proposal storylines:
 7. **The process plan slide is always `gantt-process`**, not `timeline`. Note the workstream names and approximate week-count in the content brief so im-deck can render the correct grid.
 
 See `references/deck-types.md` for the complete slide-by-slide scaffold with layout hints, action title guidance, and content briefs for each position in the standard 25-slide structure.
+
+## Inspiration corpus (im-examples)
+
+When a real corpus of past IM_ proposal slides has been indexed at `im-examples/manifest.json` (sibling folder to this skill), consult it during Step 6 (Content briefs) for **Proposal / pitch** decks. Do **not** consult it for Strategic briefing, Status update, or Workshop decks — those have no corpus coverage.
+
+**Detection.** Run once at the start of a proposal storyline:
+
+```powershell
+node im-examples/lookup.mjs --status
+```
+
+If `present=true`, follow the rest of this section. If `present=false` or the path doesn't exist, proceed without it — the corpus is optional.
+
+**Section ↔ slot mapping.** Each corpus section maps to one scaffold slot:
+
+| Scaffold slot | Layout | Corpus section |
+|---|---|---|
+| Slide 2 (opening letter) | `photo-left-content:letter` | `closing-letter` |
+| Slide 5 (SCR) | `two-panel:scr` | `intro-scq` |
+| Slide 11 (collaboration model) | `ring-diagram` | `collaboration` |
+| Slide 14 (scope & approach) | `moves-grid` | `approach-scope` |
+| Slide 15 (project plan) | `gantt-process` | `project-plan` |
+| Slide 18 (team & investment) | `team-and-investment` | `team-investment` |
+| Slide 23 (about Implement) | `two-panel:about-firm` | `about-implement` |
+| Slide 24 (why Implement) | `iconic-3-column:sidebar` | `why-implement` |
+| Slide 25 (closing letter) | `photo-left-content:letter` | `closing-letter` |
+
+Slides not in this table (cover, ToC, segment dividers, methodology, references, etc.) have no corpus section — write the brief from the scaffold alone.
+
+**Loading slices (token-efficient).** Never `Read` `manifest.json` directly — it's hundreds of slides. Use `lookup.mjs`:
+
+```powershell
+# Scan: titles + 200-char previews for the whole section
+node im-examples/lookup.mjs --section intro-scq --brief
+
+# Drill: full content of one promising slide
+node im-examples/lookup.mjs --section intro-scq --slide 4
+```
+
+Read `--brief` first; pull full slides only for the 1–3 that look most relevant.
+
+**How to use what you find.** The corpus exists to inform **tone, structure, and phrasing**, not to be copied. For each slot:
+- Look at how prior decks framed the situation/complication pair (SCR), staged the moves (approach), worded warmth in the partner letter, or grouped why-us proof points
+- Adopt patterns that fit this client's situation; never lift specific client names, figures, or claims
+- If the corpus suggests a different structure than the scaffold default (e.g., 6 modules vs 4), surface that in the content brief as an alternative for the user to confirm
+
+**Citation.** When a brief is materially shaped by corpus inspiration, end it with `*Inspired by: <section> slide N[, slide M]*`. This carries through to im-deck and im-first-draft so the reviewer can trace the lineage.

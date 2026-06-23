@@ -1,0 +1,14 @@
+{
+  "name": "im-examples",
+  "version": "0.1.0",
+  "private": true,
+  "type": "module",
+  "description": "Inspiration corpus for IM_ deck skills. Indexes example PPTX proposals into manifest.json.",
+  "scripts": {
+    "build": "node build-manifest.mjs"
+  },
+  "engines": { "node": ">=20" },
+  "dependencies": {
+    "jszip": "^3.10.1"
+  }
+}
