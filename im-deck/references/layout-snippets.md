@@ -1178,6 +1178,14 @@
 **When to use:** Week-by-week or month-by-month project plan with proposal-grade visuals — chevron activity bars, month/week header bands, optional dashed Phase 3 column at right, 4-color milestone row, and legend. Based on Proposal 3 slide 16 and Proposal 4 slide 12.
 
 ```html
+<!--
+  PROVEN GRID PATTERN — every cell uses BOTH explicit `grid-row` AND `grid-column`
+  inline styles. Auto-placement scrambles workstream labels into the wrong columns
+  when rows have differing numbers of cells, so we pin every cell. Pattern below
+  shows a 12-week deck (3 months × 4 weeks) + optional Phase-3 column at right = 14 cols.
+  To use fewer weeks: change `repeat(12, 1fr)` and the month-cell `span N` values,
+  and renumber all `grid-column` references accordingly.
+-->
 <section class="slide gantt-process" data-slide="N">
   <div class="logo">IM_</div>
   <h2 class="action-title" data-imedit-id="{IMEDIT_ID:action-title:0}">
@@ -1188,53 +1196,104 @@
 
       <div class="gantt-eyebrow-row">
         <span class="gantt-eyebrow" data-imedit-id="{IMEDIT_ID:eyebrow:0}"><!-- FILL: e.g. High level overview of project plan --></span>
-        <span class="gantt-discuss-tag" data-imedit-id="{IMEDIT_ID:discuss-tag:0}"><!-- FILL: e.g. To be discussed — or remove for client-final --></span>
+        <span class="gantt-discuss-tag" data-imedit-id="{IMEDIT_ID:discuss-tag:0}"><!-- FILL: e.g. To be discussed — remove for client-final --></span>
       </div>
 
-      <!--
-        gantt-col-template formula: <label-width> repeat(<weeks>, 1fr) <phase-optional-width>
-        Adjust counts to match your weeks. 9 weeks shown here.
-        Each activity bar uses `grid-column: <start> / span <weeks>` so it spans precisely.
-      -->
-      <div class="gantt-table" style="--gantt-col-template: 200px repeat(9, 1fr) 220px;">
+      <div class="gantt-table" style="--gantt-col-template: 180px repeat(12, 1fr) 200px; grid-auto-rows: minmax(0, auto);">
 
-        <div class="gantt-month-cell gantt-month-empty"></div>
-        <div class="gantt-month-cell" style="grid-column: span 3;" data-imedit-id="{IMEDIT_ID:month:0}"><!-- FILL: month 1, e.g. OCT --></div>
-        <div class="gantt-month-cell" style="grid-column: span 3;" data-imedit-id="{IMEDIT_ID:month:1}"><!-- FILL: month 2 --></div>
-        <div class="gantt-month-cell" style="grid-column: span 3;" data-imedit-id="{IMEDIT_ID:month:2}"><!-- FILL: month 3 --></div>
-        <div class="gantt-month-cell gantt-month-empty"></div>
+        <!-- Row 1: month band (col 1 empty for label, then 3 months × 4 weeks, then col 14 empty) -->
+        <div class="gantt-month-cell gantt-month-empty" style="grid-row: 1; grid-column: 1;"></div>
+        <div class="gantt-month-cell" style="grid-row: 1; grid-column: 2 / span 4;" data-imedit-id="{IMEDIT_ID:month:0}"><!-- FILL: month 1 --></div>
+        <div class="gantt-month-cell" style="grid-row: 1; grid-column: 6 / span 4;" data-imedit-id="{IMEDIT_ID:month:1}"><!-- FILL: month 2 --></div>
+        <div class="gantt-month-cell" style="grid-row: 1; grid-column: 10 / span 4;" data-imedit-id="{IMEDIT_ID:month:2}"><!-- FILL: month 3 --></div>
+        <div class="gantt-month-cell gantt-month-empty" style="grid-row: 1; grid-column: 14;"></div>
 
-        <div class="gantt-week-cell gantt-week-label">Month / Week</div>
-        <div class="gantt-week-cell">W1</div><div class="gantt-week-cell">W2</div><div class="gantt-week-cell">W3</div>
-        <div class="gantt-week-cell">W4</div><div class="gantt-week-cell">W5</div><div class="gantt-week-cell">W6</div>
-        <div class="gantt-week-cell">W7</div><div class="gantt-week-cell">W8</div><div class="gantt-week-cell">W9</div>
-        <div class="gantt-week-cell" style="background: var(--im-ash);"></div>
+        <!-- Row 2: week sub-header (12 cells, one per week) -->
+        <div class="gantt-week-cell gantt-week-label" style="grid-row: 2; grid-column: 1;">Month / Week</div>
+        <div class="gantt-week-cell" style="grid-row: 2; grid-column: 2;">W1</div>
+        <div class="gantt-week-cell" style="grid-row: 2; grid-column: 3;">W2</div>
+        <div class="gantt-week-cell" style="grid-row: 2; grid-column: 4;">W3</div>
+        <div class="gantt-week-cell" style="grid-row: 2; grid-column: 5;">W4</div>
+        <div class="gantt-week-cell" style="grid-row: 2; grid-column: 6;">W5</div>
+        <div class="gantt-week-cell" style="grid-row: 2; grid-column: 7;">W6</div>
+        <div class="gantt-week-cell" style="grid-row: 2; grid-column: 8;">W7</div>
+        <div class="gantt-week-cell" style="grid-row: 2; grid-column: 9;">W8</div>
+        <div class="gantt-week-cell" style="grid-row: 2; grid-column: 10;">W9</div>
+        <div class="gantt-week-cell" style="grid-row: 2; grid-column: 11;">W10</div>
+        <div class="gantt-week-cell" style="grid-row: 2; grid-column: 12;">W11</div>
+        <div class="gantt-week-cell" style="grid-row: 2; grid-column: 13;">W12</div>
+        <div class="gantt-week-cell" style="grid-row: 2; grid-column: 14; background: var(--im-ash);"></div>
 
-        <!-- REPEAT workstream rows as needed. Pattern per row:
-             1. <div class="gantt-row-label"> with .gantt-row-title (and optional .gantt-row-subtitle)
-             2. Zero or more <div class="gantt-cell"> with style="grid-column: <start> / span <weeks>"
-                containing a <div class="gantt-bar"> (or .gantt-bar-supporting variant)
-             3. End each row with empty <div class="gantt-cell"> for the trailing Phase-3 column
-                — OR use one shared .gantt-phase-optional that spans all rows via grid-row: span N -->
-
-        <!-- Row 1 example: Mobilization -->
-        <div class="gantt-row-label">
-          <span class="gantt-row-title"><!-- FILL: workstream name --></span>
-        </div>
-        <div class="gantt-cell"><div class="gantt-bar gantt-bar-supporting"><!-- FILL: bar text --></div></div>
-        <div class="gantt-cell" style="grid-column: span 8;"></div>
-        <div class="gantt-phase-optional" style="grid-row: span N;">
-          <strong>Phase 3 (Optional):</strong> <!-- FILL: optional-phase description -->
+        <!-- Phase 3 (Optional) dashed column — spans all workstream sub-rows (3 → 3+N-1) in col 14.
+             Adjust `grid-row: 3 / span N` so N = total number of activity sub-rows below (excluding milestones). -->
+        <div class="gantt-phase-optional" style="grid-row: 3 / span 6; grid-column: 14;" data-imedit-id="{IMEDIT_ID:phase-optional:0}">
+          <strong>Phase 3 (Optional):</strong> <!-- FILL: optional-phase description, italic Palatino body -->
         </div>
 
-        <!-- ...more rows... -->
+        <!-- Row 3: Mobilization (single short bar) -->
+        <div class="gantt-row-label" style="grid-row: 3; grid-column: 1;" data-imedit-id="{IMEDIT_ID:row-label:0}">
+          <span class="gantt-row-title"><!-- FILL: workstream name, e.g. Mobilization --></span>
+        </div>
+        <div class="gantt-cell" style="grid-row: 3; grid-column: 2;"><div class="gantt-bar gantt-bar-supporting" data-imedit-id="{IMEDIT_ID:bar:0}"><!-- FILL: bar text --></div></div>
+        <div class="gantt-cell" style="grid-row: 3; grid-column: 3 / span 11;"></div>
 
-        <!-- Final row: milestones -->
-        <div class="gantt-row-label gantt-milestones-label">
+        <!-- Row 4: Phase 1 with a TALLER multi-line bar (title + subtitle stacked).
+             Cell needs min-height: 88px so the bar fills it. Bar uses span class children, not <br>. -->
+        <div class="gantt-row-label" style="grid-row: 4; grid-column: 1;" data-imedit-id="{IMEDIT_ID:row-label:1}">
+          <span class="gantt-row-title"><!-- FILL: e.g. Phase 1: --></span>
+          <span class="gantt-row-subtitle"><!-- FILL: subtitle line, e.g. Commercialisation Viability --></span>
+        </div>
+        <div class="gantt-cell" style="grid-row: 4; grid-column: 2 / span 7; min-height: 88px;">
+          <div class="gantt-bar gantt-bar-multiline" data-imedit-id="{IMEDIT_ID:bar:1}">
+            <span class="gbar-title"><!-- FILL: bar title (bold) --></span>
+            <span class="gbar-sub"><!-- FILL: subtitle line (lighter) --></span>
+          </div>
+        </div>
+        <div class="gantt-cell" style="grid-row: 4; grid-column: 9 / span 5;"><div class="gantt-bar gantt-bar-supporting" data-imedit-id="{IMEDIT_ID:bar:2}"><!-- FILL: second bar in this row --></div></div>
+
+        <!-- Row 5: Phase 2 (two bars spanning different week ranges) -->
+        <div class="gantt-row-label" style="grid-row: 5; grid-column: 1;" data-imedit-id="{IMEDIT_ID:row-label:2}">
+          <span class="gantt-row-title"><!-- FILL: e.g. Phase 2: --></span>
+          <span class="gantt-row-subtitle"><!-- FILL: subtitle --></span>
+        </div>
+        <div class="gantt-cell" style="grid-row: 5; grid-column: 2 / span 5;"></div>
+        <div class="gantt-cell" style="grid-row: 5; grid-column: 7 / span 4;"><div class="gantt-bar" data-imedit-id="{IMEDIT_ID:bar:3}"><!-- FILL: bar text --></div></div>
+        <div class="gantt-cell" style="grid-row: 5; grid-column: 11 / span 3;"><div class="gantt-bar gantt-bar-supporting" data-imedit-id="{IMEDIT_ID:bar:4}"><!-- FILL: bar text --></div></div>
+
+        <!-- Rows 6-8: Data collection with 3 stacked sub-bars.
+             Label uses `grid-row: 6 / span 3` so it spans all three sub-rows. -->
+        <div class="gantt-row-label" style="grid-row: 6 / span 3; grid-column: 1;" data-imedit-id="{IMEDIT_ID:row-label:3}">
+          <span class="gantt-row-title"><!-- FILL: e.g. Data collection --></span>
+        </div>
+        <!-- Sub-row 1 -->
+        <div class="gantt-cell" style="grid-row: 6; grid-column: 2;"></div>
+        <div class="gantt-cell" style="grid-row: 6; grid-column: 3 / span 8;"><div class="gantt-bar gantt-bar-supporting" data-imedit-id="{IMEDIT_ID:bar:5}"><!-- FILL: e.g. Industry expert interviews --></div></div>
+        <div class="gantt-cell" style="grid-row: 6; grid-column: 11 / span 3;"></div>
+        <!-- Sub-row 2 -->
+        <div class="gantt-cell" style="grid-row: 7; grid-column: 2 / span 3;"></div>
+        <div class="gantt-cell" style="grid-row: 7; grid-column: 5 / span 7;"><div class="gantt-bar gantt-bar-supporting" data-imedit-id="{IMEDIT_ID:bar:6}"><!-- FILL: e.g. Customer interviews --></div></div>
+        <div class="gantt-cell" style="grid-row: 7; grid-column: 12 / span 2;"></div>
+        <!-- Sub-row 3 -->
+        <div class="gantt-cell" style="grid-row: 8; grid-column: 2 / span 11;"><div class="gantt-bar gantt-bar-supporting" data-imedit-id="{IMEDIT_ID:bar:7}"><!-- FILL: e.g. Desktop research --></div></div>
+
+        <!-- Final row: Main touchpoints — one cell per week + col 14 for decision gate in Phase-3 col.
+             Drop a <div class="gantt-milestone milestone-X"></div> into the cells where milestones land. -->
+        <div class="gantt-row-label gantt-milestones-label" style="grid-row: 9; grid-column: 1;">
           <span class="gantt-row-title">Main touchpoints</span>
         </div>
-        <!-- One <div class="gantt-cell"> per week; add <div class="gantt-milestone milestone-X"></div>
-             inside the cells where milestones fall. milestone-X = kickoff | checkin | workshop | decision -->
+        <div class="gantt-cell" style="grid-row: 9; grid-column: 2;"><div class="gantt-milestone milestone-kickoff"></div></div>
+        <div class="gantt-cell" style="grid-row: 9; grid-column: 3;"></div>
+        <div class="gantt-cell" style="grid-row: 9; grid-column: 4;"><div class="gantt-milestone milestone-checkin"></div></div>
+        <div class="gantt-cell" style="grid-row: 9; grid-column: 5;"></div>
+        <div class="gantt-cell" style="grid-row: 9; grid-column: 6;"><div class="gantt-milestone milestone-checkin"></div></div>
+        <div class="gantt-cell" style="grid-row: 9; grid-column: 7;"></div>
+        <div class="gantt-cell" style="grid-row: 9; grid-column: 8;"><div class="gantt-milestone milestone-workshop"></div></div>
+        <div class="gantt-cell" style="grid-row: 9; grid-column: 9;"></div>
+        <div class="gantt-cell" style="grid-row: 9; grid-column: 10;"><div class="gantt-milestone milestone-checkin"></div></div>
+        <div class="gantt-cell" style="grid-row: 9; grid-column: 11;"></div>
+        <div class="gantt-cell" style="grid-row: 9; grid-column: 12;"><div class="gantt-milestone milestone-workshop"></div></div>
+        <div class="gantt-cell" style="grid-row: 9; grid-column: 13;"></div>
+        <div class="gantt-cell" style="grid-row: 9; grid-column: 14;"><div class="gantt-milestone milestone-decision"></div></div>
 
       </div>
 
@@ -1245,15 +1304,21 @@
         <div class="gantt-legend-item"><span class="gantt-legend-diamond diamond-decision"></span><span>Decision gate</span></div>
       </div>
 
-      <div class="gantt-notes-box">Notes</div>
-
     </div>
   </div>
   <p class="page-number"><!-- FILL: NN / TT --></p>
 </section>
 ```
 
-**Notes:** The `--gantt-col-template` inline style on `.gantt-table` sets the grid — label column width + `repeat(N, 1fr)` for weeks + optional Phase-3 column width at right. Activity bars use `grid-column: <col-start> / span <weeks>` to span exact week ranges; column numbering starts at 2 (the first `1fr` column) since column 1 is the label. The `gantt-phase-optional` div uses `grid-row: span N` to span all workstream rows without repeating it per row. Milestone diamond variants are `milestone-kickoff` (filled teal), `milestone-checkin` (egg-white outline), `milestone-workshop` (dark teal), and `milestone-decision` (black, larger). The `gantt-discuss-tag` span can be removed entirely for client-final versions.
+**Notes:**
+- **Grid math.** `--gantt-col-template: <label-width> repeat(<weeks>, 1fr) <phase-3-width>`. Total cols = `weeks + 2`. For a 12-week deck → 14 cols (1 label + 12 weeks + 1 Phase-3). Column numbering starts at **1** for the label cell, **2** for the first week, ... so week N is at column `N + 1`. Phase-3 column is always the last (`weeks + 2`).
+- **Pin every cell.** Use BOTH `grid-row: R` AND `grid-column: C [/ span N]` on every cell. Without explicit `grid-row`, CSS Grid auto-placement scrambles labels into adjacent rows when a row has fewer cells than the column count.
+- **Multi-line bars.** Use `gantt-bar-multiline` class + explicit `<span class="gbar-title">` + `<span class="gbar-sub">` child spans (NOT `<br>` + text node — text nodes inside flex-column render unreliably). The containing cell needs `min-height: 88px` so the bar can stretch tall enough for the chevron to contain both lines.
+- **Stacked sub-rows.** When a workstream needs multiple parallel activities (like Data collection with Industry interviews + Customer interviews + Desktop research), give the label `grid-row: <start> / span N` and put each sub-bar in its own `grid-row`. Cell `min-height: 26px` (the base) keeps sub-rows tight.
+- **Phase 3 (Optional) column.** A single `.gantt-phase-optional` div spans all workstream rows via `grid-row: <start> / span N` in column `weeks + 2`. Italic Palatino body inside. Remove the div entirely if no optional phase.
+- **Milestones row.** `gantt-milestones-label` row has one `.gantt-cell` per week (including the Phase-3 column for a closing decision gate). Drop `<div class="gantt-milestone milestone-X"></div>` into the cells where touchpoints fall. Four variants: `milestone-kickoff` (filled blue-green), `milestone-checkin` (egg with dark border), `milestone-workshop` (dark blue-green), `milestone-decision` (black, larger).
+- **Discuss tag.** `.gantt-discuss-tag` span shows "To be discussed" or similar. Remove the entire span for client-final.
+- **Legend.** Sits below the grid with 4 milestone-type swatches. Trim if your deck only uses 2-3 milestone types.
 
 ---
 
