@@ -2602,11 +2602,11 @@ p, li { color: #E1E0DE !important; }
   border-bottom: 1px solid var(--im-blue-green-light);
   border-right: 1px solid var(--im-blue-green-light);
   background: var(--im-white);
-  min-height: 56px;
+  min-height: 26px;
   position: relative;
   display: flex;
   align-items: center;
-  padding: 4px 0;
+  padding: 2px 0;
 }
 .gantt-cell.gantt-spanning {
   /* Used when a cell spans multiple columns via grid-column. */
