@@ -2618,30 +2618,50 @@ p, li { color: #E1E0DE !important; }
   font-size: var(--type-body-small);
   font-weight: 700;
   color: var(--im-white);
-  padding: 6px 22px 6px 14px;
+  padding: 8px 22px 8px 14px;
   background: var(--im-blue-green);
   clip-path: polygon(0 0, calc(100% - 14px) 0, 100% 50%, calc(100% - 14px) 100%, 0 100%);
   flex: 1;
   min-height: 28px;
+  /* Column flex so multiline content (title + subtitle / bullets) stacks vertically,
+     each line spanning the full width of the bar. Never side-by-side. */
   display: flex;
-  align-items: center;
-  white-space: nowrap;
+  flex-direction: column;
+  align-items: stretch;
+  justify-content: center;
+  gap: 2px;
+  text-align: left;
+  /* Single-line bars: nowrap + ellipsis. Multiline variant overrides below. */
   overflow: hidden;
+}
+.gantt-bar > * { display: block; width: 100%; }
+
+/* Default single-line — first child gets nowrap+ellipsis */
+.gantt-bar:not(.gantt-bar-multiline) {
+  white-space: nowrap;
   text-overflow: ellipsis;
 }
+
 .gantt-bar.gantt-bar-supporting {
   background: var(--im-green-grey);
   color: var(--im-black);
 }
+
+/* Multiline: title (bold) first child + subtitle (regular) second child, both full-width */
 .gantt-bar.gantt-bar-multiline {
   white-space: normal;
+  align-items: stretch;
+  padding: 10px 22px 10px 14px;
+  line-height: 1.3;
   font-weight: 400;
-  font-size: var(--type-body-small);
-  align-items: flex-start;
-  padding: 8px 22px 8px 14px;
-  line-height: 1.35;
 }
-.gantt-bar.gantt-bar-multiline strong { font-weight: 700; }
+.gantt-bar.gantt-bar-multiline strong {
+  display: block;
+  font-weight: 700;
+  font-size: var(--type-body-small);
+  margin-bottom: 2px;
+}
+.gantt-bar.gantt-bar-multiline br + * { /* nothing — br forces wrap */ }
 
 /* Optional star milestones for a "Key deliverables" row */
 .gantt-star {
