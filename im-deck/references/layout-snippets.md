@@ -888,74 +888,124 @@
 
 ---
 
-## Layout 16 — Team and investment
+## Layout 16 — Team & investment
 
-**When to use:** Proposal team + fee slide. 2/1 split: team photo grid left (optionally split into Core team + SMEs subsections) and Investment panel right. Optional "Updated price" callout tag.
+**Action-title pattern:** `<strong>Team & investment</strong> | <declarative people + fee statement>`
 
-```html
+Three variants for different team shapes. Card markup is consistent across variants — only the wrapper class and the optional `team-experts-col` / `team-network-row` blocks change.
+
+**Shared card markup** (use inside any `.team-grid`):
+
+````html
+<div class="team-card" data-imedit-id="{IMEDIT_ID:team-card:0}">
+  <div class="team-card-photo">Image placeholder</div>
+  <div class="team-card-body">
+    <p class="team-card-name" data-imedit-id="{IMEDIT_ID:team-card-name:0}"><!-- FILL: Full Name --></p>
+    <p class="team-card-role" data-imedit-id="{IMEDIT_ID:team-card-role:0}"><!-- FILL: Role / title --></p>
+    <p class="team-card-desc" data-imedit-id="{IMEDIT_ID:team-card-desc:0}"><!-- FILL: 2-4 line description of expertise --></p>
+  </div>
+</div>
+````
+
+For minimal cards (no description), omit `.team-card-desc` and optionally swap in `.team-card-email`.
+
+### `:compact` (default — small team + investment)
+
+Up to 6 cards in a 2-col grid on the left, Investment panel on the right. Matches the "5-person team with fixed fee" shape.
+
+````html
 <section class="slide" data-slide="N">
   <div class="logo">IM_</div>
-  <h2 class="action-title" data-imedit-id="{IMEDIT_ID:action-title:0}">
-    <strong><!-- FILL: section label --></strong> | <!-- FILL: declarative action title -->
-  </h2>
+  <h2 class="action-title" data-imedit-id="{IMEDIT_ID:action-title:0}"><strong>Team & investment</strong> | <!-- FILL --></h2>
   <div class="content-wrap">
-    <div class="team-and-investment">
-
-      <!-- Left: team photo grid -->
+    <div class="team-and-investment variant-compact">
       <div class="team-grid-wrap">
-        <!-- Optional subsection label — omit if only one group -->
-        <p class="team-section-label" data-imedit-id="{IMEDIT_ID:team-section-label:0}">Core team</p>
+        <p class="team-section-label">Core team</p>
         <div class="team-grid">
-          <!-- NOTE: increment :N in data-imedit-id for each repeated team-card -->
-          <div class="team-card" data-imedit-id="{IMEDIT_ID:team-card:0}">
-            <div class="team-card-photo">Image placeholder</div>
-            <p class="team-card-name" data-imedit-id="{IMEDIT_ID:team-card-name:0}"><!-- FILL: Name --></p>
-            <p class="team-card-role" data-imedit-id="{IMEDIT_ID:team-card-role:0}"><!-- FILL: Role / title --></p>
-            <p class="team-card-email" data-imedit-id="{IMEDIT_ID:team-card-email:0}"><!-- FILL: email@implement.no --></p>
-          </div>
-          <div class="team-card" data-imedit-id="{IMEDIT_ID:team-card:1}">
-            <div class="team-card-photo">Image placeholder</div>
-            <p class="team-card-name" data-imedit-id="{IMEDIT_ID:team-card-name:1}"><!-- FILL --></p>
-            <p class="team-card-role" data-imedit-id="{IMEDIT_ID:team-card-role:1}"><!-- FILL --></p>
-            <p class="team-card-email" data-imedit-id="{IMEDIT_ID:team-card-email:1}"><!-- FILL --></p>
-          </div>
-          <div class="team-card" data-imedit-id="{IMEDIT_ID:team-card:2}">
-            <div class="team-card-photo">Image placeholder</div>
-            <p class="team-card-name" data-imedit-id="{IMEDIT_ID:team-card-name:2}"><!-- FILL --></p>
-            <p class="team-card-role" data-imedit-id="{IMEDIT_ID:team-card-role:2}"><!-- FILL --></p>
-            <p class="team-card-email" data-imedit-id="{IMEDIT_ID:team-card-email:2}"><!-- FILL --></p>
-          </div>
-          <!-- repeat team-card × up to 3 more for a 2×3 grid (use :3, :4, :5) -->
+          <!-- 4-6 .team-card blocks -->
         </div>
-        <!-- Optional SMEs subsection -->
-        <!-- <p class="team-section-label">Subject matter experts</p>
-             <div class="team-grid"> ... more team-cards ... </div> -->
       </div>
-
-      <!-- Right: investment panel -->
       <div class="investment-panel">
-        <!-- Optional callout tag — omit if not needed -->
-        <div class="investment-callout" data-imedit-id="{IMEDIT_ID:investment-callout:0}"><!-- FILL: e.g. "Updated price" — or remove this element --></div>
-        <h3 class="investment-heading" data-imedit-id="{IMEDIT_ID:investment-heading:0}">Investment</h3>
-        <p class="investment-body" data-imedit-id="{IMEDIT_ID:investment-body:0}"><!-- FILL: 1–2 sentence fee summary, e.g. "Our estimated fee for this engagement is..." --></p>
+        <h3 class="investment-heading">Investment</h3>
+        <p class="investment-body"><!-- FILL: 1-2 sentence intro --></p>
         <ul class="investment-bullets">
-          <li data-imedit-id="{IMEDIT_ID:investment-bullet:0}"><strong><!-- FILL: category, e.g. "Fee" --></strong> <!-- FILL: amount --></li>
-          <li data-imedit-id="{IMEDIT_ID:investment-bullet:1}"><strong><!-- FILL: "Expenses" --></strong> <!-- FILL: --></li>
-          <li data-imedit-id="{IMEDIT_ID:investment-bullet:2}"><strong><!-- FILL: "Terms" --></strong> <!-- FILL: --></li>
-          <!-- add more as needed -->
+          <li><strong>Fee</strong> <!-- FILL --></li>
+          <li><strong>Expenses</strong> <!-- FILL --></li>
+          <li><strong>Terms</strong> <!-- FILL --></li>
         </ul>
       </div>
-
     </div>
   </div>
-  <p class="source-line"><!-- FILL: or omit --></p>
-  <p class="page-number"><!-- FILL: NN / TT --></p>
+  <p class="page-number"><!-- NN / TT --></p>
 </section>
-```
+````
 
-**Notes:** Default team grid is 3 columns (matching CSS `.team-grid { grid-template-columns: repeat(3, 1fr) }`). For a 2×2 grid (4 people), override with `style="grid-template-columns: 1fr 1fr"` on `.team-grid`. The `.investment-callout` element is absolutely positioned and should be removed when there is no callout.
+### `:with-experts` (3-column: core + experts + investment)
 
-**Overflow rule:** Never use more than 3 team columns. For 4–6 people, use the default 3-column grid in two rows. For >6 people, split into Core team + SMEs subsections (the snippet shows the pattern). Overriding to 4 columns will overflow the 720px slide height because each team card has a fixed photo aspect-ratio plus three text lines.
+For larger engagements where Subject Matter Experts are differentiated from the core team.
+
+````html
+<section class="slide" data-slide="N">
+  <div class="logo">IM_</div>
+  <h2 class="action-title"><strong>Team & investment</strong> | <!-- FILL --></h2>
+  <div class="content-wrap">
+    <div class="team-and-investment variant-with-experts">
+      <div class="team-grid-wrap">
+        <p class="team-section-label">Core team</p>
+        <div class="team-grid">
+          <!-- 4-6 .team-card blocks -->
+        </div>
+      </div>
+      <div class="team-experts-col">
+        <p class="team-section-label">Subject matter experts</p>
+        <div class="team-grid">
+          <!-- 2-4 .team-card blocks (single column, dashed dividers between) -->
+        </div>
+      </div>
+      <div class="investment-panel">
+        <h3 class="investment-heading">Investment</h3>
+        <p class="investment-body"><!-- FILL --></p>
+        <ul class="investment-bullets"><!-- FILL bullets --></ul>
+      </div>
+    </div>
+  </div>
+  <p class="page-number"><!-- NN / TT --></p>
+</section>
+````
+
+### `:network` (core team + expert network, NO investment)
+
+Team showcase page. Action title becomes `<strong>Team</strong> | <people statement>` — no fee on this slide.
+
+````html
+<section class="slide" data-slide="N">
+  <div class="logo">IM_</div>
+  <h2 class="action-title"><strong>Team</strong> | <!-- FILL --></h2>
+  <div class="content-wrap">
+    <div class="team-and-investment variant-network">
+      <div class="team-grid-wrap">
+        <p class="team-section-label">Core team</p>
+        <div class="team-grid">
+          <!-- up to 6 .team-card blocks (3-col grid) -->
+        </div>
+      </div>
+      <div class="team-network-row">
+        <p class="team-section-label">Expert network</p>
+        <div class="team-grid">
+          <!-- 3 .team-card blocks (3-col row) -->
+        </div>
+        <p class="team-footnote"><!-- FILL: optional caveat e.g. "To be confirmed" --></p>
+      </div>
+    </div>
+  </div>
+  <p class="page-number"><!-- NN / TT --></p>
+</section>
+````
+
+**Choosing a variant:**
+- 4-6 named team members + fee on the same slide → `:compact`
+- 4-6 core + 2-3 SMEs called out separately + fee → `:with-experts`
+- Showcase including an extended expert/advisor network, fee on a separate slide → `:network`
 
 ---
 

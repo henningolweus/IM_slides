@@ -2071,50 +2071,71 @@ p, li { color: #E1E0DE !important; }
   padding-bottom: 4px;
 }
 .team-section-label:first-child { margin-top: 0; }
+/* Default grid: 2 columns of HORIZONTAL cards (photo left, content right). */
 .team-grid {
   display: grid;
-  grid-template-columns: repeat(3, 1fr);
-  gap: 14px;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 10px;
   align-content: start;
 }
 .team-card {
-  display: flex;
-  flex-direction: column;
-  gap: 5px;
+  display: grid;
+  grid-template-columns: 72px 1fr;
+  gap: 10px;
+  background: var(--im-light-grey);
+  padding: 10px 12px;
+  align-items: start;
 }
 .team-card-photo {
-  width: 100%;
-  aspect-ratio: 3/4;
+  width: 72px;
+  height: 72px;
   background: var(--im-egg);
   border: 1.5px dashed var(--im-ash);
   opacity: 0.45;
-  margin-bottom: 6px;
   display: flex;
   align-items: center;
   justify-content: center;
-  font-size: 9px;
-  letter-spacing: 0.1em;
+  font-size: 8px;
+  letter-spacing: 0.08em;
   text-transform: uppercase;
   color: var(--im-grey);
   font-weight: 700;
+  text-align: center;
+  line-height: 1.1;
+}
+.team-card-body {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+  min-width: 0;
 }
 .team-card-name {
   font-family: var(--font-body);
   font-weight: 700;
   font-size: var(--type-body-small);
   color: var(--im-black);
-  line-height: 1.25;
+  line-height: 1.2;
 }
 .team-card-role {
-  font-size: var(--type-eyebrow);
-  color: var(--im-grey);
-  line-height: 1.3;
+  font-family: var(--font-display);
+  font-style: italic;
+  font-size: var(--type-body-small);
+  color: var(--im-ash);
+  line-height: 1.25;
+  margin-bottom: 2px;
+}
+.team-card-desc {
+  font-size: 10px;
+  line-height: 1.35;
+  color: var(--im-ash);
+  margin-top: 2px;
 }
 .team-card-email {
   font-size: var(--type-eyebrow);
   color: var(--im-blue-green);
   line-height: 1.3;
   word-break: break-all;
+  margin-top: 2px;
 }
 .investment-panel {
   background: var(--im-blue-green-near-white);
@@ -2169,6 +2190,85 @@ p, li { color: #E1E0DE !important; }
   line-height: 1.45;
 }
 .investment-bullets li strong { font-weight: 700; color: var(--im-black); }
+
+/* =========================================================
+   TEAM-AND-INVESTMENT variant slots
+   References: Proposal 1, 2, 3 team slides.
+   ========================================================= */
+
+/* :compact — same shape as default (2fr/1fr, 2-col card grid + investment panel).
+   Explicit class for clarity in markup. */
+.team-and-investment.variant-compact:not(section) {
+  grid-template-columns: 2fr 1fr;
+}
+
+/* :with-experts — 3-column. Core team (2-col horizontal cards) + Experts column + Investment.
+   Matches Proposal 1 / Proposal 3 references. */
+.team-and-investment.variant-with-experts:not(section) {
+  display: grid;
+  grid-template-columns: 1.7fr 1fr 0.95fr;
+  gap: 18px;
+  min-height: 0;
+}
+.team-and-investment.variant-with-experts .team-grid {
+  grid-template-columns: repeat(2, 1fr);
+}
+.team-and-investment.variant-with-experts .team-experts-col {
+  background: var(--im-blue-green-near-white);
+  padding: 14px 14px 16px;
+  display: flex;
+  flex-direction: column;
+  min-height: 0;
+  overflow: hidden;
+}
+.team-and-investment.variant-with-experts .team-experts-col .team-section-label {
+  border-bottom: 1px solid rgba(31,31,35,0.15);
+  margin-top: 0;
+}
+.team-and-investment.variant-with-experts .team-experts-col .team-grid {
+  grid-template-columns: 1fr;
+  gap: 8px;
+}
+.team-and-investment.variant-with-experts .team-experts-col .team-card {
+  background: transparent;
+  padding: 6px 0;
+  border-bottom: 1px dashed rgba(31,31,35,0.15);
+}
+.team-and-investment.variant-with-experts .team-experts-col .team-card:last-child {
+  border-bottom: none;
+}
+
+/* :network — Core team grid top (full width), Expert Network row bottom.
+   No investment panel — used for team-showcase pages without fee.
+   Matches Proposal 2 reference. */
+.team-and-investment.variant-network:not(section) {
+  display: flex;
+  flex-direction: column;
+  gap: 18px;
+  min-height: 0;
+}
+.team-and-investment.variant-network .team-grid-wrap {
+  flex: 1;
+  min-height: 0;
+}
+.team-and-investment.variant-network .team-grid {
+  grid-template-columns: repeat(3, 1fr);
+}
+.team-and-investment.variant-network .team-network-row {
+  flex-shrink: 0;
+}
+.team-and-investment.variant-network .team-network-row .team-section-label {
+  margin-top: 0;
+}
+.team-and-investment.variant-network .team-network-row .team-grid {
+  grid-template-columns: repeat(3, 1fr);
+}
+.team-and-investment.variant-network .team-footnote {
+  font-size: 9px;
+  font-style: italic;
+  color: var(--im-grey);
+  margin-top: 6px;
+}
 
 /* =========================================================
    LAYOUT 17 — PERSON BIO
