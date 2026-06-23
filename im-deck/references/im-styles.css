@@ -1353,8 +1353,12 @@ p, li { color: #E1E0DE !important; }
   color: var(--im-white);
   padding: 52px 52px 40px;
   position: relative;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
 }
 .slide-cover .cover-left .im-mark {
+  font-family: var(--font-body);
   font-weight: 700; font-size: 17.2px; letter-spacing: 0.04em;
   color: rgba(255,255,255,0.75);
 }
@@ -1366,27 +1370,30 @@ p, li { color: #E1E0DE !important; }
   color: var(--im-white);
   max-width: 92%;
   padding-right: 0;
+  margin-top: 0;
 }
 .slide-cover .cover-left h1 em { font-style: italic; }
+/* Subtitle = Arial body, not Palatino italic — matches P1/P3 references */
 .slide-cover .cover-left .subtitle {
-  font-family: var(--font-display);
-  font-style: italic;
-  font-size: var(--type-callout);
-  line-height: 1.35;
-  max-width: 85%;
-  margin-top: 16px;
+  font-family: var(--font-body);
+  font-style: normal;
+  font-size: var(--type-body);
+  line-height: 1.4;
+  max-width: 90%;
+  margin-top: 14px;
   color: rgba(255,255,255,0.85);
 }
 .slide-cover .cover-left .meta {
+  font-family: var(--font-body);
   font-size: var(--type-body-small);
   letter-spacing: 0.04em;
   color: rgba(255,255,255,0.7);
   line-height: 1.6;
 }
 .slide-cover .cover-left .meta strong { color: var(--im-white); font-weight: 700; }
-/* Proposal cover right — photo placeholder egg-tone */
+/* Proposal cover right — same green-grey tone as left; real decks swap in a photo */
 .slide-cover .cover-right-photo {
-  background: var(--im-egg);
+  background: var(--im-blue-green);
   position: relative;
   display: flex;
   align-items: center;
@@ -1394,20 +1401,20 @@ p, li { color: #E1E0DE !important; }
   overflow: hidden;
 }
 .slide-cover .cover-right-photo .photo-placeholder-cover {
-  width: 70%;
-  height: 60%;
-  border: 1.5px dashed var(--im-ash);
-  opacity: 0.4;
+  width: 80%;
+  height: 70%;
+  border: 1.5px dashed rgba(255,255,255,0.35);
+  opacity: 0.55;
   display: flex;
   align-items: center;
   justify-content: center;
   font-size: var(--type-eyebrow);
   letter-spacing: 0.18em;
   text-transform: uppercase;
-  color: var(--im-grey);
+  color: rgba(255,255,255,0.7);
   font-weight: 700;
 }
-/* Vertical IMPLEMENT mark top-right on cover */
+/* Vertical IMPLEMENT mark top-right — white on photo/right panel */
 .slide-cover .cover-right-photo .im-mark-vertical {
   position: absolute;
   top: 24px;
@@ -1415,10 +1422,10 @@ p, li { color: #E1E0DE !important; }
   writing-mode: vertical-rl;
   font-family: var(--font-body);
   font-weight: 700;
-  font-size: 12px;
-  letter-spacing: 0.08em;
-  color: var(--im-ash);
-  opacity: 0.6;
+  font-size: 10px;
+  letter-spacing: 0.1em;
+  color: rgba(255,255,255,0.75);
+  opacity: 1;
 }
 /* Dark variant — Proposal 4 style: dark banded top + dark below + photo right */
 .slide-cover.variant-dark .cover-left {
@@ -1442,13 +1449,19 @@ p, li { color: #E1E0DE !important; }
   overflow: hidden;
 }
 /* Photo variant (default) — full-bleed image placeholder with dark overlay */
-/* Full-bleed override — segment-divider must drop the default .slide padding + flex so absolute children fill 1280x720 */
+/* Full-bleed override — segment-divider must fill the entire 1280×720 canvas.
+   Override the .slide.active flex+padding rules so absolute children work. */
 .segment-divider { display: none; }
 .segment-divider.active {
   display: block !important;
+  width: 1280px !important;
+  height: 720px !important;
   padding: 0 !important;
-  position: relative;
-  overflow: hidden;
+  position: absolute !important;
+  top: 50% !important;
+  left: 50% !important;
+  transform: translate(-50%, -50%) scale(var(--scale, 1)) !important;
+  overflow: hidden !important;
 }
 .segment-divider .sdiv-photo-bg {
   position: absolute;
@@ -1620,48 +1633,112 @@ p, li { color: #E1E0DE !important; }
 .photo-left-content.variant-purpose .purpose-box-body { font-size: var(--type-body-small); line-height: 1.45; color: var(--im-ash); }
 .photo-left-content.variant-purpose .purpose-box-body strong { font-weight: 700; color: var(--im-black); }
 
-/* -- Letter variant (long-form Palatino body + signature block) -- */
+/* -- Letter variant — dark right panel with Palatino heading + body + signature block -- */
+/* Left: full-height photo placeholder, 42% width */
+.photo-left-content.variant-letter {
+  grid-template-columns: 42% 58%;
+}
+.photo-left-content.variant-letter .plc-left {
+  background: var(--im-egg);
+  padding: 0;
+  align-items: stretch;
+  justify-content: stretch;
+  gap: 0;
+}
+.photo-left-content.variant-letter .plc-left .photo-placeholder {
+  width: 100%;
+  height: 100%;
+  aspect-ratio: unset;
+  border: none;
+  border-right: 1.5px dashed rgba(48,55,59,0.3);
+  opacity: 0.45;
+  border-radius: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+/* Right panel: dark ash background, white text */
 .photo-left-content.variant-letter .plc-right {
-  background: var(--im-white);
+  background: var(--im-ash);
   padding: 56px 60px 48px;
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-start;
+  color: var(--im-white);
+}
+.photo-left-content.variant-letter .plc-right .logo {
+  color: rgba(255,255,255,0.5);
+}
+/* Override the generic plc-heading for the letter title */
+.photo-left-content.variant-letter .plc-right .plc-heading {
+  font-family: var(--font-display);
+  font-weight: normal;
+  font-size: 48px;
+  line-height: 1.1;
+  color: var(--im-white);
+  margin-bottom: 24px;
+  padding-right: 0;
 }
 .plc-letter-body {
-  font-family: var(--font-display);
-  font-size: 17.3px; /* ~13pt — slightly larger than body for letter feel */
-  line-height: 1.65;
-  color: var(--im-ash);
-  margin-bottom: 20px;
+  font-family: var(--font-body);
+  font-size: 14.5px;
+  line-height: 1.55;
+  color: rgba(255,255,255,0.88);
+  margin-bottom: 0;
   flex: 1;
 }
-.plc-letter-body p + p { margin-top: 16px; }
-.plc-letter-body strong { font-weight: 700; color: var(--im-black); }
+.plc-letter-body p + p { margin-top: 14px; }
+.plc-letter-body strong { font-weight: 700; color: var(--im-white); }
+/* Signature block: IMPLEMENT wordmark left + avatar+name right */
 .plc-signature {
-  display: grid;
-  grid-template-columns: 52px 1fr;
-  gap: 14px;
+  display: flex;
   align-items: center;
+  justify-content: space-between;
+  gap: 16px;
   padding-top: 20px;
-  border-top: 1px solid var(--im-blue-green-light);
+  border-top: 1px solid rgba(255,255,255,0.2);
   margin-top: auto;
 }
+.plc-signature-wordmark {
+  font-family: var(--font-body);
+  font-weight: 700;
+  font-size: 18px;
+  letter-spacing: 0.04em;
+  color: var(--im-white);
+  line-height: 1;
+  flex-shrink: 0;
+}
+.plc-signature-wordmark small {
+  display: block;
+  font-size: 9px;
+  letter-spacing: 0.18em;
+  font-weight: 400;
+  color: rgba(255,255,255,0.6);
+  margin-top: 2px;
+}
+.plc-signature-person {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
 .plc-signature-avatar {
-  width: 48px;
-  height: 48px;
+  width: 44px;
+  height: 44px;
   border-radius: 50%;
-  background: var(--im-egg);
-  border: 1.5px dashed var(--im-ash);
-  opacity: 0.5;
+  background: transparent;
+  border: 1.5px dashed rgba(255,255,255,0.4);
+  flex-shrink: 0;
 }
 .plc-signature-name {
   font-family: var(--font-body);
   font-weight: 700;
-  font-size: var(--type-body);
-  color: var(--im-black);
+  font-size: var(--type-body-small);
+  color: var(--im-white);
   line-height: 1.3;
 }
 .plc-signature-role {
-  font-size: var(--type-body-small);
-  color: var(--im-grey);
+  font-size: var(--type-eyebrow);
+  color: rgba(255,255,255,0.6);
   line-height: 1.3;
 }
 
@@ -1814,33 +1891,36 @@ p, li { color: #E1E0DE !important; }
 .ring-bullets-right .ring-bullet strong { font-weight: 700; color: var(--im-black); }
 .ring-diagram-circles {
   position: relative;
-  height: 260px;
+  height: 280px;
   display: flex;
   align-items: center;
   justify-content: center;
 }
+/* Left circle: outlined only, no fill — matches reference (client side) */
 .ring-circle-left {
   position: absolute;
   left: 50%;
-  margin-left: -200px;
+  margin-left: -190px;
   width: 220px;
   height: 220px;
   border-radius: 50%;
-  border: 2.5px solid var(--im-green-grey);
+  border: 1.5px solid var(--im-green-grey);
   background: transparent;
   z-index: 1;
 }
+/* Right circle: lightly filled green-grey — matches reference (Implement side) */
 .ring-circle-right {
   position: absolute;
   left: 50%;
-  margin-left: -20px;
+  margin-left: -30px;
   width: 220px;
   height: 220px;
   border-radius: 50%;
-  background: var(--im-blue-green);
-  opacity: 0.85;
+  background: rgba(103,129,127,0.18);
+  border: 1.5px solid var(--im-blue-green);
   z-index: 1;
 }
+/* Center overlap: small filled green circle with italic label */
 .ring-center {
   position: absolute;
   left: 50%;
@@ -1848,15 +1928,22 @@ p, li { color: #E1E0DE !important; }
   transform: translate(-50%, -50%);
   z-index: 3;
   text-align: center;
-  width: 130px;
+  width: 110px;
+  height: 110px;
+  background: var(--im-blue-green);
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
 }
 .ring-center-label {
   font-family: var(--font-display);
   font-style: italic;
-  font-size: var(--type-body);
+  font-size: var(--type-body-small);
   color: var(--im-white);
   line-height: 1.3;
-  text-shadow: 0 1px 3px rgba(0,0,0,0.35);
+  padding: 0 10px;
+  text-align: center;
 }
 .ring-left-label {
   font-family: var(--font-body);
@@ -2549,39 +2636,62 @@ p, li { color: #E1E0DE !important; }
   background: var(--im-white);
   border: 1px solid var(--im-blue-green-light);
 }
+/* SCR arrow — subtle "›" character, not a large chevron shape */
 .scr-arrow {
   position: absolute;
   left: 50%;
   top: 50%;
   transform: translate(-50%, -50%);
   z-index: 5;
-  width: 64px;
-  height: 64px;
-  background: var(--im-blue-green);
-  clip-path: polygon(0 0, 60% 0, 100% 50%, 60% 100%, 0 100%, 40% 50%);
+  width: 20px;
+  height: 20px;
+  background: transparent;
+  clip-path: none;
   display: flex;
   align-items: center;
   justify-content: center;
   pointer-events: none;
+  font-size: 24px;
+  color: var(--im-grey);
+  line-height: 1;
 }
-/* Give the right SCR panel breathing room so its content doesn't crash into the arrow */
-.two-panel.variant-scr .gov-panel.right-panel { padding-left: 56px; }
+.scr-arrow::after { content: "›"; }
+/* Right SCR panel — normal padding, no large arrow to accommodate */
+.two-panel.variant-scr .gov-panel.right-panel { padding-left: 20px; }
+/* SCR numbered circles — large (44px), green-grey fill, white number */
 .scr-numbered-circle {
   display: inline-flex;
   align-items: center;
   justify-content: center;
-  width: 26px;
-  height: 26px;
+  width: 44px;
+  height: 44px;
   background: var(--im-blue-green);
   border-radius: 50%;
   font-family: var(--font-body);
   font-weight: 700;
-  font-size: var(--type-body-small);
+  font-size: 16px;
   color: var(--im-white);
   flex-shrink: 0;
-  margin-right: 10px;
+  margin-right: 14px;
   vertical-align: middle;
 }
+/* SCR block: circle left + text right as a flex row */
+.gov-block.scr-block {
+  display: flex;
+  align-items: flex-start;
+  gap: 0;
+  padding: 14px 0;
+  border-top: 1px solid var(--im-blue-green-light);
+}
+.gov-block.scr-block:first-child { border-top: none; padding-top: 0; }
+.gov-block.scr-block .gov-block-label {
+  font-size: var(--type-body);
+  font-weight: 400;
+  line-height: 1.5;
+  color: var(--im-ash);
+  padding-top: 10px;
+}
+.gov-block.scr-block .gov-block-label strong { font-weight: 700; color: var(--im-black); }
 .scr-discussion-tag {
   position: absolute;
   top: -6px;
