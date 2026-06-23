@@ -2659,23 +2659,9 @@ p, li { color: #E1E0DE !important; }
   display: none;
 }
 /* SCR numbered digit — large Palatino numeral, no circle */
-.scr-numbered-digit {
-  font-family: var(--font-display);
-  font-weight: normal;
-  font-size: 64px;
-  line-height: 1;
-  color: var(--im-black);
-  display: block;
-  margin-bottom: 0;
-}
-/* Underline beneath each digit — 140px wide inline-block */
-.scr-digit-rule {
-  display: block;
-  width: 140px;
-  height: 1px;
-  background: var(--im-black);
-  margin: 4px 0 10px 0;
-}
+/* Big Palatino digit + rule — disabled in favour of numbered circles */
+.scr-numbered-digit { display: none; }
+.scr-digit-rule { display: none; }
 /* SCR block: digit + rule + body text stacked vertically */
 .gov-block.scr-block {
   display: flex;
@@ -2697,8 +2683,23 @@ p, li { color: #E1E0DE !important; }
   letter-spacing: normal;
 }
 .gov-block.scr-block .gov-block-label strong { font-weight: 700; color: var(--im-black); }
-/* Legacy circle — hidden in new SCR; kept for back-compat */
-.scr-numbered-circle { display: none; }
+/* Numbered green circle — 44px filled, white digit inside */
+.scr-numbered-circle {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 44px;
+  height: 44px;
+  border-radius: 50%;
+  background: var(--im-blue-green);
+  color: var(--im-white);
+  font-family: var(--font-body);
+  font-weight: 700;
+  font-size: 18px;
+  line-height: 1;
+  margin-bottom: 14px;
+  flex-shrink: 0;
+}
 /* "To be validated" / "For discussion" tag — white box with dark border, top-right */
 .scr-validation-tag {
   position: absolute;
