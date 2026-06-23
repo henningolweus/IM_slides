@@ -2486,189 +2486,259 @@ p, li { color: #E1E0DE !important; }
 }
 
 /* =========================================================
-   LAYOUT 20 — GANTT PROCESS
-   Month/week headers (dark) × workstream rows.
-   Activity bands as colored cells. Bottom legend.
-   Optional dashed "future phase" column at right.
+   GANTT-PROCESS (proposal-grade)
+   Reference: Proposal 3 slide 16, Proposal 4 slide 12.
+   5-band layout: eyebrow → month/week headers → activities
+   table → milestones row → legend.
    ========================================================= */
+
 .gantt-process:not(section) {
   flex: 1;
   display: flex;
   flex-direction: column;
+  gap: 0;
   min-height: 0;
-  overflow: hidden;
+  position: relative;
 }
-.gantt-table {
-  flex: 1;
-  display: grid;
-  grid-template-rows: auto auto 1fr;
-  min-height: 0;
-  border: 1px solid var(--im-blue-green-light);
+
+/* Eyebrow + To-be-discussed tag row above the table */
+.gantt-eyebrow-row {
+  display: flex;
+  justify-content: space-between;
+  align-items: baseline;
+  margin-bottom: 6px;
 }
-.gantt-header-row {
-  display: grid;
-  grid-template-columns: var(--gantt-col-template, 160px repeat(8, 1fr));
-  background: var(--im-ash);
+.gantt-eyebrow {
+  font-family: var(--font-body);
+  font-weight: 700;
+  font-size: var(--type-eyebrow);
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  color: var(--im-black);
 }
-.gantt-header-month {
-  padding: 7px 10px;
+.gantt-discuss-tag {
   font-family: var(--font-body);
   font-size: var(--type-eyebrow);
-  font-weight: 700;
-  letter-spacing: 0.16em;
-  text-transform: uppercase;
-  color: var(--im-white);
-  border-right: 1px solid rgba(255,255,255,0.15);
-  text-align: center;
+  letter-spacing: 0.04em;
+  background: var(--im-white);
+  border: 1px solid var(--im-black);
+  color: var(--im-black);
+  padding: 3px 12px;
 }
-.gantt-header-month:first-child {
-  background: transparent;
-  border-right: 1px solid rgba(255,255,255,0.2);
-}
-.gantt-subheader-row {
+
+/* The gantt table grid container.
+   --gantt-col-template controls how many week columns + label width;
+   passed in via inline style on .gantt-table. */
+.gantt-table {
   display: grid;
-  grid-template-columns: var(--gantt-col-template, 160px repeat(8, 1fr));
-  background: var(--im-blue-green-dark);
-  border-bottom: 2px solid var(--im-ash);
-}
-.gantt-subheader-cell {
-  padding: 4px 8px;
-  font-size: 10.7px;
-  font-weight: 700;
-  letter-spacing: 0.1em;
-  color: rgba(255,255,255,0.65);
-  border-right: 1px solid rgba(255,255,255,0.12);
-  text-align: center;
-}
-.gantt-subheader-cell:first-child { text-align: left; color: rgba(255,255,255,0.4); }
-.gantt-workstream-rows { display: flex; flex-direction: column; flex: 1; min-height: 0; }
-.gantt-workstream-row {
-  display: grid;
-  grid-template-columns: var(--gantt-col-template, 160px repeat(8, 1fr));
+  grid-template-columns: var(--gantt-col-template, 180px repeat(9, 1fr) 200px);
   border-top: 1px solid var(--im-blue-green-light);
+  border-left: 1px solid var(--im-blue-green-light);
   flex: 1;
-  align-items: center;
   min-height: 0;
 }
-.gantt-workstream-row:first-child { border-top: none; }
-.gantt-workstream-label {
-  padding: 6px 12px;
+
+/* Header rows: month band (dark) + week sub-band */
+.gantt-month-cell {
+  background: var(--im-ash);
+  color: var(--im-white);
+  font-family: var(--font-body);
+  font-weight: 700;
+  font-size: var(--type-body-small);
+  letter-spacing: 0.18em;
+  text-transform: uppercase;
+  padding: 8px 0;
+  text-align: center;
+  border-right: 1px solid rgba(255,255,255,0.18);
+  border-bottom: 1px solid rgba(255,255,255,0.18);
+}
+.gantt-month-cell.gantt-month-empty { background: var(--im-ash); border-right: 1px solid var(--im-ash); }
+.gantt-week-cell {
+  background: var(--im-blue-green-dark);
+  color: var(--im-white);
+  font-family: var(--font-body);
+  font-weight: 700;
+  font-size: var(--type-body-small);
+  letter-spacing: 0.04em;
+  padding: 6px 0;
+  text-align: center;
+  border-right: 1px solid rgba(255,255,255,0.18);
+  border-bottom: 1px solid var(--im-blue-green-dark);
+}
+.gantt-week-cell.gantt-week-label {
+  background: var(--im-blue-green-dark);
+  color: var(--im-white);
+  font-style: italic;
+  font-weight: 400;
+  text-align: left;
+  padding-left: 14px;
+  letter-spacing: 0.06em;
+}
+
+/* Workstream rows */
+.gantt-row {
+  display: contents;
+}
+.gantt-row-label {
+  background: var(--im-blue-green-near-white);
+  font-family: var(--font-body);
+  font-size: var(--type-body-small);
+  font-weight: 400;
+  color: var(--im-black);
+  padding: 12px 14px;
+  border-bottom: 1px solid var(--im-blue-green-light);
+  border-right: 1px solid var(--im-blue-green-light);
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  gap: 2px;
+}
+.gantt-row-label .gantt-row-title { font-weight: 700; font-size: var(--type-body-small); }
+.gantt-row-label .gantt-row-subtitle { font-weight: 400; font-size: var(--type-body-small); line-height: 1.25; color: var(--im-ash); }
+
+/* Each cell in the activities body */
+.gantt-cell {
+  border-bottom: 1px solid var(--im-blue-green-light);
+  border-right: 1px solid var(--im-blue-green-light);
+  background: var(--im-white);
+  min-height: 56px;
+  position: relative;
+  display: flex;
+  align-items: center;
+  padding: 4px 0;
+}
+.gantt-cell.gantt-spanning {
+  /* Used when a cell spans multiple columns via grid-column. */
+}
+
+/* The chevron-shape activity bar.
+   Core (filled green-grey #67817F) and Supporting (lighter #B9C7C2) variants. */
+.gantt-bar {
   font-family: var(--font-body);
   font-size: var(--type-body-small);
   font-weight: 700;
-  color: var(--im-black);
-  background: var(--im-blue-green-near-white);
-  border-right: 2px solid var(--im-blue-green-light);
-  height: 100%;
-  display: flex;
-  align-items: center;
-  line-height: 1.3;
-}
-.gantt-cell {
-  height: 100%;
-  display: flex;
-  align-items: center;
-  padding: 4px 2px;
-  border-right: 1px solid var(--im-blue-green-light);
-  position: relative;
-}
-.gantt-cell:last-child { border-right: none; }
-.gantt-band {
-  height: 22px;
-  background: var(--im-blue-green);
-  display: flex;
-  align-items: center;
-  padding: 0 8px;
-  font-size: 9.6px;
-  font-weight: 700;
   color: var(--im-white);
-  letter-spacing: 0.04em;
+  padding: 6px 22px 6px 14px;
+  background: var(--im-blue-green);
+  clip-path: polygon(0 0, calc(100% - 14px) 0, 100% 50%, calc(100% - 14px) 100%, 0 100%);
+  flex: 1;
+  min-height: 28px;
+  display: flex;
+  align-items: center;
   white-space: nowrap;
   overflow: hidden;
-  clip-path: polygon(0 0, calc(100% - 8px) 0, 100% 50%, calc(100% - 8px) 100%, 0 100%);
-  width: 100%;
+  text-overflow: ellipsis;
 }
-.gantt-band.band-light {
+.gantt-bar.gantt-bar-supporting {
   background: var(--im-green-grey);
   color: var(--im-black);
 }
-.gantt-band.band-start {
-  clip-path: polygon(0 0, calc(100% - 8px) 0, 100% 50%, calc(100% - 8px) 100%, 0 100%);
-  border-radius: 2px 0 0 2px;
+.gantt-bar.gantt-bar-multiline {
+  white-space: normal;
+  font-weight: 400;
+  font-size: var(--type-body-small);
+  align-items: flex-start;
+  padding: 8px 22px 8px 14px;
+  line-height: 1.35;
 }
-.gantt-band.band-mid {
-  clip-path: polygon(8px 0, calc(100% - 8px) 0, 100% 50%, calc(100% - 8px) 100%, 8px 100%, 0 50%);
+.gantt-bar.gantt-bar-multiline strong { font-weight: 700; }
+
+/* Optional star milestones for a "Key deliverables" row */
+.gantt-star {
+  width: 22px;
+  height: 22px;
+  background: #E4A93B;
+  position: absolute;
+  left: 50%;
+  top: 50%;
+  transform: translate(-50%, -50%);
+  clip-path: polygon(50% 0%, 61% 35%, 98% 35%, 68% 57%, 79% 91%, 50% 70%, 21% 91%, 32% 57%, 2% 35%, 39% 35%);
 }
-.gantt-band.band-end {
-  clip-path: polygon(8px 0, 100% 0, 100% 100%, 8px 100%, 0 50%);
-  border-radius: 0 2px 2px 0;
+
+/* Phase 3 (Optional) dashed column — italic Palatino body, repeating hatch bg */
+.gantt-phase-optional {
+  background:
+    repeating-linear-gradient(-45deg, transparent 0 8px, rgba(185,199,194,0.18) 8px 16px),
+    var(--im-white);
+  border-left: 2px dashed var(--im-green-grey);
+  border-right: 1px solid var(--im-blue-green-light);
+  border-bottom: 1px solid var(--im-blue-green-light);
+  padding: 12px 16px;
+  font-family: var(--font-display);
+  font-style: italic;
+  font-size: var(--type-body-small);
+  line-height: 1.35;
+  color: var(--im-ash);
+}
+.gantt-phase-optional strong { font-weight: 700; font-style: normal; }
+
+/* Milestone row at bottom — dark label, white row, 4 diamond types */
+.gantt-row-label.gantt-milestones-label {
+  background: var(--im-black);
+  color: var(--im-white);
+  font-weight: 700;
 }
 .gantt-milestone {
-  width: 14px;
-  height: 14px;
-  background: var(--im-black);
+  width: 18px;
+  height: 18px;
+  background: var(--im-blue-green);
   transform: rotate(45deg);
   position: absolute;
   left: 50%;
   top: 50%;
-  margin-left: -7px;
-  margin-top: -7px;
+  margin-left: -9px;
+  margin-top: -9px;
 }
 .gantt-milestone.milestone-kickoff { background: var(--im-blue-green); }
-.gantt-milestone.milestone-checkin { background: var(--im-egg); border: 1px solid var(--im-blue-green-dark); }
+.gantt-milestone.milestone-checkin {
+  background: var(--im-egg);
+  border: 1.5px solid var(--im-blue-green-dark);
+  width: 16px; height: 16px;
+  margin-left: -8px; margin-top: -8px;
+}
 .gantt-milestone.milestone-workshop { background: var(--im-blue-green-dark); }
-.gantt-milestone.milestone-decision { background: var(--im-black); width: 16px; height: 16px; margin-left: -8px; margin-top: -8px; }
-.gantt-milestones-row { background: var(--im-white); }
-.gantt-milestones-row .gantt-workstream-label { background: var(--im-black); color: var(--im-white); }
-.gantt-legend-diamond.diamond-kickoff { background: var(--im-blue-green); }
-.gantt-legend-diamond.diamond-checkin { background: var(--im-egg); border: 1px solid var(--im-blue-green-dark); }
-.gantt-legend-diamond.diamond-workshop { background: var(--im-blue-green-dark); }
-.gantt-legend-diamond.diamond-decision { background: var(--im-black); }
-.gantt-future-phase {
-  border-right: none;
-  border-left: 2px dashed var(--im-green-grey);
-  background: repeating-linear-gradient(
-    -45deg,
-    transparent,
-    transparent 6px,
-    rgba(185,199,194,0.12) 6px,
-    rgba(185,199,194,0.12) 12px
-  );
+.gantt-milestone.milestone-decision {
+  background: var(--im-black);
+  width: 22px; height: 22px;
+  margin-left: -11px; margin-top: -11px;
 }
-.gantt-workstream-label.future-label {
-  font-style: italic;
-  color: var(--im-grey);
-  background: var(--im-blue-green-near-white);
-}
+
+/* Legend below the table */
 .gantt-legend {
   display: flex;
-  gap: 20px;
+  gap: 28px;
   align-items: center;
-  padding: 8px 0 0;
-  border-top: 1px solid var(--im-blue-green-light);
-  margin-top: 6px;
+  padding: 10px 0 0;
+  margin-top: 8px;
 }
 .gantt-legend-item {
   display: flex;
   align-items: center;
-  gap: 7px;
-  font-size: var(--type-eyebrow);
-  color: var(--im-grey);
-  letter-spacing: 0.04em;
+  gap: 8px;
+  font-size: var(--type-body-small);
+  color: var(--im-ash);
 }
-.gantt-legend-swatch {
-  width: 20px;
-  height: 10px;
-  background: var(--im-blue-green);
-  border-radius: 1px;
-}
-.gantt-legend-swatch.swatch-light { background: var(--im-green-grey); }
 .gantt-legend-diamond {
-  width: 10px;
-  height: 10px;
-  background: var(--im-black);
+  width: 14px;
+  height: 14px;
   transform: rotate(45deg);
   flex-shrink: 0;
+}
+.gantt-legend-diamond.diamond-kickoff { background: var(--im-blue-green); }
+.gantt-legend-diamond.diamond-checkin { background: var(--im-egg); border: 1.5px solid var(--im-blue-green-dark); width: 13px; height: 13px; }
+.gantt-legend-diamond.diamond-workshop { background: var(--im-blue-green-dark); }
+.gantt-legend-diamond.diamond-decision { background: var(--im-black); width: 16px; height: 16px; }
+
+/* "Notes" box bottom-left (optional) */
+.gantt-notes-box {
+  position: absolute;
+  bottom: 6px;
+  left: 0;
+  border: 1px dashed var(--im-grey);
+  padding: 2px 14px;
+  font-size: var(--type-eyebrow);
+  color: var(--im-grey);
+  letter-spacing: 0.06em;
 }
 
 /* =========================================================
