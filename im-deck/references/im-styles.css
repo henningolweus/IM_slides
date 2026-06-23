@@ -1474,14 +1474,14 @@ p, li { color: #E1E0DE !important; }
 .segment-divider.variant-solid .sdiv-photo-bg { display: none; }
 .segment-divider.variant-solid .sdiv-overlay { display: none; }
 .segment-divider.variant-solid .sdiv-content {
-  bottom: 70px;
+  bottom: 180px;
   top: auto;
   left: 8%;
   right: auto;
   transform: none;
   display: flex;
   flex-direction: row;
-  align-items: baseline;
+  align-items: center;
   gap: 36px;
 }
 .segment-divider.variant-solid .sdiv-section-num {
