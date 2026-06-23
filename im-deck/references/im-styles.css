@@ -1474,14 +1474,14 @@ p, li { color: #E1E0DE !important; }
 .segment-divider.variant-solid .sdiv-photo-bg { display: none; }
 .segment-divider.variant-solid .sdiv-overlay { display: none; }
 .segment-divider.variant-solid .sdiv-content {
-  bottom: auto;
-  top: 50%;
-  left: 12%;
+  bottom: 70px;
+  top: auto;
+  left: 8%;
   right: auto;
-  transform: translateY(-50%);
+  transform: none;
   display: flex;
   flex-direction: row;
-  align-items: center;
+  align-items: baseline;
   gap: 36px;
 }
 .segment-divider.variant-solid .sdiv-section-num {
@@ -1496,9 +1496,9 @@ p, li { color: #E1E0DE !important; }
 .segment-divider.variant-solid .sdiv-title {
   font-family: var(--font-display);
   font-style: normal;
-  font-weight: normal;
+  font-weight: 400;
   font-size: 56px;
-  line-height: 1.1;
+  line-height: 1;
   color: var(--im-black);
   margin: 0;
 }
