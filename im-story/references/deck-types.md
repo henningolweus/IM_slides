@@ -73,9 +73,9 @@ Real examples from the DWS Norway briefing:
 7. **Section divider** (`segment-divider`)
    - Content: "Section 02" + section name, e.g. "Our perspectives on [Client]"
 
-8. **Success criteria** (`vertical-numbered-list:numbered`)
+8. **Success criteria** (`vertical-numbered-list:dark-labels`)
    - Action title: states what must be true for the engagement to succeed, e.g. "Five criteria will determine whether this transformation delivers lasting impact"
-   - Content: 5 rows, each with a numbered green-grey circle + bold Arial title + 1–2 supporting bullets. Use `:lettered` variant if the items are phases or considerations rather than ranked criteria.
+   - Content: 5 rows, each with a dark-ash label cell on the left (bold white title + optional italic subtitle) and 1–2 supporting bullets on the right. Variants: `:numbered` for green-grey circles + bullets, `:numbered-arc` adds a quarter-arc decoration (use when the slide is THE thesis page of the section), `:light-labels` for airy italic-Palatino labels with paragraph body, `:lettered` for A/B/C ordering when items are non-ranked.
 
 9. **Credentials / experience** (`photo-card-grid`)
    - Action title: anchors on the client's specific need, e.g. "We bring deep experience in exactly the three areas that matter most for [Client]"
@@ -115,9 +115,9 @@ Real examples from the DWS Norway briefing:
 17. **Section divider** (`segment-divider`)
     - Content: "Section 04" + section name, e.g. "Team & investment"
 
-18. **Team and investment** (`team-and-investment`)
+18. **Team and investment** (`team-and-investment:compact`)
     - Action title: states the team's combined qualification, e.g. "The core team brings [combined years] of directly relevant experience to [Client]"
-    - Content: team photo grid left — Core team sub-section (3–4 people) + SMEs / senior advisors sub-section (2–3 people); each card: photo placeholder + name (Arial bold) + role (Arial italic) + email. Fee panel right: "Investment" header + paragraph description of fee basis + bulleted assumptions and terms + optional callout box ("Updated price" or "Estimate valid until [date]").
+    - Content: 2-column horizontal cards on the left (small 72×96 portrait photo + name in Arial bold + italic role + 2–4 line description), Investment panel on the right with "Investment" header + paragraph + bulleted assumptions. Variants: `:compact` for ≤6-person teams with fee; `:with-experts` for 3-column (core team + Subject Matter Experts column + Investment); `:network` for core team + Expert Network row, no investment column (use a separate slide for fee).
 
 19. *(Optional)* **Person bio(s)** (`person-bio`)
     - Action title: names the person and anchors their relevance, e.g. "[Name] has led [N] similar transformations and will serve as day-to-day lead"
