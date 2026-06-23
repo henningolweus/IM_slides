@@ -1472,22 +1472,18 @@ p, li { color: #E1E0DE !important; }
 .segment-divider .sdiv-photo-bg {
   position: absolute;
   inset: 0;
-  background: var(--im-ash);
+  background: linear-gradient(135deg, #4F6764 0%, #30373B 60%, #1F1F23 100%);
   display: flex;
   align-items: center;
   justify-content: center;
 }
 .segment-divider .sdiv-photo-bg .photo-placeholder-divider {
-  width: 100%;
-  height: 100%;
-  background: var(--im-egg);
-  border: 1.5px dashed var(--im-ash);
-  opacity: 0.25;
+  display: none;
 }
 .segment-divider .sdiv-overlay {
   position: absolute;
   inset: 0;
-  background: linear-gradient(to top, rgba(31,31,35,0.72) 0%, rgba(31,31,35,0.3) 60%, rgba(31,31,35,0.15) 100%);
+  background: linear-gradient(to top, rgba(31,31,35,0.55) 0%, transparent 50%);
 }
 .segment-divider .sdiv-content {
   position: absolute;
@@ -2629,86 +2625,110 @@ p, li { color: #E1E0DE !important; }
 
 /* =========================================================
    VARIANT SLOT — TWO-PANEL:SCR
-   Chevron arrow between panels + numbered green circles in right.
-   Optional "FOR DISCUSSION" tag top-right.
+   Reference: Proposal 4 slide 4. Left white, right #D5DDDA.
+   Panel headers: Palatino italic ~32px. Right panel: large
+   Palatino digit (64px) + 140px underline + body text below.
+   No chevron arrow. Optional "To be validated" tag top-right.
    ========================================================= */
 .two-panel.variant-scr .gov-layout {
   position: relative;
+  grid-template-columns: 1fr 1fr;
 }
 .two-panel.variant-scr .gov-panel.left-panel {
-  background: var(--im-blue-green-near-white);
+  background: var(--im-white);
+  padding: 36px;
 }
 .two-panel.variant-scr .gov-panel.right-panel {
-  background: var(--im-white);
-  border: 1px solid var(--im-blue-green-light);
+  background: #D5DDDA;
+  padding: 36px;
+  border: none;
 }
-/* SCR arrow — subtle "›" character, not a large chevron shape */
+/* Panel header label — Palatino italic 32px replaces Arial bold */
+.two-panel.variant-scr .gov-block-label {
+  font-family: var(--font-display);
+  font-style: italic;
+  font-weight: normal;
+  font-size: 32px;
+  line-height: 1.15;
+  color: var(--im-black);
+  margin-bottom: 20px;
+  letter-spacing: normal;
+}
+/* Hide old chevron arrow */
 .scr-arrow {
-  position: absolute;
-  left: 50%;
-  top: 50%;
-  transform: translate(-50%, -50%);
-  z-index: 5;
-  width: 20px;
-  height: 20px;
-  background: transparent;
-  clip-path: none;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  pointer-events: none;
-  font-size: 24px;
-  color: var(--im-grey);
+  display: none;
+}
+/* SCR numbered digit — large Palatino numeral, no circle */
+.scr-numbered-digit {
+  font-family: var(--font-display);
+  font-weight: normal;
+  font-size: 64px;
   line-height: 1;
+  color: var(--im-black);
+  display: block;
+  margin-bottom: 0;
 }
-.scr-arrow::after { content: "›"; }
-/* Right SCR panel — normal padding, no large arrow to accommodate */
-.two-panel.variant-scr .gov-panel.right-panel { padding-left: 20px; }
-/* SCR numbered circles — large (44px), green-grey fill, white number */
-.scr-numbered-circle {
-  display: inline-flex;
-  align-items: center;
-  justify-content: center;
-  width: 44px;
-  height: 44px;
-  background: var(--im-blue-green);
-  border-radius: 50%;
-  font-family: var(--font-body);
-  font-weight: 700;
-  font-size: 16px;
-  color: var(--im-white);
-  flex-shrink: 0;
-  margin-right: 14px;
-  vertical-align: middle;
+/* Underline beneath each digit — 140px wide inline-block */
+.scr-digit-rule {
+  display: block;
+  width: 140px;
+  height: 1px;
+  background: var(--im-black);
+  margin: 4px 0 10px 0;
 }
-/* SCR block: circle left + text right as a flex row */
+/* SCR block: digit + rule + body text stacked vertically */
 .gov-block.scr-block {
   display: flex;
+  flex-direction: column;
   align-items: flex-start;
   gap: 0;
-  padding: 14px 0;
-  border-top: 1px solid var(--im-blue-green-light);
+  padding: 20px 0;
+  border-top: none;
 }
-.gov-block.scr-block:first-child { border-top: none; padding-top: 0; }
+.gov-block.scr-block:first-child { padding-top: 0; }
 .gov-block.scr-block .gov-block-label {
+  font-family: var(--font-body);
+  font-style: normal;
   font-size: var(--type-body);
   font-weight: 400;
-  line-height: 1.5;
+  line-height: 1.55;
   color: var(--im-ash);
-  padding-top: 10px;
+  margin-bottom: 0;
+  letter-spacing: normal;
 }
 .gov-block.scr-block .gov-block-label strong { font-weight: 700; color: var(--im-black); }
+/* Legacy circle — hidden in new SCR; kept for back-compat */
+.scr-numbered-circle { display: none; }
+/* "To be validated" / "For discussion" tag — white box with dark border, top-right */
+.scr-validation-tag {
+  position: absolute;
+  top: -4px;
+  right: 0;
+  background: var(--im-white);
+  border: 1px solid var(--im-black);
+  color: var(--im-black);
+  font-family: var(--font-body);
+  font-size: 11px;
+  font-weight: 700;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  padding: 4px 10px;
+  z-index: 4;
+}
+/* Keep old scr-discussion-tag working as alias */
 .scr-discussion-tag {
   position: absolute;
-  top: -6px;
+  top: -4px;
   right: 0;
-  background: var(--im-ash);
-  color: var(--im-white);
-  font-size: 9.6px;
+  background: var(--im-white);
+  border: 1px solid var(--im-black);
+  color: var(--im-black);
+  font-size: 11px;
   font-weight: 700;
-  letter-spacing: 0.1em;
+  letter-spacing: 0.06em;
   text-transform: uppercase;
-  padding: 3px 10px;
+  padding: 4px 10px;
+  z-index: 4;
 }
 
 /* =========================================================

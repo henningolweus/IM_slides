@@ -1300,7 +1300,7 @@
 
 ## Layout 4 variants — Two-panel variant slots
 
-**When to use (SCR):** Situation-Complication-Resolution framing. Left panel = situation/context; right panel = key questions or objectives with numbered green circles. Optional "FOR DISCUSSION" tag top-right.
+**When to use (SCR):** Situation-Complication-Resolution framing. Left panel (white) = situation/understanding with Palatino italic header + bullets; right panel (`#D5DDDA`) = task/objectives with Palatino italic header + large digit items. Optional "To be validated" or "For discussion" tag top-right.
 
 ```html
 <!-- Two-panel:scr variant -->
@@ -1309,16 +1309,19 @@
   <h2 class="action-title" data-imedit-id="{IMEDIT_ID:action-title:0}">
     <strong><!-- FILL: section label --></strong> | <!-- FILL: declarative action title -->
   </h2>
-  <!-- Optional FOR DISCUSSION tag -->
-  <div class="scr-discussion-tag" data-imedit-id="{IMEDIT_ID:scr-tag:0}">For discussion</div>
-  <div class="content-wrap">
+  <div class="content-wrap" style="position: relative;">
+
+    <!-- Optional validation / discussion tag top-right (choose one or omit) -->
+    <div class="scr-validation-tag" data-imedit-id="{IMEDIT_ID:scr-tag:0}">To be validated</div>
+    <!-- <div class="scr-discussion-tag">For discussion</div> -->
+
     <div class="gov-layout">
 
-      <!-- Left: situation / context -->
+      <!-- Left: situation / understanding — white background -->
       <div class="gov-side">
-        <p class="table-label" data-imedit-id="{IMEDIT_ID:table-label:0}"><!-- FILL: e.g. "Situation" or "Background" --></p>
-        <div class="table-label-underline"></div>
         <div class="gov-panel left-panel">
+          <!-- Palatino italic header for the left panel -->
+          <p class="gov-block-label" data-imedit-id="{IMEDIT_ID:left-header:0}"><!-- FILL: e.g. "Our understanding of the situation.." --></p>
           <ul class="gov-bullets">
             <li data-imedit-id="{IMEDIT_ID:bullet:0}"><!-- FILL: context point --></li>
             <li data-imedit-id="{IMEDIT_ID:bullet:1}"><!-- FILL --></li>
@@ -1327,38 +1330,31 @@
         </div>
       </div>
 
-      <!-- Chevron arrow between panels -->
-      <div class="scr-arrow" aria-hidden="true"></div>
-
-      <!-- Right: key questions or objectives -->
+      <!-- Right: task / objectives — #D5DDDA background, large digit items -->
       <div class="gov-side">
-        <p class="table-label" data-imedit-id="{IMEDIT_ID:table-label:1}"><!-- FILL: e.g. "Key questions" --></p>
-        <div class="table-label-underline"></div>
         <div class="gov-panel right-panel">
+          <!-- Palatino italic header for the right panel -->
+          <p class="gov-block-label" data-imedit-id="{IMEDIT_ID:right-header:0}"><!-- FILL: e.g. "…and the task at hand" --></p>
           <div class="gov-blocks">
-            <!-- FILL: each block uses a scr-numbered-circle before the text -->
-            <div class="gov-block">
-              <p class="gov-block-label" data-imedit-id="{IMEDIT_ID:gov-block-label:0}">
-                <span class="scr-numbered-circle">1</span><!-- FILL: question or objective title -->
-              </p>
-              <ul class="gov-bullets">
-                <li data-imedit-id="{IMEDIT_ID:bullet:3}"><!-- FILL --></li>
-              </ul>
+
+            <div class="gov-block scr-block">
+              <span class="scr-numbered-digit">1</span>
+              <span class="scr-digit-rule"></span>
+              <p class="gov-block-label" data-imedit-id="{IMEDIT_ID:gov-block-label:0}"><!-- FILL: question or objective --></p>
             </div>
-            <div class="gov-block">
-              <p class="gov-block-label" data-imedit-id="{IMEDIT_ID:gov-block-label:1}">
-                <span class="scr-numbered-circle">2</span><!-- FILL --></p>
-              <ul class="gov-bullets">
-                <li data-imedit-id="{IMEDIT_ID:bullet:4}"><!-- FILL --></li>
-              </ul>
+
+            <div class="gov-block scr-block">
+              <span class="scr-numbered-digit">2</span>
+              <span class="scr-digit-rule"></span>
+              <p class="gov-block-label" data-imedit-id="{IMEDIT_ID:gov-block-label:1}"><!-- FILL --></p>
             </div>
-            <div class="gov-block">
-              <p class="gov-block-label" data-imedit-id="{IMEDIT_ID:gov-block-label:2}">
-                <span class="scr-numbered-circle">3</span><!-- FILL --></p>
-              <ul class="gov-bullets">
-                <li data-imedit-id="{IMEDIT_ID:bullet:5}"><!-- FILL --></li>
-              </ul>
+
+            <div class="gov-block scr-block">
+              <span class="scr-numbered-digit">3</span>
+              <span class="scr-digit-rule"></span>
+              <p class="gov-block-label" data-imedit-id="{IMEDIT_ID:gov-block-label:2}"><!-- FILL --></p>
             </div>
+
           </div>
         </div>
       </div>
@@ -1370,7 +1366,7 @@
 </section>
 ```
 
-**Notes for SCR variant:** The `.scr-arrow` is absolutely positioned between the two `.gov-side` panels using `position: absolute; left: 50%; top: 50%; transform: translate(-50%, -50%)` — it requires `position: relative` on `.gov-layout`. The `.scr-discussion-tag` is absolutely positioned top-right relative to `.content-wrap`. Omit both elements if not needed. The `.scr-numbered-circle` sits inline before the label text.
+**Notes for SCR variant:** Left panel background is white; right panel background is `#D5DDDA` (set via CSS on `.gov-panel.right-panel`). Both panels get a Palatino italic 32px header via `.gov-block-label` directly inside `.gov-panel`. Numbered items use `.scr-numbered-digit` (Palatino 64px, no circle) + `.scr-digit-rule` (140px hairline rule beneath the digit) + `.gov-block-label` for the descriptive text. The `.scr-validation-tag` / `.scr-discussion-tag` are absolutely positioned top-right — requires `position: relative` on `.content-wrap`. The `.scr-arrow` is hidden via CSS and should be omitted from markup.
 
 ---
 
