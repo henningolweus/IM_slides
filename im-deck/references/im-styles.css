@@ -1442,6 +1442,14 @@ p, li { color: #E1E0DE !important; }
   overflow: hidden;
 }
 /* Photo variant (default) — full-bleed image placeholder with dark overlay */
+/* Full-bleed override — segment-divider must drop the default .slide padding + flex so absolute children fill 1280x720 */
+.segment-divider { display: none; }
+.segment-divider.active {
+  display: block !important;
+  padding: 0 !important;
+  position: relative;
+  overflow: hidden;
+}
 .segment-divider .sdiv-photo-bg {
   position: absolute;
   inset: 0;
@@ -1813,7 +1821,8 @@ p, li { color: #E1E0DE !important; }
 }
 .ring-circle-left {
   position: absolute;
-  left: 0;
+  left: 50%;
+  margin-left: -200px;
   width: 220px;
   height: 220px;
   border-radius: 50%;
@@ -1823,7 +1832,8 @@ p, li { color: #E1E0DE !important; }
 }
 .ring-circle-right {
   position: absolute;
-  right: 0;
+  left: 50%;
+  margin-left: -20px;
   width: 220px;
   height: 220px;
   border-radius: 50%;
@@ -2545,14 +2555,17 @@ p, li { color: #E1E0DE !important; }
   top: 50%;
   transform: translate(-50%, -50%);
   z-index: 5;
-  width: 36px;
-  height: 36px;
+  width: 64px;
+  height: 64px;
   background: var(--im-blue-green);
   clip-path: polygon(0 0, 60% 0, 100% 50%, 60% 100%, 0 100%, 40% 50%);
   display: flex;
   align-items: center;
   justify-content: center;
+  pointer-events: none;
 }
+/* Give the right SCR panel breathing room so its content doesn't crash into the arrow */
+.two-panel.variant-scr .gov-panel.right-panel { padding-left: 56px; }
 .scr-numbered-circle {
   display: inline-flex;
   align-items: center;
