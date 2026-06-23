@@ -2489,6 +2489,157 @@ p, li { color: #E1E0DE !important; }
 }
 
 /* =========================================================
+   VERTICAL-NUMBERED-LIST variant slots
+   Reference: Proposal 3 slide 9 (numbered+arc), and the user's
+   review feedback on the success-criteria slide.
+   ========================================================= */
+
+/* :numbered-arc — adds a large quarter-arc decoration on the left,
+   behind the first 2-3 rows. Decorative; doesn't take grid space. */
+.vertical-numbered-list.variant-numbered-arc {
+  position: relative;
+  padding-left: 36px;
+}
+.vertical-numbered-list.variant-numbered-arc::before {
+  content: '';
+  position: absolute;
+  left: -120px;
+  top: -40px;
+  width: 320px;
+  height: 320px;
+  border-radius: 50%;
+  background: var(--im-blue-green-near-white);
+  z-index: 0;
+  pointer-events: none;
+}
+.vertical-numbered-list.variant-numbered-arc .vnl-row {
+  position: relative;
+  z-index: 1;
+}
+
+/* :dark-labels — 5 rows where left column is a dark-ash label cell with
+   white bold title + optional subtitle; right column is bullets.
+   Heavier "strategic pillar" visual. */
+.vertical-numbered-list.variant-dark-labels {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+.vertical-numbered-list.variant-dark-labels .vnl-row {
+  display: grid;
+  grid-template-columns: 200px 1fr;
+  gap: 0;
+  align-items: stretch;
+  background: var(--im-blue-green-near-white);
+  border-top: none;
+  padding: 0;
+}
+.vertical-numbered-list.variant-dark-labels .vnl-label-cell {
+  background: var(--im-ash);
+  color: var(--im-white);
+  padding: 14px 18px;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  gap: 4px;
+}
+.vertical-numbered-list.variant-dark-labels .vnl-label-title {
+  font-family: var(--font-body);
+  font-weight: 700;
+  font-size: var(--type-subheading);
+  line-height: 1.2;
+  color: var(--im-white);
+}
+.vertical-numbered-list.variant-dark-labels .vnl-label-subtitle {
+  font-family: var(--font-display);
+  font-style: italic;
+  font-size: var(--type-body-small);
+  color: rgba(255,255,255,0.75);
+  line-height: 1.3;
+}
+.vertical-numbered-list.variant-dark-labels .vnl-body-cell {
+  padding: 14px 22px;
+  display: flex;
+  align-items: center;
+}
+.vertical-numbered-list.variant-dark-labels .vnl-body-cell ul {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+.vertical-numbered-list.variant-dark-labels .vnl-body-cell li {
+  font-family: var(--font-body);
+  font-size: var(--type-body);
+  line-height: 1.45;
+  color: var(--im-ash);
+  padding-left: 16px;
+  position: relative;
+}
+.vertical-numbered-list.variant-dark-labels .vnl-body-cell li::before {
+  content: '\2022';
+  position: absolute;
+  left: 0;
+  top: 0;
+  color: var(--im-blue-green);
+  font-weight: 700;
+}
+.vertical-numbered-list.variant-dark-labels .vnl-body-cell li strong {
+  color: var(--im-black);
+  font-weight: 700;
+}
+
+/* :light-labels — same row structure but left cell is light green-grey
+   with italic Palatino category name; right cell is a single paragraph.
+   Airy/narrative variant. */
+.vertical-numbered-list.variant-light-labels {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+.vertical-numbered-list.variant-light-labels .vnl-row {
+  display: grid;
+  grid-template-columns: 200px 1fr;
+  gap: 0;
+  align-items: stretch;
+  background: var(--im-light-grey);
+  border-top: none;
+  padding: 0;
+}
+.vertical-numbered-list.variant-light-labels .vnl-label-cell {
+  background: var(--im-blue-green-near-white);
+  padding: 14px 18px;
+  display: flex;
+  align-items: center;
+}
+.vertical-numbered-list.variant-light-labels .vnl-label-title {
+  font-family: var(--font-display);
+  font-style: italic;
+  font-weight: 400;
+  font-size: var(--type-subheading);
+  line-height: 1.25;
+  color: var(--im-black);
+}
+.vertical-numbered-list.variant-light-labels .vnl-body-cell {
+  padding: 14px 22px;
+  display: flex;
+  align-items: center;
+}
+.vertical-numbered-list.variant-light-labels .vnl-body-cell p {
+  font-family: var(--font-body);
+  font-size: var(--type-body);
+  line-height: 1.5;
+  color: var(--im-ash);
+  margin: 0;
+}
+.vertical-numbered-list.variant-light-labels .vnl-body-cell strong {
+  color: var(--im-black);
+  font-weight: 700;
+}
+
+/* =========================================================
    GANTT-PROCESS (proposal-grade)
    Reference: Proposal 3 slide 16, Proposal 4 slide 12.
    5-band layout: eyebrow → month/week headers → activities

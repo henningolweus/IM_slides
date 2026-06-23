@@ -1191,6 +1191,72 @@
 
 **Notes:** The `.vnl-row` elements use `flex: 1` to distribute vertical space equally across all 5 rows. For a slide with only 3 or 4 criteria, simply remove the excess `.vnl-row` blocks — remaining rows expand to fill. The optional `.vnl-decoration` (quarter-arc) is placed as a sibling of `.vertical-numbered-list` inside the `position: relative` content-wrap. To activate, uncomment the decoration line and ensure `content-wrap` has `position: relative`.
 
+### Variants
+
+The 4 useful variants share the same `<section class="slide vertical-numbered-list variant-X">` shell. Pick by content shape:
+
+**`:numbered-arc`** — add `variant-numbered-arc` to the section class. Identical inner markup to `:numbered`; the quarter-arc decoration is purely CSS. Use when the slide is the section's thesis ("Five conditions must hold").
+
+**`:dark-labels`** — heavier visual, dark-ash label cells. Each row has 2 grid children: `.vnl-label-cell` (title + optional italic subtitle) and `.vnl-body-cell` (bullets).
+
+````html
+<section class="slide vertical-numbered-list variant-dark-labels" data-slide="N">
+  <div class="logo">IM_</div>
+  <h2 class="action-title" data-imedit-id="{IMEDIT_ID:action-title:0}">
+    <strong><!-- FILL: section label --></strong> | <!-- FILL: declarative action title -->
+  </h2>
+  <div class="content-wrap">
+    <div class="vertical-numbered-list variant-dark-labels">
+      <div class="vnl-row">
+        <div class="vnl-label-cell">
+          <span class="vnl-label-title" data-imedit-id="{IMEDIT_ID:label-title:0}"><!-- FILL: row 1 title --></span>
+          <span class="vnl-label-subtitle" data-imedit-id="{IMEDIT_ID:label-subtitle:0}"><!-- FILL: optional italic subtitle, remove span if not needed --></span>
+        </div>
+        <div class="vnl-body-cell">
+          <ul>
+            <li data-imedit-id="{IMEDIT_ID:bullet:0}"><strong><!-- FILL: lead --></strong> <!-- FILL: rest --></li>
+            <li data-imedit-id="{IMEDIT_ID:bullet:1}"><!-- FILL: bullet 2 --></li>
+          </ul>
+        </div>
+      </div>
+      <!-- Repeat .vnl-row x 5 -->
+    </div>
+  </div>
+  <p class="page-number"><!-- FILL: NN / TT --></p>
+</section>
+````
+
+**`:light-labels`** — airy variant. Same row shell, but label cells use italic Palatino on a light green-grey panel, and body cells contain a single `<p>` instead of bullets.
+
+````html
+<section class="slide vertical-numbered-list variant-light-labels" data-slide="N">
+  <div class="logo">IM_</div>
+  <h2 class="action-title" data-imedit-id="{IMEDIT_ID:action-title:0}">
+    <strong><!-- FILL: section label --></strong> | <!-- FILL: declarative action title -->
+  </h2>
+  <div class="content-wrap">
+    <div class="vertical-numbered-list variant-light-labels">
+      <div class="vnl-row">
+        <div class="vnl-label-cell">
+          <span class="vnl-label-title" data-imedit-id="{IMEDIT_ID:label-title:0}"><!-- FILL: italic Palatino category name --></span>
+        </div>
+        <div class="vnl-body-cell">
+          <p data-imedit-id="{IMEDIT_ID:body:0}"><!-- FILL: paragraph body --></p>
+        </div>
+      </div>
+      <!-- Repeat x 5 -->
+    </div>
+  </div>
+  <p class="page-number"><!-- FILL: NN / TT --></p>
+</section>
+````
+
+**Choosing a variant:**
+- 5 actionable conditions -> `:numbered` (or `:numbered-arc` if it's THE thesis page)
+- 5 strategic pillars with structure -> `:dark-labels`
+- 5 narrative topics / themes -> `:light-labels`
+- 5 considerations with no inherent order -> `:lettered`
+
 ---
 
 ## Layout 20 — Gantt process
