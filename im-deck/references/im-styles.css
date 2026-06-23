@@ -1879,143 +1879,93 @@ p, li { color: #E1E0DE !important; }
 .photo-card-desc strong { font-weight: 700; color: var(--im-black); }
 
 /* =========================================================
-   LAYOUT 15 — RING DIAGRAM
-   Two overlapping circles (outlined left, filled right, shared center label)
-   + bullet lists each side + optional bottom icon row.
+   LAYOUT 15 — RING DIAGRAM (proposal-grade)
+   Reference: Proposal 3 slide 14 ("One project team"),
+              Proposal 4 slide 15 ("Collaboration model").
+   3-col layout: left side panel (bullets + icons) | center ring | right side panel
+   Split bg: left = #F8F5E7 (egg), right = #F1F4F3 (panel-light) — neither white.
    ========================================================= */
 .ring-diagram:not(section) {
   flex: 1;
-  display: flex;
-  flex-direction: column;
-  min-height: 0;
-}
-.ring-diagram-inner {
-  flex: 1;
   display: grid;
-  grid-template-columns: 1fr 360px 1fr;
-  gap: 24px;
-  align-items: center;
+  grid-template-columns: 1fr auto 1fr;
+  gap: 0;
   min-height: 0;
-  padding-top: 8px;
+  position: relative;
 }
-.ring-bullets-left,
-.ring-bullets-right {
+
+.ring-side {
+  padding: 24px 28px 18px;
   display: flex;
   flex-direction: column;
-  gap: 0;
+  min-height: 0;
 }
-.ring-bullets-left .ring-bullet,
-.ring-bullets-right .ring-bullet {
-  font-size: var(--type-body);
-  line-height: 1.5;
+.ring-side.ring-left { background: var(--im-egg); }
+.ring-side.ring-right { background: var(--im-blue-green-near-white); }
+
+.ring-side-brand {
+  font-family: var(--font-body);
+  font-size: var(--type-eyebrow);
+  font-weight: 700;
+  letter-spacing: 0.18em;
+  text-transform: uppercase;
+  color: var(--im-blue-green-dark);
+  margin-bottom: 14px;
+}
+.ring-side.ring-right .ring-side-brand {
+  font-family: var(--font-body);
+  font-weight: 700;
+  font-size: 17px;
+  letter-spacing: 0.05em;
+  text-transform: none;
+  color: var(--im-black);
+}
+.ring-side.ring-right .ring-side-brand small {
+  display: block;
+  font-size: var(--type-eyebrow);
+  font-weight: 700;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  color: var(--im-blue-green-dark);
+  margin-top: 2px;
+}
+
+.ring-bullets {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+.ring-bullets li {
+  font-family: var(--font-body);
+  font-size: 13px;
+  line-height: 1.45;
   color: var(--im-ash);
-  padding: 9px 0;
-  border-top: 1px solid var(--im-blue-green-light);
-  position: relative;
   padding-left: 22px;
+  position: relative;
 }
-.ring-bullets-left .ring-bullet:first-child,
-.ring-bullets-right .ring-bullet:first-child { border-top: none; }
-.ring-bullets-left .ring-bullet::before,
-.ring-bullets-right .ring-bullet::before {
-  content: "•";
+.ring-bullets li::before {
+  content: '\2713';
   position: absolute;
   left: 0;
-  top: 9px;
+  top: 0;
   color: var(--im-blue-green);
   font-weight: 700;
-  line-height: 1.5;
+  font-size: 13px;
 }
-.ring-bullets-left .ring-bullet strong,
-.ring-bullets-right .ring-bullet strong { font-weight: 700; color: var(--im-black); }
-.ring-diagram-circles {
-  position: relative;
-  height: 280px;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-}
-/* Left circle: outlined only, no fill — matches reference (client side) */
-.ring-circle-left {
-  position: absolute;
-  left: 50%;
-  margin-left: -190px;
-  width: 220px;
-  height: 220px;
-  border-radius: 50%;
-  border: 1.5px solid var(--im-green-grey);
-  background: transparent;
-  z-index: 1;
-}
-/* Right circle: lightly filled green-grey — matches reference (Implement side) */
-.ring-circle-right {
-  position: absolute;
-  left: 50%;
-  margin-left: -30px;
-  width: 220px;
-  height: 220px;
-  border-radius: 50%;
-  background: rgba(103,129,127,0.18);
-  border: 1.5px solid var(--im-blue-green);
-  z-index: 1;
-}
-/* Center overlap: small filled green circle with italic label */
-.ring-center {
-  position: absolute;
-  left: 50%;
-  top: 50%;
-  transform: translate(-50%, -50%);
-  z-index: 3;
-  text-align: center;
-  width: 110px;
-  height: 110px;
-  background: var(--im-blue-green);
-  border-radius: 50%;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-}
-.ring-center-label {
-  font-family: var(--font-display);
-  font-style: italic;
-  font-size: var(--type-body-small);
-  color: var(--im-white);
-  line-height: 1.3;
-  padding: 0 10px;
-  text-align: center;
-}
-.ring-left-label {
-  font-family: var(--font-body);
-  font-size: var(--type-eyebrow);
-  font-weight: 700;
-  letter-spacing: 0.14em;
-  text-transform: uppercase;
-  color: var(--im-blue-green-dark);
-  margin-bottom: 10px;
-}
-.ring-right-label {
-  font-family: var(--font-body);
-  font-size: var(--type-eyebrow);
-  font-weight: 700;
-  letter-spacing: 0.14em;
-  text-transform: uppercase;
-  color: var(--im-blue-green-dark);
-  margin-bottom: 10px;
-  text-align: right;
-}
-/* Optional bottom icon row */
+.ring-bullets li strong { color: var(--im-black); font-weight: 700; }
+
+/* Bottom icon row — 4 icon+label pairs per side */
 .ring-icons {
   display: grid;
-  grid-template-columns: 1fr 360px 1fr;
-  gap: 24px;
-  padding-top: 16px;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 8px;
+  margin-top: 16px;
+  padding-top: 14px;
   border-top: 1px solid var(--im-blue-green-light);
-  margin-top: 8px;
-}
-.ring-icons-side {
-  display: flex;
-  gap: 16px;
-  align-items: flex-start;
 }
 .ring-icon-item {
   display: flex;
@@ -2023,23 +1973,75 @@ p, li { color: #E1E0DE !important; }
   align-items: center;
   gap: 4px;
   text-align: center;
-  flex: 1;
 }
-.ring-icon-circle {
-  width: 40px;
-  height: 40px;
-  background: var(--im-blue-green-near-white);
-  border-radius: 50%;
+.ring-icon-item svg {
+  width: 26px;
+  height: 26px;
+  stroke: var(--im-blue-green-dark);
+  stroke-width: 1.4;
+  fill: none;
+  stroke-linecap: round;
+  stroke-linejoin: round;
+}
+.ring-icon-label {
+  font-family: var(--font-body);
+  font-size: 10.5px;
+  line-height: 1.2;
+  color: var(--im-ash);
+  font-weight: 400;
+}
+
+/* Center column: the rings + center label */
+.ring-center {
   display: flex;
   align-items: center;
   justify-content: center;
-  color: var(--im-blue-green);
+  position: relative;
+  width: 260px;
 }
-.ring-icon-label {
-  font-size: var(--type-eyebrow);
-  color: var(--im-ash);
-  line-height: 1.3;
-  letter-spacing: 0.04em;
+.ring-outer {
+  position: relative;
+  width: 230px;
+  height: 230px;
+}
+.ring-circle {
+  position: absolute;
+  border-radius: 50%;
+  border: 1.5px solid var(--im-blue-green);
+  width: 200px;
+  height: 200px;
+  top: 50%;
+  transform: translateY(-50%);
+}
+.ring-circle.ring-circle-left  { left: 0; background: transparent; }
+.ring-circle.ring-circle-right {
+  right: 0;
+  background: rgba(103, 129, 127, 0.18);
+}
+.ring-center-label {
+  position: absolute;
+  left: 50%;
+  top: 50%;
+  transform: translate(-50%, -50%);
+  width: 86px;
+  height: 86px;
+  border-radius: 50%;
+  background: var(--im-blue-green);
+  color: var(--im-white);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  text-align: center;
+  font-family: var(--font-display);
+  font-style: italic;
+  font-size: 14px;
+  line-height: 1.2;
+  z-index: 2;
+}
+.ring-center-label.ring-center-label-large {
+  width: 110px;
+  height: 110px;
+  font-size: 16px;
 }
 
 /* =========================================================

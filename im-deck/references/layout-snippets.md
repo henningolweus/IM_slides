@@ -792,79 +792,99 @@
 
 ## Layout 15 — Ring diagram
 
-**When to use:** Co-creation model, collaboration structure, one-project-team concept. Two overlapping circles (outlined left, filled right) with bullet lists on each side. Optional bottom icon row.
+**When to use:** Co-creation model, collaboration structure, one-project-team concept. Split-panel background with overlapping circles, 5 check-bullets per side, brand row, and bottom icon row. Matches Proposal 3 slide 14 and Proposal 4 slide 15 density.
 
 ```html
-<section class="slide" data-slide="N">
+<section class="slide ring-diagram" data-slide="N">
   <div class="logo">IM_</div>
   <h2 class="action-title" data-imedit-id="{IMEDIT_ID:action-title:0}">
-    <strong><!-- FILL: section label --></strong> | <!-- FILL: declarative action title -->
+    <strong><!-- FILL: section label, e.g. Co-creation --></strong> | <!-- FILL: declarative action title -->
   </h2>
   <div class="content-wrap">
     <div class="ring-diagram">
-      <div class="ring-diagram-inner">
 
-        <!-- Left bullets (client side) -->
-        <div class="ring-bullets-left">
-          <p class="ring-left-label" data-imedit-id="{IMEDIT_ID:ring-left-label:0}"><!-- FILL: left side label, e.g. "[CLIENT]" --></p>
-          <!-- NOTE: increment :N for each ring-bullet -->
-          <p class="ring-bullet" data-imedit-id="{IMEDIT_ID:ring-bullet-left:0}"><!-- FILL: left side bullet --></p>
-          <p class="ring-bullet" data-imedit-id="{IMEDIT_ID:ring-bullet-left:1}"><!-- FILL --></p>
-          <p class="ring-bullet" data-imedit-id="{IMEDIT_ID:ring-bullet-left:2}"><!-- FILL --></p>
-          <p class="ring-bullet" data-imedit-id="{IMEDIT_ID:ring-bullet-left:3}"><!-- FILL --></p>
-        </div>
-
-        <!-- Overlapping circles -->
-        <div class="ring-diagram-circles">
-          <div class="ring-circle-left"></div>
-          <div class="ring-circle-right"></div>
-          <div class="ring-center">
-            <p class="ring-center-label" data-imedit-id="{IMEDIT_ID:ring-center-label:0}"><!-- FILL: center overlap label, e.g. "One project team" --></p>
+      <!-- LEFT SIDE — client perspective -->
+      <div class="ring-side ring-left">
+        <div class="ring-side-brand" data-imedit-id="{IMEDIT_ID:left-brand:0}"><!-- FILL: client name in caps, e.g. COMPANY X --></div>
+        <ul class="ring-bullets">
+          <li data-imedit-id="{IMEDIT_ID:left-bullet:0}"><strong><!-- FILL: bullet 1 lead --></strong> <!-- FILL: rest --></li>
+          <li data-imedit-id="{IMEDIT_ID:left-bullet:1}"><!-- FILL: bullet 2 --></li>
+          <li data-imedit-id="{IMEDIT_ID:left-bullet:2}"><!-- FILL: bullet 3 --></li>
+          <li data-imedit-id="{IMEDIT_ID:left-bullet:3}"><!-- FILL: bullet 4 --></li>
+          <li data-imedit-id="{IMEDIT_ID:left-bullet:4}"><!-- FILL: bullet 5 --></li>
+        </ul>
+        <div class="ring-icons">
+          <div class="ring-icon-item">
+            <svg viewBox="0 0 24 24"><circle cx="12" cy="8" r="3.5"/><path d="M5 21c0-3.866 3.134-7 7-7s7 3.134 7 7"/></svg>
+            <span class="ring-icon-label"><!-- FILL: icon-1 label, e.g. Ownership --></span>
+          </div>
+          <div class="ring-icon-item">
+            <svg viewBox="0 0 24 24"><rect x="4" y="10" width="16" height="11" rx="1"/><path d="M8 10V6a4 4 0 0 1 8 0v4"/></svg>
+            <span class="ring-icon-label"><!-- FILL: icon-2 label, e.g. Access --></span>
+          </div>
+          <div class="ring-icon-item">
+            <svg viewBox="0 0 24 24"><path d="M5 12l4 4L19 6"/><rect x="3" y="3" width="18" height="18" rx="2"/></svg>
+            <span class="ring-icon-label"><!-- FILL: icon-3 label, e.g. Validation --></span>
+          </div>
+          <div class="ring-icon-item">
+            <svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 1 1-2.83 2.83l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-4 0v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 1 1-2.83-2.83l.06-.06a1.65 1.65 0 0 0 .33-1.82 1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1 0-4h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 1 1 2.83-2.83l.06.06a1.65 1.65 0 0 0 1.82.33H9a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 4 0v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 1 1 2.83 2.83l-.06.06a1.65 1.65 0 0 0-.33 1.82V9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 0 4h-.09a1.65 1.65 0 0 0-1.51 1z"/></svg>
+            <span class="ring-icon-label"><!-- FILL: icon-4 label, e.g. Execution --></span>
           </div>
         </div>
-
-        <!-- Right bullets (Implement side) -->
-        <div class="ring-bullets-right">
-          <p class="ring-right-label" data-imedit-id="{IMEDIT_ID:ring-right-label:0}"><!-- FILL: right side label, e.g. "IMPLEMENT" --></p>
-          <p class="ring-bullet" data-imedit-id="{IMEDIT_ID:ring-bullet-right:0}"><!-- FILL: right side bullet --></p>
-          <p class="ring-bullet" data-imedit-id="{IMEDIT_ID:ring-bullet-right:1}"><!-- FILL --></p>
-          <p class="ring-bullet" data-imedit-id="{IMEDIT_ID:ring-bullet-right:2}"><!-- FILL --></p>
-          <p class="ring-bullet" data-imedit-id="{IMEDIT_ID:ring-bullet-right:3}"><!-- FILL --></p>
-        </div>
-
       </div>
 
-      <!-- Optional bottom icon row — omit entire .ring-icons block if not needed -->
-      <div class="ring-icons">
-        <div class="ring-icons-side">
-          <div class="ring-icon-item" data-imedit-id="{IMEDIT_ID:ring-icon:0}">
-            <div class="ring-icon-circle">
-              <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><!-- FILL: icon paths --></svg>
-            </div>
-            <span class="ring-icon-label" data-imedit-id="{IMEDIT_ID:ring-icon-label:0}"><!-- FILL: icon label --></span>
-          </div>
-          <!-- repeat ring-icon-item × 1-3 more -->
+      <!-- CENTER — overlapping rings with center label -->
+      <div class="ring-center">
+        <div class="ring-outer">
+          <div class="ring-circle ring-circle-left"></div>
+          <div class="ring-circle ring-circle-right"></div>
+          <div class="ring-center-label ring-center-label-large" data-imedit-id="{IMEDIT_ID:center-label:0}"><!-- FILL: center label, e.g. One project team --></div>
         </div>
-        <div></div><!-- center spacer (circles column) -->
-        <div class="ring-icons-side">
-          <div class="ring-icon-item" data-imedit-id="{IMEDIT_ID:ring-icon:4}">
-            <div class="ring-icon-circle">
-              <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><!-- FILL --></svg>
-            </div>
-            <span class="ring-icon-label" data-imedit-id="{IMEDIT_ID:ring-icon-label:4}"><!-- FILL --></span>
+      </div>
+
+      <!-- RIGHT SIDE — Implement perspective -->
+      <div class="ring-side ring-right">
+        <div class="ring-side-brand" data-imedit-id="{IMEDIT_ID:right-brand:0}">IMPLEMENT<small>Consulting Group_</small></div>
+        <ul class="ring-bullets">
+          <li data-imedit-id="{IMEDIT_ID:right-bullet:0}"><strong><!-- FILL: bullet 1 lead --></strong> <!-- FILL: rest --></li>
+          <li data-imedit-id="{IMEDIT_ID:right-bullet:1}"><!-- FILL: bullet 2 --></li>
+          <li data-imedit-id="{IMEDIT_ID:right-bullet:2}"><!-- FILL: bullet 3 --></li>
+          <li data-imedit-id="{IMEDIT_ID:right-bullet:3}"><!-- FILL: bullet 4 --></li>
+          <li data-imedit-id="{IMEDIT_ID:right-bullet:4}"><!-- FILL: bullet 5 --></li>
+        </ul>
+        <div class="ring-icons">
+          <div class="ring-icon-item">
+            <svg viewBox="0 0 24 24"><path d="M12 2L4 6v6c0 5.55 3.84 9.74 8 11 4.16-1.26 8-5.45 8-11V6l-8-4z"/></svg>
+            <span class="ring-icon-label"><!-- FILL: icon-1 label, e.g. Leadership --></span>
           </div>
-          <!-- repeat ring-icon-item × 1-3 more -->
+          <div class="ring-icon-item">
+            <svg viewBox="0 0 24 24"><line x1="5" y1="12" x2="19" y2="12"/><circle cx="5" cy="12" r="2"/><circle cx="19" cy="12" r="2"/><line x1="12" y1="5" x2="12" y2="19"/></svg>
+            <span class="ring-icon-label"><!-- FILL: icon-2 label, e.g. Methods --></span>
+          </div>
+          <div class="ring-icon-item">
+            <svg viewBox="0 0 24 24"><polyline points="4 19 9 14 13 18 20 6"/><polyline points="15 6 20 6 20 11"/></svg>
+            <span class="ring-icon-label"><!-- FILL: icon-3 label, e.g. Analytics --></span>
+          </div>
+          <div class="ring-icon-item">
+            <svg viewBox="0 0 24 24"><polyline points="3 6 9 12 5 16 13 21 14 14 19 18 21 6 3 6"/></svg>
+            <span class="ring-icon-label"><!-- FILL: icon-4 label, e.g. Roadmap --></span>
+          </div>
         </div>
       </div>
 
     </div>
   </div>
-  <p class="source-line"><!-- FILL: or omit --></p>
   <p class="page-number"><!-- FILL: NN / TT --></p>
 </section>
 ```
 
-**Notes:** The left circle is outlined only (`border: 2.5px solid #B9C7C2; background: transparent`) — representing the client. The right circle is filled `#67817F` — representing Implement. The overlap center has a white Palatino italic label. For the bottom icon row, keep left icons parallel to left bullets and right icons parallel to right bullets.
+**Notes:**
+- **Split background.** Left panel = `#F8F5E7` (egg), right = `#F1F4F3` (panel-light). Neither is pure white — the visual weight of the side panels is what makes the slide feel "designed" rather than blank.
+- **Side brand row.** Left side uses small-caps Arial for a client name ("COMPANY X"). Right side mimics the IMPLEMENT wordmark: `IMPLEMENT<small>Consulting Group_</small>` in larger Arial bold + small caps subscript line. Customize the left brand per engagement.
+- **Bullets.** Use 4–6 bullets per side. Use `<strong>` on the lead phrase of each for emphasis. Checkmark markers are styled via CSS `::before` content.
+- **Center.** Two overlapping circles (outline left, filled-transparent right). Inner `.ring-center-label` is a filled `#67817F` circle with white italic Palatino text. Use `.ring-center-label-large` modifier for longer labels like "One project team".
+- **Bottom icon row.** 4 inline SVG icons + label per side. Icons stroked in `#4F6764`, 1.4px width, fill none. Customize labels per engagement; the SVG paths in the snippet are placeholders (person/lock/checkbox/gear left; shield/method/chart/roadmap right).
+- **Remove pieces if unneeded.** If a slide doesn't have bottom-row themes, drop the `.ring-icons` div. If only 3 bullets fit, just use 3 `<li>` items.
 
 ---
 
