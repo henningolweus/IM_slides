@@ -1725,6 +1725,7 @@ p, li { color: #E1E0DE !important; }
   margin-bottom: 0;
   flex: 1;
 }
+.plc-letter-body p { color: rgba(255,255,255,0.88); margin: 0; }
 .plc-letter-body p + p { margin-top: 14px; }
 .plc-letter-body strong { font-weight: 700; color: var(--im-white); }
 /* Signature block: IMPLEMENT wordmark left + avatar+name right */
