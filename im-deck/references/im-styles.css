@@ -2615,10 +2615,10 @@ p, li { color: #E1E0DE !important; }
    Core (filled green-grey #67817F) and Supporting (lighter #B9C7C2) variants. */
 .gantt-bar {
   font-family: var(--font-body);
-  font-size: var(--type-body-small);
+  font-size: 11.5px;
   font-weight: 700;
   color: var(--im-white);
-  padding: 8px 22px 8px 14px;
+  padding: 5px 22px 5px 12px;
   background: var(--im-blue-green);
   clip-path: polygon(0 0, calc(100% - 14px) 0, 100% 50%, calc(100% - 14px) 100%, 0 100%);
   flex: 1;

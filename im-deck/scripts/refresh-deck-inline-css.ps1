@@ -26,15 +26,21 @@ $utf8NoBom = New-Object System.Text.UTF8Encoding($false)
 $cssNew = [System.IO.File]::ReadAllText($CssPath, $utf8NoBom)
 $deck   = [System.IO.File]::ReadAllText($DeckPath, $utf8NoBom)
 
-# Match the FIRST <style>...</style> block only. (?s) = dotall mode in .NET regex.
-$pattern  = '(?s)<style[^>]*>.*?</style>'
+# Match the FIRST <style>...</style> block only.
+# Use explicit RegexOptions.Singleline — the (?s) inline prefix is unreliable in .NET
+# when used at the start of the pattern via the static Replace overload.
+$pattern = '<style[^>]*>.*?</style>'
 $replacement = '<style>' + ($cssNew -replace '\$', '$$$$') + '</style>'
-$updated  = [System.Text.RegularExpressions.Regex]::Replace($deck, $pattern, $replacement, 1)
+$opts = [System.Text.RegularExpressions.RegexOptions]::Singleline
+$rx = New-Object System.Text.RegularExpressions.Regex($pattern, $opts)
 
-# Verify a swap happened -- fail loud rather than silently no-op
-if ($updated -eq $deck) {
+# Check pattern match independently — `$updated -eq $deck` would false-positive when
+# the new inline CSS happens to match the existing inline CSS byte-for-byte.
+if (-not $rx.IsMatch($deck)) {
   throw "No <style>...</style> block found in $DeckPath; nothing was changed."
 }
+
+$updated = $rx.Replace($deck, $replacement, 1)
 
 # Write back as UTF-8 WITHOUT BOM. Set-Content's defaults vary by PS version; using
 # the .NET helper is the only fully-portable safe path.
