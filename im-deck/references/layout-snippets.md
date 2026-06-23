@@ -935,6 +935,8 @@
 
 **Notes:** Default team grid is 3 columns (matching CSS `.team-grid { grid-template-columns: repeat(3, 1fr) }`). For a 2×2 grid (4 people), override with `style="grid-template-columns: 1fr 1fr"` on `.team-grid`. The `.investment-callout` element is absolutely positioned and should be removed when there is no callout.
 
+**Overflow rule:** Never use more than 3 team columns. For 4–6 people, use the default 3-column grid in two rows. For >6 people, split into Core team + SMEs subsections (the snippet shows the pattern). Overriding to 4 columns will overflow the 720px slide height because each team card has a fixed photo aspect-ratio plus three text lines.
+
 ---
 
 ## Layout 17 — Person bio
@@ -1705,6 +1707,7 @@
 ---
 
 ## Deck chrome (include in every generated deck)
+**Copy this block byte-for-byte before `</body>`.** Do not rename ids, do not paraphrase the script, do not drop the trailing `updateScale()` retries. The deck cannot function without this exact chrome.
 
 Paste this immediately before `</body>`. Replace the `<!-- FILL: N -->` values with the actual total slide count.
 

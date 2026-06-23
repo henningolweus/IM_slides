@@ -104,6 +104,8 @@ When generating layout snippets, set `font-size: var(--type-X)` rather than a ha
 ### Step 6 — Deliver
 Save the file as `[topic-slug]-deck.html` in the current working directory.
 
+Write the file as UTF-8 without BOM. Use the Write tool (default is correct). If scripting via PowerShell, use `[IO.File]::WriteAllText($path, $html, [Text.UTF8Encoding]::new($false))` — PowerShell 5.1's `Out-File`/`Set-Content` default to UTF-16 LE and will produce mojibake when the browser interprets the file as UTF-8.
+
 Tell the user:
 > "Deck saved as `[filename].html`. Open it in Chrome or Edge.
 > - **Navigate:** arrow keys, spacebar, or click the dots
@@ -157,3 +159,9 @@ node "C:\Users\heol\.claude\skills\im-deck\scripts\export-pptx.mjs" --slides "[s
 - [ ] Color theme override block (if non-Standard) is the FIRST thing inside `<style>`, before im-styles.css content
 - [ ] If PPTX export requested: all 5 (or N) slides converted with no errors; `[slug]-deck.pptx` opens cleanly in PowerPoint with editable text
 - [ ] Icon-catalog and color-scales references read whenever the content brief includes icons or color choices
+- [ ] Every action title is ≤120 characters (≈3 lines at 24pt). If longer, restructure as `<strong>Section label</strong> | short declarative clause`.
+- [ ] No layout exceeds its safe card count: `.team-grid` ≤ 6 cards in 3 columns (2 rows); `.assets-grid` ≤ 4 cards; `.qs-initiative-card` ≤ 4.
+- [ ] Exactly one slide has the `active` class (`grep -c 'class="[^"]*\bactive\b' deck.html` must return 1).
+- [ ] The deck-chrome block from `references/layout-snippets.md` is pasted verbatim immediately before `</body>`. Verify the `<script>` substring `updateScale()` appears at least three times.
+- [ ] File is saved as UTF-8 without BOM. First three bytes must NOT be `EF BB BF` and the file must NOT contain mojibake sequences like `â€"`.
+- [ ] Open the deck in Chrome/Edge: slide 1 visible; arrow keys advance; no console errors; navigating through every slide shows distinct content.

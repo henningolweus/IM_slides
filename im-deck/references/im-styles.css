@@ -75,6 +75,7 @@
     display: none;
   }
   .slide.active { display: flex; flex-direction: column; padding: 30px 44px 67px; }
+  .slide:not(.active) { display: none !important; }
   .slide-cover.active { display: grid; padding: 0; }
 
   /* Bleed-right variant — used on slide 2 (right panel extends to slide edge) */
@@ -127,6 +128,11 @@
     letter-spacing: -0.005em;
     min-height: 74px;
     box-sizing: border-box;
+    display: -webkit-box;
+    -webkit-line-clamp: 3;
+    -webkit-box-orient: vertical;
+    overflow: hidden;
+    max-height: calc(1.26em * 3);
   }
   .action-title strong { font-weight: 700; }
   .action-title em { font-style: italic; }
@@ -2016,7 +2022,7 @@ p, li { color: #E1E0DE !important; }
   gap: 24px;
   min-height: 0;
 }
-.team-grid-wrap { display: flex; flex-direction: column; min-height: 0; }
+.team-grid-wrap { display: flex; flex-direction: column; min-height: 0; overflow: hidden; }
 .team-section-label {
   font-family: var(--font-body);
   font-size: var(--type-eyebrow);
