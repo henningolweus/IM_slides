@@ -1,7 +1,7 @@
 #!/usr/bin/env node
 import { readFile, writeFile, access } from 'node:fs/promises';
 import { resolve, basename, dirname, join } from 'node:path';
-import { fileURLToPath } from 'node:url';
+import { fileURLToPath, pathToFileURL } from 'node:url';
 import { parseStory } from './story-parser.mjs';
 import { loadCatalog, layoutsForTags, normaliseLayoutHint } from './catalog.mjs';
 import { renderThumbnail } from './thumbnail-renderer.mjs';
@@ -115,7 +115,7 @@ function escapeHtml(s) {
 }
 function truncate(s, max) { return s.length > max ? s.slice(0, max - 1) + '…' : s; }
 
-if (import.meta.url === `file://${process.argv[1]}` || import.meta.url.endsWith(process.argv[1].replace(/\\/g, '/'))) {
+if (process.argv[1] && import.meta.url === pathToFileURL(process.argv[1]).href) {
   const storyPath = process.argv[2];
   if (!storyPath) { console.error('Usage: node generate-firstdraft.mjs <path-to-story.md>'); process.exit(1); }
   const storyMd = await readFile(resolve(storyPath), 'utf8');

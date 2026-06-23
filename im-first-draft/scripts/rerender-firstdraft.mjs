@@ -1,6 +1,7 @@
 #!/usr/bin/env node
 import { readFile, writeFile } from 'node:fs/promises';
 import { resolve, basename } from 'node:path';
+import { pathToFileURL } from 'node:url';
 import * as cheerio from 'cheerio';
 import { generateFirstdraft } from './generate-firstdraft.mjs';
 
@@ -38,7 +39,7 @@ export async function rerenderFirstdraft(draftPath, storyPath) {
 
 function normaliseTitle(t) { return t.replace(/\s+/g, ' ').trim().toLowerCase(); }
 
-if (import.meta.url === `file://${process.argv[1]}` || import.meta.url.endsWith(process.argv[1].replace(/\\/g, '/'))) {
+if (process.argv[1] && import.meta.url === pathToFileURL(process.argv[1]).href) {
   const story = process.argv[2];
   if (!story) { console.error('Usage: node rerender-firstdraft.mjs <story.md>'); process.exit(1); }
   const draft = resolve(story).replace(/-story\.md$/, '-firstdraft.html');
